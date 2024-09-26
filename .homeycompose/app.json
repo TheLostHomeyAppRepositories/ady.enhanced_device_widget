@@ -1,0 +1,30 @@
+{
+	"id": "ady.enhanced_device_widget",
+	"version": "1.0.0",
+	"compatibility": ">=5.0.0",
+	"sdk": 3,
+	"platforms": [
+		"local"
+	],
+	"name": {
+		"en": "Enhanced Device Widget"
+	},
+	"description": {
+		"en": "Add device widgets with multiple capabilities"
+	},
+	"category": [
+		"tools"
+	],
+	"permissions": [
+		"homey:manager:api"
+	],
+	"images": {
+		"small": "/assets/images/small.png",
+		"large": "/assets/images/large.png",
+		"xlarge": "/assets/images/xlarge.png"
+	},
+	"author": {
+		"name": "RockSoft Solutions",
+		"email": "ady@rockalls.uk"
+	}
+}

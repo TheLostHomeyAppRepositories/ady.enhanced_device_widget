@@ -1,0 +1,79 @@
+<html>
+
+<head>
+	<style>
+		/* Example of a custom CSS class. */
+		.custom-image-class {
+			margin: var(--homey-su-3) auto var(--homey-su-5);
+		}
+
+		.alignleft {
+			float: left;
+		}
+
+		.alignright {
+			float: right;
+		}
+	</style>
+</head>
+
+<body class="homey-widget">
+	<!-- <img id="deviceIcon" src="homey-logo.png" alt="Device Icon" class="custom-image-class" /> -->
+	<div id="deviceName" class="homey-text-bold">Device.</div>
+	<hr>
+	<div id="capabilitiesSection"></div>
+
+	<script type="text/javascript">
+		function onHomeyReady(Homey) {
+			const widgetId = Homey.getWidgetInstanceId();
+
+			// View the settings the user provided if your widget has settings.
+			const settings = Homey.getSettings();
+			document.getElementById('deviceName').innerHTML = settings.devices.name;
+
+			updateValues(true);
+
+			Homey.ready();
+
+			Homey.on('updateWidget', function({ deviceId, capabilityID, value }) {
+				const settings = Homey.getSettings();
+				if (settings.devices.id === deviceId) {
+					document.getElementById(capabilityID).innerHTML = value;
+				}
+			});
+		}
+
+		function updateValues(register)
+		{
+			const widgetId = Homey.getWidgetInstanceId();
+
+			// View the settings the user provided if your widget has settings.
+			const settings = Homey.getSettings();
+
+			// Fetch something from your app.
+			Homey.api('GET', `/?deviceId=${settings.devices.id}&register=${register}`, {})
+				.then((result) => {
+					var html = '';
+					var height = 300;
+					if (result) {
+						// Add each of the capabilities to the panel
+						const capabilitiesArray = Object.values(result);
+						height = ((capabilitiesArray.length) * 29) + 58;
+						for (const capability of capabilitiesArray) {
+							// create an HTML line for each capability with the title left aligned and the value right aligned
+							html += `<div><p class="alignleft homey-font-size-default" style="padding-top:6px; padding-bottom:5px"> ${capability.title}</p> <p class="alignright homey-font-size-default" style="padding-top:5px; padding-bottom:5px"><b> <span id="${capability.id}"> ${capability.value}</span> </b> ${capability.units ? capability.units : ''}</p> </div> <div style="clear: both;"></div>`;
+						}
+					}
+
+					document.getElementById('capabilitiesSection').innerHTML = html;
+					Homey.setHeight(height);
+
+					console.log(result);
+					return;
+				})
+				.catch(console.error);
+		}
+	</script>
+</body>
+
+</html>
