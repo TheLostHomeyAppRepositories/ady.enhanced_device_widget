@@ -3,6 +3,7 @@
 	"version": "1.0.0",
 	"compatibility": ">=12.1.0",
 	"sdk": 3,
+	"brandColor": "#FF7D4B",
 	"platforms": [
 		"local"
 	],
@@ -19,7 +20,6 @@
 		"pt": "Adicione widgets de dispositivos com várias capacidades",
 		"pl": "Dodaj widżety urządzeń z wieloma możliwościami",
 		"ko": "여러 기능을 갖춘 장치 위젯 추가"
-
 	},
 	"category": [
 		"tools"
@@ -35,13 +35,13 @@
 		"name": "Adrian Rockall",
 		"email": "ady@rockalls.uk"
 	},
-"support": "https://github.com/AdyRock/com.enhanced_device_widget/issues",
-"contributing": {
-	"donate": {
-		"paypal": {
-			"username": "adyrock"
+	"support": "https://github.com/AdyRock/com.enhanced_device_widget/issues",
+	"contributing": {
+		"donate": {
+			"paypal": {
+				"username": "adyrock"
+			}
 		}
-	}
-},
-"source": "https://github.com/AdyRock/com.enhanced_device_widget"
+	},
+	"source": "https://github.com/AdyRock/com.enhanced_device_widget"
 }
