@@ -1,7 +1,7 @@
 {
 	"id": "ady.enhanced_device_widget",
 	"version": "1.0.0",
-	"compatibility": ">=5.0.0",
+	"compatibility": ">=12.1.0",
 	"sdk": 3,
 	"platforms": [
 		"local"
@@ -10,7 +10,16 @@
 		"en": "Enhanced Device Widget"
 	},
 	"description": {
-		"en": "Add device widgets with multiple capabilities"
+		"en": "Add device widgets with multiple capabilities",
+		"nl": "Voeg apparaatwidgets toe met meerdere mogelijkheden",
+		"de": "Fügen Sie Gerätewidgets mit mehreren Funktionen hinzu",
+		"fr": "Ajoutez des widgets d'appareils avec plusieurs fonctionnalités",
+		"es": "Agregue widgets de dispositivos con múltiples capacidades",
+		"it": "Aggiungi widget di dispositivi con più funzionalità",
+		"pt": "Adicione widgets de dispositivos com várias capacidades",
+		"pl": "Dodaj widżety urządzeń z wieloma możliwościami",
+		"ko": "여러 기능을 갖춘 장치 위젯 추가"
+
 	},
 	"category": [
 		"tools"
@@ -20,11 +29,19 @@
 	],
 	"images": {
 		"small": "/assets/images/small.png",
-		"large": "/assets/images/large.png",
-		"xlarge": "/assets/images/xlarge.png"
+		"large": "/assets/images/large.png"
 	},
 	"author": {
-		"name": "RockSoft Solutions",
+		"name": "Adrian Rockall",
 		"email": "ady@rockalls.uk"
+	},
+"support": "https://github.com/AdyRock/com.enhanced_device_widget/issues",
+"contributing": {
+	"donate": {
+		"paypal": {
+			"username": "adyrock"
+		}
 	}
+},
+"source": "https://github.com/AdyRock/com.enhanced_device_widget"
 }

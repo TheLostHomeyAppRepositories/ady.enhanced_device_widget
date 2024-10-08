@@ -2,7 +2,8 @@
 
 'use strict';
 
-if (process.env.DEBUG === '1') {
+if (process.env.DEBUG === '1')
+{
 	// eslint-disable-next-line node/no-unsupported-features/node-builtins, global-require
 	require('inspector').open(9229, '0.0.0.0', true);
 }
@@ -12,12 +13,14 @@ const { HomeyAPI } = require('homey-api');
 const DeviceManager = require('./lib/DeviceManager');
 const DeviceDispatcher = require('./lib/DeviceStateChangedDispatcher');
 
-class MyApp extends Homey.App {
+class MyApp extends Homey.App
+{
 
 	/**
 	 * onInit is called when the app is initialized.
 	 */
-	async onInit() {
+	async onInit()
+	{
 		this.api = await HomeyAPI.createAppAPI({ homey: this.homey });
 		this.deviceManager = new DeviceManager(this);
 
@@ -27,7 +30,8 @@ class MyApp extends Homey.App {
 
 		const widget = this.homey.dashboards.getWidget('enhanced-device');
 
-		widget.registerSettingAutocompleteListener('devices', async (query, settings) => {
+		widget.registerSettingAutocompleteListener('devices', async (query, settings) =>
+		{
 			const devices = await this.getHomeyDevices({});
 			return devices;
 		});
@@ -35,14 +39,48 @@ class MyApp extends Homey.App {
 		this.log('MyApp has been initialized');
 	}
 
-	async getHomeyDevices({ type = '', ids = null }) {
-		if (this.deviceManager) {
-			try {
+	async getDeviceImageURI(deviceId)
+	{
+		if (this.deviceManager)
+		{
+			try
+			{
+				const device = await this.getDeviceById(deviceId);
+				if (!device)
+				{
+					// Device not found
+					return null;
+				}
+
+				// Retrieve the cloudUrl
+				const image = await this.homey.images.createImage();
+				// @ts-ignore
+				const url = image.cloudUrl.split('/api/')[0];
+				await image.unregister();
+				return device.iconObj?.url && url ? `${url}${device.iconObj.url}` : null;
+			}
+			catch (e)
+			{
+				this.error('Error getting device image', e);
+			}
+		}
+
+		return null;
+	}
+
+	async getHomeyDevices({ type = '', ids = null })
+	{
+		if (this.deviceManager)
+		{
+			try
+			{
 				let devices = {};
-				if (this.deviceManager && this.deviceManager.devices) {
+				if (this.deviceManager && this.deviceManager.devices)
+				{
 					devices = this.deviceManager.devices;
 				}
-				else {
+				else
+				{
 					const api = await HomeyAPI.forCurrentHomey(this.homey);
 					devices = await api.devices.getDevices();
 				}
@@ -50,16 +88,22 @@ class MyApp extends Homey.App {
 				// Sort the devices by name
 				devices = Object.values(devices).sort((a, b) => a.name.localeCompare(b.name));
 
-				if (type || ids) {
+				if (type || ids)
+				{
 					// Filter the object on type or id
 					const filteredDevices = [];
 					// Turn the devices object into an array, filter on type or id and turn it back into an object
 					const deviceArray = Object.values(devices);
-					for (const device of deviceArray) {
+					for (const device of deviceArray)
+					{
+						device.IconPath = device.iconObj?.url && this.cloudUrl ? `${this.cloudUrl}${device.iconObj.url}` : null;
+
 						const capabilities = await this.deviceManager.getCapabilities(device);
 						const capabilitiesArray = Object.values(capabilities);
-						for (const capability of capabilitiesArray) {
-							if ((type && capability.type === type) || (ids && this.id.findIndex((id) => capability.id === id) >= 0)) {
+						for (const capability of capabilitiesArray)
+						{
+							if ((type && capability.type === type) || (ids && this.id.findIndex((id) => capability.id === id) >= 0))
+							{
 								filteredDevices.push(device);
 								break;
 							}
@@ -68,33 +112,40 @@ class MyApp extends Homey.App {
 
 					// return the filtered devices as an object
 					devices = {};
-					for (const device of filteredDevices) {
+					for (const device of filteredDevices)
+					{
 						devices[device.id] = device;
 					}
-
-					return devices;
 				}
 
 				return devices;
 			}
-			catch (e) {
+			catch (e)
+			{
 				this.error('Error getting devices', e);
 			}
 		}
 		return [];
 	}
 
-	async getCapabilities(deviceId, register) {
-		if (this.deviceManager) {
+	async getCapabilities(deviceId, register)
+	{
+		if (this.deviceManager)
+		{
 			const capabilities = await this.deviceManager.getCapabilities(deviceId);
-			if (register) {
+			if (register)
+			{
 				// For each capability, register the capability with registerDeviceCapability
 				const capabilitiesArray = Object.values(capabilities);
-				for (const capability of capabilitiesArray) {
-					try {
+				for (const capability of capabilitiesArray)
+				{
+					try
+					{
+						capability.IconPath = capability.iconObj?.url && this.cloudUrl ? `${this.cloudUrl}${capability.iconObj.url}` : null;
 						await this.deviceDispather.registerDeviceCapability(deviceId, capability.id);
 					}
-					catch (e) {
+					catch (e)
+					{
 						this.error('Error registering capability', e);
 					}
 				}
@@ -102,6 +153,69 @@ class MyApp extends Homey.App {
 			return capabilities;
 		}
 		return [];
+	}
+
+	async setCapability(deviceId, capabilityId, value)
+	{
+		if (this.deviceManager)
+		{
+			try
+			{
+				const device = await this.getDeviceById(deviceId);
+				if (!device)
+				{
+					// Device not found
+					return;
+				}
+
+				// Find the capability that is defined in the configuration
+				const capability = await this.getCapabilityById(device, capabilityId);
+				if (!capability)
+				{
+					// Capability not found
+					return;
+				}
+
+				await device.setCapabilityValue(capabilityId, value);
+			}
+			catch (e)
+			{
+				this.error('Error setting capability', e);
+			}
+		}
+	}
+
+	async getDeviceById(id)
+	{
+		if (this.deviceManager)
+		{
+			try
+			{
+				if (this.deviceManager.devices)
+				{
+					return await this.deviceManager.getDeviceById(id);
+				}
+			}
+			catch (e)
+			{
+			}
+		}
+		return undefined;
+	}
+
+	async getCapabilityById(device, capabilityId)
+	{
+		if (this.deviceManager && device)
+		{
+			try
+			{
+				return this.deviceManager.getCapability(device, capabilityId);
+			}
+			catch (e)
+			{
+			}
+		}
+		return undefined;
 	}
 
 }

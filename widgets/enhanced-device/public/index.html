@@ -1,74 +1,186 @@
 <html>
 
 <head>
+	<link rel="stylesheet" type="text/css" href="extraStyles.css">
+
 	<style>
 		/* Example of a custom CSS class. */
-		.custom-image-class {
-			margin: var(--homey-su-3) auto var(--homey-su-5);
+		.device-image-class {
+			margin-right: 10px;
+			width: 30px;
+			height: 35px;
 		}
 
-		.alignleft {
-			float: left;
+		.container {
+			display: flex;
+			align-items: center;
+			/* Aligns items to the left */
+			justify-content: flex-start;
+			/* Makes the container only as wide as the content */
+			width: fit-content;
 		}
 
-		.alignright {
-			float: right;
+		/* Ensures the div doesn't stretch */
+		#deviceName {
+			flex-grow: 0;
 		}
 	</style>
 </head>
 
 <body class="homey-widget">
-	<!-- <img id="deviceIcon" src="homey-logo.png" alt="Device Icon" class="custom-image-class" /> -->
-	<div id="deviceName" class="homey-text-bold">Device.</div>
+	<div class="container">
+		<img id="deviceIcon" src="homey-logo.png" alt="Device Icon" class="device-image-class" />
+		<div id="deviceName" class="homey-text-bold">Device.</div>
+	</div>
 	<hr>
 	<div id="capabilitiesSection"></div>
 
 	<script type="text/javascript">
-		function onHomeyReady(Homey) {
+		function onHomeyReady(Homey)
+		{
 			const widgetId = Homey.getWidgetInstanceId();
 
 			// View the settings the user provided if your widget has settings.
 			const settings = Homey.getSettings();
 			document.getElementById('deviceName').innerHTML = settings.devices.name;
 
+			Homey.api('GET', `/?deviceImage=${settings.devices.id}`, {})
+				.then((result) =>
+				{
+					document.getElementById('deviceIcon').src = result;
+				})
+				.catch(console.error);
+
 			updateValues(true);
 
 			Homey.ready();
 
-			Homey.on('updateWidget', function({ deviceId, capabilityID, value }) {
+			Homey.on('updateWidget', function ({ deviceId, capabilityID, value })
+			{
 				const settings = Homey.getSettings();
-				if (settings.devices.id === deviceId) {
-					document.getElementById(capabilityID).innerHTML = value;
+				if (settings.devices.id === deviceId)
+				{
+					if (typeof(value) ===  'number')
+					{
+						document.getElementById(capabilityID).value = value;
+					}
+					else if (typeof (value) === 'boolean')
+					{
+						document.getElementById(capabilityID).checked = value;
+					}
+					else
+					{
+						document.getElementById(capabilityID).innerHTML = value;
+					}
 				}
 			});
+
+			function updateValues(register)
+			{
+				const widgetId = Homey.getWidgetInstanceId();
+
+				// View the settings the user provided if your widget has settings.
+				const settings = Homey.getSettings();
+
+				// Fetch something from your app.
+				Homey.api('GET', `/?deviceId=${settings.devices.id}&register=${register}`, {})
+					.then((result) =>
+					{
+						var html = '';
+						var height = 300;
+						if (result)
+						{
+							// Add each of the capabilities to the panel
+							const capabilitiesArray = Object.values(result);
+							height = ((capabilitiesArray.length) * 29) + 78;
+							for (const capability of capabilitiesArray)
+							{
+								// create an HTML line for each capability with the title left aligned and the value right aligned
+								if (capability.setable === true)
+								{
+									if (capability.type === "boolean")
+									{
+										// create a switch for boolean capabilities
+										html += `<div>
+													<p class="alignleft homey-font-size-default" style="padding-top:6px; padding-bottom:5px"> ${capability.title}</p>
+													<p class="alignright homey-font-size-default" style="padding-top:5px; padding-bottom:5px">
+														<b>
+															<span>
+																<label class="switch">
+																	<input id="${capability.id}" type="checkbox" ${capability.value ? 'checked' : ''} onclick="onOffToggle('${capability.id}')">
+																	<span class="slider round">
+																	</span>
+																</label>
+															</span>
+														</b>
+													</p>
+												</div>
+												<div style="clear: both;">
+												</div>`;
+									}
+									else if (capability.type === "number")
+									{
+										// create a slider for number capabilities
+										html += `<div>
+													<p class="alignleft homey-font-size-default" style="padding-top:6px; padding-bottom:5px"> ${capability.title}</p>
+													<p class="alignright homey-font-size-default" style="padding-top:5px; padding-bottom:5px">
+														<b>
+															<input id="${capability.id}" type="range" min="${capability.min}" max="${capability.max}" step="${(capability.max - capability.min) / 100}" value="${capability.value}" onchange="numberChange('${capability.id}')">
+														</b>
+													</p>
+												</div>
+												<div style="clear: both;">
+												</div>`;
+									}
+									else
+									{
+										html += `<div><p class="alignleft homey-font-size-default" style="padding-top:6px; padding-bottom:5px"> ${capability.title}</p> <p class="alignright homey-font-size-default" style="padding-top:5px; padding-bottom:5px"><b> <span id="${capability.id}"> ${capability.value}</span> </b> ${capability.units ? capability.units : ''}</p> </div> <div style="clear: both;"></div>`;
+									}
+								}
+								else
+								{
+									html += `<div><p class="alignleft homey-font-size-default" style="padding-top:6px; padding-bottom:5px"> ${capability.title}</p> <p class="alignright homey-font-size-default" style="padding-top:5px; padding-bottom:5px"><b> <span id="${capability.id}"> ${capability.value}</span> </b> ${capability.units ? capability.units : ''}</p> </div> <div style="clear: both;"></div>`;
+								}
+							}
+						}
+
+						document.getElementById('capabilitiesSection').innerHTML = html;
+						Homey.setHeight(height);
+
+						console.log(result);
+						return;
+					})
+					.catch(console.error);
+			}
 		}
 
-		function updateValues(register)
+		function onOffToggle(capabilityId)
 		{
-			const widgetId = Homey.getWidgetInstanceId();
-
-			// View the settings the user provided if your widget has settings.
 			const settings = Homey.getSettings();
+			const element = document.getElementById(capabilityId);
+			const value = element.checked;
 
-			// Fetch something from your app.
-			Homey.api('GET', `/?deviceId=${settings.devices.id}&register=${register}`, {})
-				.then((result) => {
-					var html = '';
-					var height = 300;
-					if (result) {
-						// Add each of the capabilities to the panel
-						const capabilitiesArray = Object.values(result);
-						height = ((capabilitiesArray.length) * 29) + 58;
-						for (const capability of capabilitiesArray) {
-							// create an HTML line for each capability with the title left aligned and the value right aligned
-							html += `<div><p class="alignleft homey-font-size-default" style="padding-top:6px; padding-bottom:5px"> ${capability.title}</p> <p class="alignright homey-font-size-default" style="padding-top:5px; padding-bottom:5px"><b> <span id="${capability.id}"> ${capability.value}</span> </b> ${capability.units ? capability.units : ''}</p> </div> <div style="clear: both;"></div>`;
-						}
-					}
-
-					document.getElementById('capabilitiesSection').innerHTML = html;
-					Homey.setHeight(height);
-
+			Homey.api('POST', '/', { deviceId: settings.devices.id, capabilityId: capabilityId, value: value })
+				.then((result) =>
+				{
 					console.log(result);
+					updateValues(false);
+					return;
+				})
+				.catch(console.error);
+		}
+
+		function numberChange(capabilityId)
+		{
+			const settings = Homey.getSettings();
+			const element = document.getElementById(capabilityId);
+			const value = parseFloat(element.value);
+
+			Homey.api('POST', '/', { deviceId: settings.devices.id, capabilityId: capabilityId, value: value })
+				.then((result) =>
+				{
+					console.log(result);
+					updateValues(false);
 					return;
 				})
 				.catch(console.error);

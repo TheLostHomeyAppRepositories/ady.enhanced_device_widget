@@ -22,11 +22,11 @@
 		},
 		"updateSomething": {
 			"method": "PUT",
-			"path": "/:id"
+			"path": "/"
 		},
 		"deleteSomething": {
 			"method": "DELETE",
-			"path": "/:id"
+			"path": "/"
 		}
 	}
 }
