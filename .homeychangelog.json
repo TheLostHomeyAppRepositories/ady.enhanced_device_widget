@@ -1,5 +1,8 @@
 {
   "1.0.0": {
     "en": "First test version"
+  },
+  "1.0.1": {
+	"en": "Update app images and readme to pass Homey review"
   }
 }
