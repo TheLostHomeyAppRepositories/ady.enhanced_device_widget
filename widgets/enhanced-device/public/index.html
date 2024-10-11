@@ -28,6 +28,20 @@
 		#deviceName {
 			flex-grow: 0;
 		}
+
+		input[type=range] {
+			pointer-events: none;
+			width: 100%;
+			height: 30px;
+		}
+
+		input[type=range]::-webkit-slider-thumb {
+			-webkit-appearance: none;
+			pointer-events: auto;
+			height: 30px;
+			width: 30px;
+			border-radius: 50%;
+		}
 	</style>
 </head>
 
@@ -43,6 +57,7 @@
 		function onHomeyReady(Homey)
 		{
 			const widgetId = Homey.getWidgetInstanceId();
+
 
 			// View the settings the user provided if your widget has settings.
 			const settings = Homey.getSettings();
@@ -66,15 +81,25 @@
 				{
 					if (typeof (value) === 'number')
 					{
-						document.getElementById(capabilityID).value = value;
+						const slider = document.getElementById(`${capabilityID}_slide`);
+						if (slider)
+						{
+							slider.value = value;
+						}
+						if (capabilityID === 'dim')
+						{
+							value = value * 100;
+							value = value.toFixed();
+						}
+						document.getElementById(`${capabilityID}`).innerHTML = `${value}`;
 					}
 					else if (typeof (value) === 'boolean')
 					{
-						document.getElementById(capabilityID).checked = value;
+						document.getElementById(`${capabilityID}`).checked = value;
 					}
 					else
 					{
-						document.getElementById(capabilityID).innerHTML = value;
+						document.getElementById(`${capabilityID}`).innerHTML = value;
 					}
 				}
 			});
@@ -124,17 +149,18 @@
 									}
 									else if (capability.type === "number")
 									{
+										// Allow extra space for sliders
+										height += 30;
+
 										// create a slider for number capabilities
 										html += `<div>
-													<p class="alignleft homey-font-size-default" style="padding-top:6px; padding-bottom:5px"> ${capability.title}</p>
-													<p class="alignright homey-font-size-default" style="padding-top:5px; padding-bottom:5px">
-														<b>
-															<input id="${capability.id}" type="range" min="${capability.min}" max="${capability.max}" step="${(capability.max - capability.min) / 100}" value="${capability.value}" onchange="numberChange('${capability.id}')">
-														</b>
-													</p>
+													<p class="alignleft homey-font-size-default" style="padding-top:6px; padding-bottom:1px"> ${capability.title}</p><p class="alignright homey-font-size-default" style="padding-top:1px; padding-bottom:5px"><b> <span id="${capability.id}">${capability.id === 'dim' ? capability.value * 100 : capability.value}</span> </b> ${capability.units ? capability.units : ''}</p>
 												</div>
-												<div style="clear: both;">
-												</div>`;
+												<div style="clear: both;"></div>
+												<p class="homey-font-size-default" style="padding-top:0px; padding-bottom:5px">
+													<input id="${capability.id}_slide" type="range" min="${capability.min}" max="${capability.max}" step="${(capability.max - capability.min) / 100}" value="${capability.value}" onchange="numberChange('${capability.id}')" oninput="numberSlide('${capability.id}')">
+												</p>
+												<div style="clear: both;"></div>`;
 									}
 									else
 									{
@@ -177,8 +203,9 @@
 		function numberChange(capabilityId)
 		{
 			const settings = Homey.getSettings();
-			const element = document.getElementById(capabilityId);
+			const element = document.getElementById(`${capabilityId}_slide`);
 			const value = parseFloat(element.value);
+			// document.getElementById(capabilityId).innerHTML = element.value;
 
 			Homey.api('POST', '/', { deviceId: settings.devices.id, capabilityId: capabilityId, value: value })
 				.then((result) =>
@@ -189,6 +216,20 @@
 				})
 				.catch(console.error);
 		}
+
+		function numberSlide(capabilityId)
+		{
+			const settings = Homey.getSettings();
+			const element = document.getElementById(`${capabilityId}_slide`);
+			let value = parseFloat(element.value);
+			if (capabilityId === 'dim')
+			{
+				value = (value * 100);
+				value = value.toFixed();
+			}
+			document.getElementById(capabilityId).innerHTML = `${value}`;
+		}
+
 	</script>
 </body>
 
