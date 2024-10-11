@@ -11,6 +11,10 @@
 			height: 35px;
 		}
 
+		.homey-dark-mode img {
+			filter: invert(1);
+		}
+
 		.container {
 			display: flex;
 			align-items: center;
@@ -60,7 +64,7 @@
 				const settings = Homey.getSettings();
 				if (settings.devices.id === deviceId)
 				{
-					if (typeof(value) ===  'number')
+					if (typeof (value) === 'number')
 					{
 						document.getElementById(capabilityID).value = value;
 					}
