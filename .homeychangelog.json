@@ -6,6 +6,6 @@
 	"en": "Update app images and readme to pass Homey review"
   },
   "1.0.2": {
-	"en": "Fix search when selecting a device. Invert icon colour in darkmode."
+	"en": "Fix search when selecting a device. Invert icon colour in darkmode.. Improve slider usability and add the value to the widget"
   }
 }
