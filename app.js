@@ -33,7 +33,7 @@ class MyApp extends Homey.App
 		widget.registerSettingAutocompleteListener('devices', async (query, settings) =>
 		{
 			const devices = await this.getHomeyDevices({});
-			return devices;
+			return devices.filter((item) => item.name.toLowerCase().includes(query.toLowerCase()));
 		});
 
 		this.log('MyApp has been initialized');
