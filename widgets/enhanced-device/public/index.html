@@ -86,7 +86,7 @@
 						{
 							slider.value = value;
 						}
-						if (capabilityID === 'dim')
+						if ((capabilityID === 'dim') || (capabilityID === 'windowcoverings_set'))
 						{
 							value = value * 100;
 							value = value.toFixed();
@@ -154,7 +154,7 @@
 
 										// create a slider for number capabilities
 										html += `<div>
-													<p class="alignleft homey-font-size-default" style="padding-top:6px; padding-bottom:1px"> ${capability.title}</p><p class="alignright homey-font-size-default" style="padding-top:1px; padding-bottom:5px"><b> <span id="${capability.id}">${capability.id === 'dim' ? capability.value * 100 : capability.value}</span> </b> ${capability.units ? capability.units : ''}</p>
+													<p class="alignleft homey-font-size-default" style="padding-top:6px; padding-bottom:1px"> ${capability.title}</p><p class="alignright homey-font-size-default" style="padding-top:1px; padding-bottom:5px"><b> <span id="${capability.id}">${(capability.id === 'dim') || (capability.id == 'windowcoverings_set') ? capability.value * 100 : capability.value}</span> </b> ${capability.units ? capability.units : ''}</p>
 												</div>
 												<div style="clear: both;"></div>
 												<p class="homey-font-size-default" style="padding-top:0px; padding-bottom:5px">
@@ -222,7 +222,7 @@
 			const settings = Homey.getSettings();
 			const element = document.getElementById(`${capabilityId}_slide`);
 			let value = parseFloat(element.value);
-			if (capabilityId === 'dim')
+			if ((capabilityId === 'dim') || (capabilityId === 'windowcoverings_set'))
 			{
 				value = (value * 100);
 				value = value.toFixed();
