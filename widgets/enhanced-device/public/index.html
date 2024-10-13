@@ -2,47 +2,6 @@
 
 <head>
 	<link rel="stylesheet" type="text/css" href="extraStyles.css">
-
-	<style>
-		/* Example of a custom CSS class. */
-		.device-image-class {
-			margin-right: 10px;
-			width: 30px;
-			height: 35px;
-		}
-
-		.homey-dark-mode img {
-			filter: invert(1);
-		}
-
-		.container {
-			display: flex;
-			align-items: center;
-			/* Aligns items to the left */
-			justify-content: flex-start;
-			/* Makes the container only as wide as the content */
-			width: fit-content;
-		}
-
-		/* Ensures the div doesn't stretch */
-		#deviceName {
-			flex-grow: 0;
-		}
-
-		input[type=range] {
-			pointer-events: none;
-			width: 100%;
-			height: 30px;
-		}
-
-		input[type=range]::-webkit-slider-thumb {
-			-webkit-appearance: none;
-			pointer-events: auto;
-			height: 30px;
-			width: 30px;
-			border-radius: 50%;
-		}
-	</style>
 </head>
 
 <body class="homey-widget">
@@ -127,12 +86,12 @@
 								// create an HTML line for each capability with the title left aligned and the value right aligned
 								if (capability.setable === true)
 								{
-									if (capability.type === "boolean")
+									if ((capability.type === "boolean") && capability.getable)
 									{
 										// create a switch for boolean capabilities
 										html += `<div>
 													<p class="alignleft homey-font-size-default" style="padding-top:6px; padding-bottom:5px"> ${capability.title}</p>
-													<p class="alignright homey-font-size-default" style="padding-top:5px; padding-bottom:5px">
+													<p class="alignright homey-font-size-default" style="padding-top:6px; padding-bottom:5px">
 														<b>
 															<span>
 																<label class="switch">
@@ -147,6 +106,24 @@
 												<div style="clear: both;">
 												</div>`;
 									}
+									else if (capability.type === "boolean")
+									{
+										// Create a push button
+										html += `<div>
+													<p class="alignleft homey-font-size-default" style="padding-top:6px; padding-bottom:5px"> ${capability.title}</p>
+													<p class="alignright homey-font-size-default" style="padding-top:6px; padding-bottom:5px">
+														<b>
+															<span>
+																<button class="button" id="${capability.id}" onclick="buttonPressed('${capability.id}')">
+																	O
+																</button>
+															</span>
+														</b>
+													</p>
+												</div>
+												<div style="clear: both;">
+												</div>`;
+									}
 									else if (capability.type === "number")
 									{
 										// Allow extra space for sliders
@@ -154,11 +131,21 @@
 
 										// create a slider for number capabilities
 										html += `<div>
-													<p class="alignleft homey-font-size-default" style="padding-top:6px; padding-bottom:1px"> ${capability.title}</p><p class="alignright homey-font-size-default" style="padding-top:1px; padding-bottom:5px"><b> <span id="${capability.id}">${(capability.id === 'dim') || (capability.id == 'windowcoverings_set') ? capability.value * 100 : capability.value}</span> </b> ${capability.units ? capability.units : ''}</p>
+													<p class="alignleft homey-font-size-default" style="padding-top:6px; padding-bottom:1px"> ${capability.title}</p><p class="alignright homey-font-size-default" style="padding-top:6px; padding-bottom:5px"><b> <span id="${capability.id}">${(capability.id === 'dim') || (capability.id == 'windowcoverings_set') ? capability.value * 100 : capability.value}</span> </b> ${capability.units ? capability.units : ''}</p>
 												</div>
 												<div style="clear: both;"></div>
 												<p class="homey-font-size-default" style="padding-top:0px; padding-bottom:5px">
-													<input id="${capability.id}_slide" type="range" min="${capability.min}" max="${capability.max}" step="${(capability.max - capability.min) / 100}" value="${capability.value}" onchange="numberChange('${capability.id}')" oninput="numberSlide('${capability.id}')">
+												<input
+													id="${capability.id}_slide"
+													type="range"
+													min="${capability.min}"
+													max="${capability.max}"
+													step="${(capability.max - capability.min) / 100}"
+													value="${capability.value}"
+													onchange="numberChange('${capability.id}')"
+													oninput="numberSlide('${capability.id}')"
+													onpointerdown="handlePointerDown(event)"
+													onpointerup="handlePointerUp(event)">
 												</p>
 												<div style="clear: both;"></div>`;
 									}
@@ -200,6 +187,21 @@
 				.catch(console.error);
 		}
 
+		function buttonPressed(capabilityId)
+		{
+			const settings = Homey.getSettings();
+			const element = document.getElementById(capabilityId);
+
+			Homey.api('POST', '/', { deviceId: settings.devices.id, capabilityId: capabilityId, value: true })
+				.then((result) =>
+				{
+					console.log(result);
+					updateValues(false);
+					return;
+				})
+				.catch(console.error);
+		}
+
 		function numberChange(capabilityId)
 		{
 			const settings = Homey.getSettings();
@@ -219,6 +221,8 @@
 
 		function numberSlide(capabilityId)
 		{
+			slider = document.getElementById(`${capabilityId}_slide`);
+			slider.style.backgroundColor = 'red'; // Change the background color of the slider when pointer is down
 			const settings = Homey.getSettings();
 			const element = document.getElementById(`${capabilityId}_slide`);
 			let value = parseFloat(element.value);
@@ -228,6 +232,21 @@
 				value = value.toFixed();
 			}
 			document.getElementById(capabilityId).innerHTML = `${value}`;
+		}
+
+		// Function to handle pointer down and capture the pointer
+		function handlePointerDown(event)
+		{
+			event.StopImmediatePropagation();
+			event.target.setPointerCapture(event.pointerId); // Capture the pointer to prevent losing focus
+			event.target.style.backgroundColor = 'red'; // Change the background color of the slider when pointer is down
+		}
+
+		// Function to handle pointer up and release the pointer capture
+		function handlePointerUp(event)
+		{
+			event.target.releasePointerCapture(event.pointerId); // Release the pointer after interaction ends
+			event.target.style.backgroundColor = 'green'; // Change the background color of the slider when pointer is up
 		}
 
 	</script>

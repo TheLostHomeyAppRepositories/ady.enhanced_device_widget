@@ -32,6 +32,9 @@
 	background-color: #ccc;
 	-webkit-transition: .4s;
 	transition: .4s;
+	box-shadow: 1px 1px 1px #000000, 0px 0px 1px #0d0d0d;
+	border-radius: 5px;
+	border: 0.2px solid #010101;
 }
 
 .slider:before {
@@ -44,6 +47,9 @@
 	background-color: white;
 	-webkit-transition: .4s;
 	transition: .4s;
+	box-shadow: 1px 1px 1px #000000, 0px 0px 1px #0d0d0d;
+	border-radius: 5px;
+	border: 0.2px solid #010101;
 }
 
 input:checked+.slider {
@@ -67,4 +73,86 @@ input:checked+.slider:before {
 
 .slider.round:before {
 	border-radius: 50%;
+}
+
+/* Example of a custom CSS class. */
+.device-image-class {
+	margin-right: 10px;
+	width: 30px;
+	height: 35px;
+}
+
+.homey-dark-mode img {
+	filter: invert(1);
+}
+
+.container {
+	display: flex;
+	align-items: center;
+	/* Aligns items to the left */
+	justify-content: flex-start;
+	/* Makes the container only as wide as the content */
+	width: fit-content;
+}
+
+/* Ensures the div doesn't stretch */
+#deviceName {
+	flex-grow: 0;
+}
+
+input[type=range] {
+	pointer-events: none;
+	-webkit-appearance: none;
+	margin: 0px 0;
+	width: 100%;
+	background: var(--homey-background-color);
+}
+
+input[type=range]:focus {
+	outline: none;
+}
+
+input[type=range]::-webkit-slider-runnable-track {
+	width: 100%;
+	height: 24px;
+	cursor: pointer;
+	box-shadow: 1px 1px 1px #000000, 0px 0px 1px #0d0d0d;
+	background: #2196F3;
+	border-radius: 5px;
+	border: 0.2px solid #010101;
+}
+
+input[type=range]::-webkit-slider-thumb {
+	pointer-events: auto;
+	box-shadow: 1px 1px 1px #000000, 0px 0px 1px #0d0d0d;
+	border: 1px solid #000000;
+	height: 24px;
+	width: 16px;
+	border-radius: 5px;
+	background: white;
+	cursor: pointer;
+	-webkit-appearance: none;
+	margin-top: 0px;
+}
+
+input[type=range]:focus::-webkit-slider-runnable-track {
+	background: #2196F3;
+}
+
+.button {
+	-webkit-appearance: none;
+	appearance: none;
+	background-color: #2196F3;
+	color: white;
+	text-align: center;
+	text-decoration: none;
+	display: inline-block;
+	font-size: 16px;
+	margin: 0px 0px;
+	cursor: pointer;
+	height: 24px;
+	width: 40px;
+	border: 0.2px solid #010101;
+	box-shadow: 1px 1px 1px #000000, 0px 0px 1px #0d0d0d;
+	border-radius: 12px;
 }
