@@ -12,7 +12,7 @@ module.exports = {
 		// perform other logic like mapping result data
 		if (query.deviceId)
 		{
-			return homey.app.getCapabilities(query.deviceId, query.register);
+			return homey.app.getCapabilities(query.deviceId, query.disabledCapabilities ? JSON.parse(query.disabledCapabilities) : null);
 		}
 
 		if (query.deviceImage)

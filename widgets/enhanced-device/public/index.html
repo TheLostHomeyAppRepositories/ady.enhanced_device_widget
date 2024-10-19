@@ -45,7 +45,7 @@
 				{
 					capabilityDisabled = result;
 
-					updateValues(true);
+					updateValues(capabilityDisabled);
 					Homey.ready();
 				})
 				.catch(console.error);
@@ -88,7 +88,7 @@
 			});
 		}
 
-		function updateValues(register)
+		function updateValues(disabledCapabilities)
 		{
 			const widgetId = Homey.getWidgetInstanceId();
 
@@ -96,7 +96,7 @@
 			const settings = Homey.getSettings();
 
 			// Fetch something from your app.
-			Homey.api('GET', `/?deviceId=${settings.devices.id}&register=${register}`, {})
+			Homey.api('GET', `/?deviceId=${settings.devices.id}&disabledCapabilities=${disabledCapabilities ? JSON.stringify(disabledCapabilities) : null}`, {})
 				.then((result) =>
 				{
 					var html = '';
@@ -113,7 +113,7 @@
 
 						for (const capability of capabilitiesArray)
 						{
-							if (!editMode && capabilityDisabled[capability.id])
+							if (!editMode && disabledCapabilities[capability.id])
 							{
 								continue;
 							}
@@ -125,7 +125,7 @@
 							{
 								// Add a toggle switch at the begging of the row to enable/disable the capability
 								html += `<p class="alignleft homey-font-size-default" style="padding-top:6px; padding-bottom:5px">
-														<input id="enable_${capability.id}" style="margin-right:5px" type="checkbox" ${capabilityDisabled[capability.id] ? '' : 'checked'} onclick="onEnableCapability('${capability.id}')">
+														<input id="enable_${capability.id}" style="margin-right:5px" type="checkbox" ${disabledCapabilities[capability.id] ? '' : 'checked'} onclick="onEnableCapability('${capability.id}')">
 													</p>`;
 							}
 

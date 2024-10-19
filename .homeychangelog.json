@@ -13,5 +13,8 @@
   },
   "1.0.4": {
 	"en": "Enabled slider tap to set position. Workaround for slider issue to reset position if finger moved off the slider. Added log to app settings page for debugging."
+  },
+  "1.0.5": {
+	"en": "Restyled the controls. Added edit mode to enable hiding of capabilities."
   }
 }

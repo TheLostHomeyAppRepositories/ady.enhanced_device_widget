@@ -146,21 +146,23 @@ class MyApp extends Homey.App
 		return [];
 	}
 
-	async getCapabilities(deviceId, register)
+	async getCapabilities(deviceId, disabledCapabilities)
 	{
 		if (this.deviceManager)
 		{
 			const capabilities = await this.deviceManager.getCapabilities(deviceId);
-			if (register)
+			if (disabledCapabilities)
 			{
-				// For each capability, register the capability with registerDeviceCapability
+				// For each capability, register the capability with registerDeviceCapability provide it's not in the disabledCapabilities
 				const capabilitiesArray = Object.values(capabilities);
 				for (const capability of capabilitiesArray)
 				{
 					try
 					{
-						capability.IconPath = capability.iconObj?.url && this.cloudUrl ? `${this.cloudUrl}${capability.iconObj.url}` : null;
-						await this.deviceDispather.registerDeviceCapability(deviceId, capability.id);
+						if (!disabledCapabilities[capability.id])
+						{
+							await this.deviceDispather.registerDeviceCapability(deviceId, capability.id);
+						}
 					}
 					catch (e)
 					{
