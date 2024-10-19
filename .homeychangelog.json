@@ -10,5 +10,8 @@
   },
   "1.0.3": {
 	"en": "Made the range bars thicker. Added buttons for non setable boolean capabilities."
+  },
+  "1.0.4": {
+	"en": "Enabled slider tap to set position. Workaround for slider issue to reset position if finger moved off the slider. Added log to app settings page for debugging."
   }
 }

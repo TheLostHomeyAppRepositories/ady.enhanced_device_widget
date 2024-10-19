@@ -13,6 +13,9 @@
 	<div id="capabilitiesSection"></div>
 
 	<script type="text/javascript">
+		var SliderCancelTimer = null;
+		var oldValue = null;
+
 		function onHomeyReady(Homey)
 		{
 			const widgetId = Homey.getWidgetInstanceId();
@@ -21,13 +24,14 @@
 			// View the settings the user provided if your widget has settings.
 			const settings = Homey.getSettings();
 			document.getElementById('deviceName').innerHTML = settings.devices.name;
+			document.getElementById('deviceIcon').src = settings.devices.iconObj.url;
 
-			Homey.api('GET', `/?deviceImage=${settings.devices.id}`, {})
-				.then((result) =>
-				{
-					document.getElementById('deviceIcon').src = result;
-				})
-				.catch(console.error);
+			// Homey.api('GET', `/?deviceImage=${settings.devices.id}`, {})
+			// 	.then((result) =>
+			// 	{
+			// 		document.getElementById('deviceIcon').src = result;
+			// 	})
+			// 	.catch(console.error);
 
 			updateValues(true);
 
@@ -95,7 +99,7 @@
 														<b>
 															<span>
 																<label class="switch">
-																	<input id="${capability.id}" type="checkbox" ${capability.value ? 'checked' : ''} onclick="onOffToggle('${capability.id}')">
+																	<input id="${capability.id}" type="checkbox" ${capability.value ? 'checked' : ''} onclick="onOffToggle('${settings.devices.id}', '${capability.id}')">
 																	<span class="slider round">
 																	</span>
 																</label>
@@ -114,8 +118,8 @@
 													<p class="alignright homey-font-size-default" style="padding-top:6px; padding-bottom:5px">
 														<b>
 															<span>
-																<button class="button" id="${capability.id}" onclick="buttonPressed('${capability.id}')">
-																	O
+																<button class="button" id="${capability.id}" onclick="buttonPressed('${settings.devices.id}', '${capability.id}')">
+																	1
 																</button>
 															</span>
 														</b>
@@ -142,10 +146,14 @@
 													max="${capability.max}"
 													step="${(capability.max - capability.min) / 100}"
 													value="${capability.value}"
-													onchange="numberChange('${capability.id}')"
+													onchange="numberChange('${settings.devices.id}', '${capability.id}')"
 													oninput="numberSlide('${capability.id}')"
 													onpointerdown="handlePointerDown(event)"
-													onpointerup="handlePointerUp(event)">
+													onpointerup="handlePointerUp(event)"
+													onpointermove="handlePointerMove(event)"
+													ontouchstart="handleTouchStart(event)"
+													ontouchmove="handleTouchStart(event)"
+													onfocus="handleCancelFocus(event)">
 												</p>
 												<div style="clear: both;"></div>`;
 									}
@@ -171,49 +179,44 @@
 			}
 		}
 
-		function onOffToggle(capabilityId)
+		function onOffToggle(deviceId, capabilityId)
 		{
-			const settings = Homey.getSettings();
 			const element = document.getElementById(capabilityId);
 			const value = element.checked;
 
-			Homey.api('POST', '/', { deviceId: settings.devices.id, capabilityId: capabilityId, value: value })
+			Homey.api('POST', '/', { deviceId: deviceId, capabilityId: capabilityId, value: value })
 				.then((result) =>
 				{
 					console.log(result);
-					updateValues(false);
 					return;
 				})
 				.catch(console.error);
 		}
 
-		function buttonPressed(capabilityId)
+		function buttonPressed(deviceId, capabilityId)
 		{
-			const settings = Homey.getSettings();
 			const element = document.getElementById(capabilityId);
 
-			Homey.api('POST', '/', { deviceId: settings.devices.id, capabilityId: capabilityId, value: true })
+			Homey.api('POST', '/', { deviceId: deviceId, capabilityId: capabilityId, value: true })
 				.then((result) =>
 				{
 					console.log(result);
-					updateValues(false);
 					return;
 				})
 				.catch(console.error);
 		}
 
-		function numberChange(capabilityId)
+		function numberChange(deviceId, capabilityId)
 		{
-			const settings = Homey.getSettings();
 			const element = document.getElementById(`${capabilityId}_slide`);
 			const value = parseFloat(element.value);
-			// document.getElementById(capabilityId).innerHTML = element.value;
+			clearTimeout(SliderCancelTimer);
+			oldValue = null;
 
-			Homey.api('POST', '/', { deviceId: settings.devices.id, capabilityId: capabilityId, value: value })
+			Homey.api('POST', '/', { deviceId: deviceId, capabilityId: capabilityId, value: value })
 				.then((result) =>
 				{
 					console.log(result);
-					updateValues(false);
 					return;
 				})
 				.catch(console.error);
@@ -221,32 +224,68 @@
 
 		function numberSlide(capabilityId)
 		{
-			slider = document.getElementById(`${capabilityId}_slide`);
-			slider.style.backgroundColor = 'red'; // Change the background color of the slider when pointer is down
-			const settings = Homey.getSettings();
 			const element = document.getElementById(`${capabilityId}_slide`);
 			let value = parseFloat(element.value);
+
+			if (oldValue === null)
+			{
+				oldValue = document.getElementById(capabilityId).innerHTML;
+			}
+
 			if ((capabilityId === 'dim') || (capabilityId === 'windowcoverings_set'))
 			{
 				value = (value * 100);
 				value = value.toFixed();
 			}
+
 			document.getElementById(capabilityId).innerHTML = `${value}`;
+
+			clearTimeout(SliderCancelTimer);
+			SliderCancelTimer = setTimeout(() =>
+			{
+				// reset slider position to current value if the slider was moved but then cancled due to finger sliding
+				document.getElementById(capabilityId).innerHTML = `${oldValue}`;
+
+				if ((capabilityId === 'dim') || (capabilityId === 'windowcoverings_set'))
+				{
+					oldValue = (oldValue / 100);
+				}
+				element.value = oldValue;
+
+				oldValue = null;
+			}, 500);
+		}
+
+		function handleCancelFocus(event)
+		{
+			// event.stopPropagation();
+			// event.preventDefault();
+		}
+
+		function handleTouchStart(event)
+		{
+			event.stopPropagation(); // Prevent the default behavior of the touch start event
+			event.stopImmediatePropagation();
 		}
 
 		// Function to handle pointer down and capture the pointer
 		function handlePointerDown(event)
 		{
-			event.StopImmediatePropagation();
+			event.stopPropagation(); // Prevent the default behavior of the pointer down event
 			event.target.setPointerCapture(event.pointerId); // Capture the pointer to prevent losing focus
-			event.target.style.backgroundColor = 'red'; // Change the background color of the slider when pointer is down
+		}
+
+		// Function to handle pointer down and capture the pointer
+		function handlePointerMove(event)
+		{
+			event.stopPropagation(); // Prevent the default behavior of the pointer down event
+			event.stopImmediatePropagation();
 		}
 
 		// Function to handle pointer up and release the pointer capture
 		function handlePointerUp(event)
 		{
 			event.target.releasePointerCapture(event.pointerId); // Release the pointer after interaction ends
-			event.target.style.backgroundColor = 'green'; // Change the background color of the slider when pointer is up
 		}
 
 	</script>

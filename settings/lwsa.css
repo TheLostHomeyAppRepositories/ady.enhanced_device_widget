@@ -1,3 +1,41 @@
+/* Style the tab */
+.tab {
+	overflow: hidden;
+	border: 1px solid #ccc;
+	background-color: #d1ddeb;
+}
+
+/* Style the buttons that are used to open the tab content */
+.tab button {
+	float: left;
+	border: none;
+	outline: none;
+	cursor: pointer;
+	padding: 14px 16px;
+	transition: 0.3s;
+	color: #c8cfd9;
+}
+
+/* Change background color of buttons on hover */
+.tab button:hover {
+	background-color: #73859c !important;
+	color: white !important;
+}
+
+/* Create an active/current tablink class */
+.active {
+	background-color: #4a6e9b !important;
+	color: white !important;
+}
+
+/* Style the tab content */
+.tabcontent {
+	display: none;
+	padding: 6px 12px;
+	border: 1px solid #ccc;
+	border-top: none;
+}
+
 .alignleft {
 	float: left;
 }
@@ -97,7 +135,9 @@ input:checked+.slider:before {
 }
 
 input[type=range] {
+	pointer-events: none;
 	-webkit-appearance: none;
+	appearance: none;
 	margin: 0px 0;
 	width: 100%;
 	background: var(--homey-background-color);
@@ -126,10 +166,10 @@ input[type=range]::-webkit-slider-thumb {
 	margin-top: 0px;
 }
 
-.button {
+.toggle {
 	-webkit-appearance: none;
 	appearance: none;
-	background-color: #737b81;
+	background-color: #2196F3;
 	color: white;
 	text-align: center;
 	text-decoration: none;
@@ -142,4 +182,26 @@ input[type=range]::-webkit-slider-thumb {
 	border: 0.2px solid #010101;
 	box-shadow: 1px 1px 1px #000000, 0px 0px 1px #0d0d0d;
 	border-radius: 12px;
+}
+
+.zoomButton {
+	flex: 0 0 auto!important;
+	width: 40px!important;
+	height: 40px!important;
+	border-radius: 100% !important;
+	background: var(--homey-background-color)!important;
+	font-size: 24px!important;
+	border: 1px solid lightgrey!important;
+	cursor: pointer!important;
+	-webkit-appearance: none;
+	appearance: none!important;
+	margin: 0 10px !important;
+}
+
+.zoomContainer {
+	width: 100%;
+	margin: 5px auto;
+	display: flex;
+	justify-content: space-between;
+	align-items: center;
 }

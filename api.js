@@ -1,6 +1,24 @@
+/* jslint node: true */
+
 'use strict';
 
 module.exports = {
+	async getLog({ homey, query })
+	{
+		return homey.app.diagLog;
+	},
+
+	async clearLog({ homey, query })
+	{
+		homey.app.diagLog = '';
+		return 'OK';
+	},
+
+	async SendInfoLog({ homey, query })
+	{
+		return homey.app.sendLog('infoLog');
+	},
+
 	async getSomething({ homey, query })
 	{
 		// you can access query parameters like "/?foo=bar" through `query.foo`
@@ -46,5 +64,4 @@ module.exports = {
 	{
 		return homey.app.getSimSettings();
 	},
-
 };

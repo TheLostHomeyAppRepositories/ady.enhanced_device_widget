@@ -21,6 +21,14 @@ class MyApp extends Homey.App
 	 */
 	async onInit()
 	{
+		this.diagLog = '';
+		this.logLevel = this.homey.settings.get('logLevel');
+		if (this.logLevel === undefined)
+		{
+			this.logLevel = 0;
+			this.homey.settings.set('logLevel', this.logLevel);
+		}
+
 		this.api = await HomeyAPI.createAppAPI({ homey: this.homey });
 		this.deviceManager = new DeviceManager(this);
 
@@ -36,6 +44,14 @@ class MyApp extends Homey.App
 			return devices.filter((item) => item.name.toLowerCase().includes(query.toLowerCase()));
 		});
 
+		const simSettings = {
+			devices: {
+				name: '84:f7:03:3a:1f:26',
+				id: '50a0144e-33fe-46b2-aa3e-62c0b103c5e1',
+			},
+		};
+
+		this.homey.settings.set('simSettings', simSettings);
 		this.log('MyApp has been initialized');
 	}
 
@@ -62,6 +78,7 @@ class MyApp extends Homey.App
 			catch (e)
 			{
 				this.error('Error getting device image', e);
+				this.updateLog(`\nError ${e.message} when getting device image ${deviceId}`);
 			}
 		}
 
@@ -123,6 +140,7 @@ class MyApp extends Homey.App
 			catch (e)
 			{
 				this.error('Error getting devices', e);
+				this.updateLog(`\nError ${e.message} when getting devices`);
 			}
 		}
 		return [];
@@ -150,6 +168,11 @@ class MyApp extends Homey.App
 					}
 				}
 			}
+			if (this.logLevel > 0)
+			{
+				this.updateLog(`Capabilities for ${deviceId}:\n${JSON.stringify(capabilities, null, 2)}`);
+			}
+
 			return capabilities;
 		}
 		return [];
@@ -177,11 +200,16 @@ class MyApp extends Homey.App
 				}
 
 				await device.setCapabilityValue(capabilityId, value);
+				if (this.logLevel > 0)
+				{
+					this.updateLog(`\nSet ${deviceId}: ${capabilityId} to ${value}`);
+				}
 			}
 			catch (e)
 			{
 				this.error('Error setting capability', e);
-			}
+				this.updateLog(`\nError ${e.message} when setting ${deviceId}: ${capabilityId} to ${value}`);
+}
 		}
 	}
 
@@ -198,7 +226,9 @@ class MyApp extends Homey.App
 			}
 			catch (e)
 			{
-			}
+				this.error('Error getting device', e);
+				this.updateLog(`\nError ${e.message} when getting device ${id}`);
+}
 		}
 		return undefined;
 	}
@@ -213,9 +243,17 @@ class MyApp extends Homey.App
 			}
 			catch (e)
 			{
+				this.error('Error getting capability', e);
+				this.updateLog(`Error ${e.message} when getting capability ${device.id}: ${capabilityId}`);
 			}
 		}
 		return undefined;
+	}
+
+	updateLog(Message)
+	{
+		this.diagLog += `\n${Message}`;
+		this.homey.api.realtime('logupdated', { log: this.diagLog });
 	}
 
 }

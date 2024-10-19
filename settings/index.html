@@ -1,0 +1,451 @@
+<!doctype html>
+<html>
+
+<head>
+	<link rel="stylesheet" type="text/css" href="lwsa.css">
+
+	<!-- The '/homey.js' script must be included in your settings view to work -->
+	<script type="text/javascript" src="/homey.js" data-origin="settings"></script>
+</head>
+
+<body>
+	<!-- Tab links -->
+	<div class="tab">
+		<button class="tablinks" onclick="setPage(event, 'log')" id="defaultOpen">Log</button>
+		<button class="tablinks" onclick="setPage(event, 'sim')" id="defaultOpen" style="display:none">Sim</button>
+	</div>
+
+	<!-- LOG PAGE -->
+	<div id="log" class="tabcontent">
+		<fieldset>
+			<p> Diagnostics Log
+			</p>
+			<div class="field row">
+				<label class="homey-form-label" for="logLevel"><span data-i18n="settings.logLevel"></span></label>
+				<select class="homey-form-select" id="logLevel">
+					<option value=0>Errors Only</option>
+					<option value=2>Basic Information</option>
+				</select>
+				<P></P>
+			</div>
+			<p>
+				<button id="clearInfoLog" class="homey-button-small" data-i18n="settings.clear"></button>
+				<button id="sendInfoLog" class="homey-button-small" data-i18n="settings.send"></button>
+			</p>
+			<div class="field row">
+				<textarea id="infoLog" class="homey-form-textarea" wrap="off"></textarea>
+			</div>
+		</fieldset>
+	</div>
+
+	<!-- SIMULATOR PAGE -->
+	<div id="sim" class="tabcontent">
+		<div class="container">
+			<img id="deviceIcon" src="homey-logo.png" alt="Device Icon" class="device-image-class" />
+			<div id="deviceName" class="homey-text-bold">Device.</div>
+		</div>
+		<hr>
+		<div id="capabilitiesSection"></div>
+	</div>
+
+
+	<script type="text/javascript">
+		var infoLogElement = document.getElementById('infoLog');
+		var logLevelElement = document.getElementById('logLevel');
+		var clearInfoLogElement = document.getElementById('clearInfoLog');
+		var sendInfoLogElement = document.getElementById('sendInfoLog');
+
+		// a method named 'onHomeyReady' must be present in your code
+		function onHomeyReady(Homey)
+		{
+			// Tell Homey we're ready to be displayed
+			Homey.ready();
+
+			document.getElementById("defaultOpen").click();
+
+			Homey.on('logupdated', function (data)
+			{
+				infoLogElement.value = data.log;
+			});
+
+			Homey.api('GET', '/getLog/',
+				{
+					notify: true
+				}, function (err, result)
+			{
+				if (err)
+				{
+					Homey.alert(err);
+				}
+				else
+				{
+					infoLogElement.value = result;
+				}
+			});
+
+			Homey.get('logLevel', function (err, logLevel)
+			{
+				if (err) return Homey.alert(err);
+				logLevelElement.value = logLevel.toString();
+			});
+
+			logLevelElement.addEventListener('change', function (e)
+			{
+				Homey.set('logLevel', parseInt(logLevelElement.value), function (err)
+				{
+					if (err) return Homey.alert(err);
+				});
+			});
+
+			sendInfoLogElement.addEventListener('click', function (e)
+			{
+				if (infoLogElement.value.length < 15)
+				{
+					return Homey.alert("No Data to send");
+				}
+
+				Homey.confirm("Send the information log contents to the developer?", null, function (e, ok)
+				{
+					if (ok)
+					{
+						waitCursor(true);
+						Homey.api('POST', '/sendInfoLog/',
+							{
+								notify: true
+							}, function (err, result)
+						{
+							if (err)
+							{
+								Homey.alert(err);
+							}
+							else
+							{
+								Homey.alert("Log sent successfully");
+							}
+							waitCursor(false);
+						});
+					}
+				});
+			});
+
+			clearInfoLogElement.addEventListener('click', function (e)
+			{
+				Homey.api('POST', '/clearLog/',
+					{
+						notify: true
+					}, function (err, result)
+				{
+					if (err)
+					{
+						return Homey.alert(err);
+					}
+					else
+					{
+						infoLogElement.value = "";
+					}
+				});
+			});
+
+
+
+
+
+
+
+			Homey.get('simSettings', function (err, settings)
+			{
+				updateValues(settings);
+			});
+
+			Homey.ready();
+
+			Homey.on('updateWidget', function ({ deviceId, capabilityID, value })
+			{
+				if (typeof (value) === 'number')
+				{
+					const slider = document.getElementById(`${capabilityID}_slide`);
+					if (slider)
+					{
+						slider.value = value;
+					}
+					if ((capabilityID === 'dim') || (capabilityID === 'windowcoverings_set'))
+					{
+						value = value * 100;
+						value = value.toFixed();
+					}
+					document.getElementById(`${capabilityID}`).innerHTML = `${value}`;
+				}
+				else if (typeof (value) === 'boolean')
+				{
+					document.getElementById(`${capabilityID}`).checked = value;
+				}
+				else
+				{
+					document.getElementById(`${capabilityID}`).innerHTML = value;
+				}
+			});
+
+			function updateValues(settings)
+			{
+				// View the settings the user provided if your widget has settings.
+				document.getElementById('deviceName').innerHTML = settings.devices.name;
+
+				Homey.api('GET', `/?deviceImage=${settings.devices.id}`, {})
+					.then((result) =>
+					{
+						document.getElementById('deviceIcon').src = result;
+					})
+					.catch(console.error);
+
+				// Fetch something from your app.
+				Homey.api('GET', `/?deviceId=${settings.devices.id}&register=true`, {})
+					.then((result) =>
+					{
+						var html = '';
+						var height = 300;
+						if (result)
+						{
+							// Add each of the capabilities to the panel
+							const capabilitiesArray = Object.values(result);
+							height = ((capabilitiesArray.length) * 29) + 78;
+							for (const capability of capabilitiesArray)
+							{
+								// create an HTML line for each capability with the title left aligned and the value right aligned
+								if (capability.setable === true)
+								{
+									if ((capability.type === "boolean") && capability.getable)
+									{
+										// create a switch for boolean capabilities
+										html += `<div>
+													<p class="alignleft homey-font-size-default" style="padding-top:6px; padding-bottom:5px"> ${capability.title}</p>
+													<p class="alignright homey-font-size-default" style="padding-top:6px; padding-bottom:5px">
+														<b>
+															<span>
+																<label class="switch">
+																	<input id="${capability.id}" type="checkbox" ${capability.value ? 'checked' : ''} onclick="onOffToggle('${settings.devices.id}', '${capability.id}')">
+																	<span class="slider round">
+																	</span>
+																</label>
+															</span>
+														</b>
+													</p>
+												</div>
+												<div style="clear: both;">
+												</div>`;
+									}
+									else if (capability.type === "boolean")
+									{
+										// Create a push button
+										html += `<div>
+													<p class="alignleft homey-font-size-default" style="padding-top:6px; padding-bottom:5px"> ${capability.title}</p>
+													<p class="alignright homey-font-size-default" style="padding-top:6px; padding-bottom:5px">
+														<b>
+															<span>
+																<button class="toggle" id="${capability.id}" onclick="buttonPressed('${settings.devices.id}', '${capability.id}')">
+																	O
+																</button>
+															</span>
+														</b>
+													</p>
+												</div>
+												<div style="clear: both;">
+												</div>`;
+									}
+									else if (capability.type === "number")
+									{
+										// Allow extra space for sliders
+										height += 30;
+
+										// create a slider for number capabilities
+										html += `<div>
+													<p class="alignleft homey-font-size-default" style="padding-top:6px; padding-bottom:1px"> ${capability.title}</p><p class="alignright homey-font-size-default" style="padding-top:6px; padding-bottom:5px"><b> <span id="${capability.id}">${(capability.id === 'dim') || (capability.id == 'windowcoverings_set') ? capability.value * 100 : capability.value}</span> </b> ${capability.units ? capability.units : ''}</p>
+												</div>
+												<div style="clear: both;"></div>
+												<div class="zoomContainer">
+													<button id="${capability.id}_minus" class="zoomButton" onclick="zoom('${settings.devices.id}', '${capability.id}', 'out')">-</button>
+													<input
+														id="${capability.id}_slide"
+														type="range"
+														min="${capability.min}"
+														max="${capability.max}"
+														step="${(capability.max - capability.min) / 100}"
+														value="${capability.value}"
+														onchange="numberChange('${settings.devices.id}', '${capability.id}')"
+														oninput="numberSlide('${capability.id}')"
+														onpointerdown="handlePointerDown(event)"
+														onpointerup="handlePointerUp(event)"
+														onpointermove="handleTouchStart(event)"
+														ontouchstart="handleTouchStart(event)"
+														ontouchmove="handleTouchStart(event)"
+														onfocus="handleCancelFocus(event)"
+													>
+													<button id="${capability.id}_plus" class="zoomButton" onclick="zoom('${settings.devices.id}', '${capability.id}', 'in')">+</button>
+												</div>
+												<div style="clear: both;"></div>`;
+									}
+									else
+									{
+										html += `<div><p class="alignleft homey-font-size-default" style="padding-top:6px; padding-bottom:5px"> ${capability.title}</p> <p class="alignright homey-font-size-default" style="padding-top:5px; padding-bottom:5px"><b> <span id="${capability.id}"> ${capability.value}</span> </b> ${capability.units ? capability.units : ''}</p> </div> <div style="clear: both;"></div>`;
+									}
+								}
+								else
+								{
+									html += `<div><p class="alignleft homey-font-size-default" style="padding-top:6px; padding-bottom:5px"> ${capability.title}</p> <p class="alignright homey-font-size-default" style="padding-top:5px; padding-bottom:5px"><b> <span id="${capability.id}"> ${capability.value}</span> </b> ${capability.units ? capability.units : ''}</p> </div> <div style="clear: both;"></div>`;
+								}
+							}
+						}
+
+						document.getElementById('capabilitiesSection').innerHTML = html;
+						// Homey.setHeight(height);
+
+						console.log(result);
+						return;
+					})
+					.catch(console.error);
+			}
+
+		}
+
+		function onOffToggle(deviceId, capabilityId)
+		{
+			const element = document.getElementById(capabilityId);
+			const value = element.checked;
+			elememt = 2;
+
+			Homey.api('POST', '/', { deviceId: deviceId, capabilityId: capabilityId, value: value })
+				.then((result) =>
+				{
+					console.log(result);
+					return;
+				})
+				.catch(console.error);
+		}
+
+		function buttonPressed(deviceId, capabilityId)
+		{
+			const element = document.getElementById(capabilityId);
+
+			Homey.api('POST', '/', { deviceId: deviceId, capabilityId: capabilityId, value: true })
+				.then((result) =>
+				{
+					console.log(result);
+					return;
+				})
+				.catch(console.error);
+		}
+
+		function zoom(deviceId, capabilityId, direction)
+		{
+			var slider = document.getElementById(`${capabilityId}_slide`);
+			var step = parseInt(slider.attributes.step, 10);
+			var currentSliderValue = parseInt(slider.value, 10);
+			var newStepValue = currentSliderValue + step;
+
+			if (direction === "out")
+			{
+				newStepValue = currentSliderValue - step;
+			} else
+			{
+				newStepValue = currentSliderValue + step;
+			}
+
+			slider.value = newStepValue;
+		}
+
+		function numberChange(deviceId, capabilityId)
+		{
+			const element = document.getElementById(`${capabilityId}_slide`);
+			const value = parseFloat(element.value);
+			// document.getElementById(capabilityId).innerHTML = element.value;
+
+			Homey.api('POST', '/', { deviceId: deviceId, capabilityId: capabilityId, value: value })
+				.then((result) =>
+				{
+					console.log(result);
+					return;
+				})
+				.catch(console.error);
+		}
+
+		function numberSlide(capabilityId)
+		{
+			slider = document.getElementById(`${capabilityId}_slide`);
+			slider.style.backgroundColor = 'red'; // Change the background color of the slider when pointer is down
+			const element = document.getElementById(`${capabilityId}_slide`);
+			let value = parseFloat(element.value);
+			if ((capabilityId === 'dim') || (capabilityId === 'windowcoverings_set'))
+			{
+				value = (value * 100);
+				value = value.toFixed();
+			}
+			document.getElementById(capabilityId).innerHTML = `${value}`;
+		}
+
+		function handleCancelFocus(event)
+		{
+			event.stopPropagation();
+			event.preventDefault();
+		}
+
+		function handleTouchStart(event)
+		{
+			event.stopPropagation(); // Prevent the default behavior of the touch start event
+		}
+
+		// Function to handle pointer down and capture the pointer
+		function handlePointerDown(event)
+		{
+			event.stopPropagation(); // Prevent the default behavior of the pointer down event
+			event.target.setPointerCapture(event.pointerId); // Capture the pointer to prevent losing focus
+			event.target.style.backgroundColor = 'red'; // Change the background color of the slider when pointer is down
+		}
+
+		// Function to handle pointer up and release the pointer capture
+		function handlePointerUp(event)
+		{
+			event.target.releasePointerCapture(event.pointerId); // Release the pointer after interaction ends
+			event.target.style.backgroundColor = 'green'; // Change the background color of the slider when pointer is up
+		}
+
+		function setPage(evt, tabPage)
+		{
+			var i, tabcontent, tablinks;
+
+			// Get all elements with class="tabcontent" and hide them
+			tabcontent = document.getElementsByClassName("tabcontent");
+			for (i = 0; i < tabcontent.length; i++)
+			{
+				tabcontent[i].style.display = "none";
+			}
+
+			// Get all elements with class="tablinks" and remove the class "active"
+			tablinks = document.getElementsByClassName("tablinks");
+			for (i = 0; i < tablinks.length; i++)
+			{
+				tablinks[i].className = tablinks[i].className.replace(" active", "");
+			}
+
+			// Show the current tab, and add an "active" class to the button that opened the tab
+			document.getElementById(tabPage).style.display = "block";
+			evt.currentTarget.className += " active";
+
+			if (tabPage == 'log')
+			{
+				// Refresh the log data
+				Homey.get('logLevel', function (err, logLevel)
+				{
+					if (err) return Homey.alert(err);
+					logLevelElement.value = logLevel;
+				});
+
+				// Make the log text area fill the page
+				infoLogElement.style.width = (logLevel.offsetWidth) + 'px';
+				infoLogElement.style.height = (window.innerHeight - infoLogElement.offsetTop - 60) + 'px';
+			}
+		}
+
+	</script>
+
+</body>
+
+</html>
