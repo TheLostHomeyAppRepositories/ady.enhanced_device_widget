@@ -20,6 +20,16 @@ module.exports = {
 			return homey.app.getDeviceImageURI(query.deviceImage);
 		}
 
+		if (query.disabledCapabilities)
+		{
+			let disabledCapabilities = homey.settings.get(query.disabledCapabilities);
+			if (!disabledCapabilities)
+			{
+				disabledCapabilities = {};
+			}
+			return disabledCapabilities;
+		}
+
 		return 'Hello from App';
 	},
 
@@ -34,7 +44,12 @@ module.exports = {
 
 	async updateSomething({ homey, params, body })
 	{
-		return homey.app.setSomething(body);
+		if (params.widgetInstanceId)
+		{
+			homey.settings.set(params.widgetInstanceId, body.capabilityDisabled);
+		}
+
+		return null;
 	},
 
 	async deleteSomething({ homey, params })

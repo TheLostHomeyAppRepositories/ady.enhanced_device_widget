@@ -6,8 +6,14 @@
 
 <body class="homey-widget">
 	<div class="container">
-		<img id="deviceIcon" src="homey-logo.png" alt="Device Icon" class="device-image-class" />
-		<div id="deviceName" class="homey-text-bold">Device.</div>
+		<div class="left-section">
+			<img id="deviceIcon" src="homey-logo.png" alt="Device Icon" class="device-image-class" />
+			<div id="deviceName" class="homey-text-bold">Device</div>
+		</div>
+		<div id="enableEdit" class="right-section">
+			<label for="editMode" class="homey-font-size-default">Edit</label>
+			<input id="editMode" type="checkbox" onclick="onChangeEditMode()">
+		</div>
 	</div>
 	<hr>
 	<div id="capabilitiesSection"></div>
@@ -15,33 +21,46 @@
 	<script type="text/javascript">
 		var SliderCancelTimer = null;
 		var oldValue = null;
+		var editMode = false;
+		var widgetId = null;
+		var capabilityDisabled = {};
+		var editEnabled = false;
 
 		function onHomeyReady(Homey)
 		{
-			const widgetId = Homey.getWidgetInstanceId();
-
+			widgetId = Homey.getWidgetInstanceId();
 
 			// View the settings the user provided if your widget has settings.
 			const settings = Homey.getSettings();
 			document.getElementById('deviceName').innerHTML = settings.devices.name;
 			document.getElementById('deviceIcon').src = settings.devices.iconObj.url;
 
-			// Homey.api('GET', `/?deviceImage=${settings.devices.id}`, {})
-			// 	.then((result) =>
-			// 	{
-			// 		document.getElementById('deviceIcon').src = result;
-			// 	})
-			// 	.catch(console.error);
+			document.getElementById('enableEdit').style.display = settings.enableConfiguration ? 'flex' : 'none';
+			editEnabled = settings.enableConfiguration;
+			// editMode = editEnabled;
+			document.getElementById('editMode').checked = editMode;
 
-			updateValues(true);
+			Homey.api('GET', `/?disabledCapabilities=${widgetId}`, {})
+				.then((result) =>
+				{
+					capabilityDisabled = result;
 
-			Homey.ready();
+					updateValues(true);
+					Homey.ready();
+				})
+				.catch(console.error);
+
 
 			Homey.on('updateWidget', function ({ deviceId, capabilityID, value })
 			{
 				const settings = Homey.getSettings();
 				if (settings.devices.id === deviceId)
 				{
+					if (capabilityDisabled[capabilityID])
+					{
+						return;
+					}
+
 					if (typeof (value) === 'number')
 					{
 						const slider = document.getElementById(`${capabilityID}_slide`);
@@ -64,79 +83,95 @@
 					{
 						document.getElementById(`${capabilityID}`).innerHTML = value;
 					}
+
 				}
 			});
+		}
 
-			function updateValues(register)
-			{
-				const widgetId = Homey.getWidgetInstanceId();
+		function updateValues(register)
+		{
+			const widgetId = Homey.getWidgetInstanceId();
 
-				// View the settings the user provided if your widget has settings.
-				const settings = Homey.getSettings();
+			// View the settings the user provided if your widget has settings.
+			const settings = Homey.getSettings();
 
-				// Fetch something from your app.
-				Homey.api('GET', `/?deviceId=${settings.devices.id}&register=${register}`, {})
-					.then((result) =>
+			// Fetch something from your app.
+			Homey.api('GET', `/?deviceId=${settings.devices.id}&register=${register}`, {})
+				.then((result) =>
+				{
+					var html = '';
+					var height = 78;
+					if (result)
 					{
-						var html = '';
-						var height = 300;
-						if (result)
+						// Add each of the capabilities to the panel
+						const capabilitiesArray = Object.values(result);
+						// height = ((capabilitiesArray.length) * 29) + 78;
+						if (editEnabled)
 						{
-							// Add each of the capabilities to the panel
-							const capabilitiesArray = Object.values(result);
-							height = ((capabilitiesArray.length) * 29) + 78;
-							for (const capability of capabilitiesArray)
-							{
-								// create an HTML line for each capability with the title left aligned and the value right aligned
-								if (capability.setable === true)
-								{
-									if ((capability.type === "boolean") && capability.getable)
-									{
-										// create a switch for boolean capabilities
-										html += `<div>
-													<p class="alignleft homey-font-size-default" style="padding-top:6px; padding-bottom:5px"> ${capability.title}</p>
-													<p class="alignright homey-font-size-default" style="padding-top:6px; padding-bottom:5px">
-														<b>
-															<span>
-																<label class="switch">
-																	<input id="${capability.id}" type="checkbox" ${capability.value ? 'checked' : ''} onclick="onOffToggle('${settings.devices.id}', '${capability.id}')">
-																	<span class="slider round">
-																	</span>
-																</label>
-															</span>
-														</b>
-													</p>
-												</div>
-												<div style="clear: both;">
-												</div>`;
-									}
-									else if (capability.type === "boolean")
-									{
-										// Create a push button
-										html += `<div>
-													<p class="alignleft homey-font-size-default" style="padding-top:6px; padding-bottom:5px"> ${capability.title}</p>
-													<p class="alignright homey-font-size-default" style="padding-top:6px; padding-bottom:5px">
-														<b>
-															<span>
-																<button class="button" id="${capability.id}" onclick="buttonPressed('${settings.devices.id}', '${capability.id}')">
-																	1
-																</button>
-															</span>
-														</b>
-													</p>
-												</div>
-												<div style="clear: both;">
-												</div>`;
-									}
-									else if (capability.type === "number")
-									{
-										// Allow extra space for sliders
-										height += 30;
+							height += 10;
+						}
 
-										// create a slider for number capabilities
-										html += `<div>
-													<p class="alignleft homey-font-size-default" style="padding-top:6px; padding-bottom:1px"> ${capability.title}</p><p class="alignright homey-font-size-default" style="padding-top:6px; padding-bottom:5px"><b> <span id="${capability.id}">${(capability.id === 'dim') || (capability.id == 'windowcoverings_set') ? capability.value * 100 : capability.value}</span> </b> ${capability.units ? capability.units : ''}</p>
-												</div>
+						for (const capability of capabilitiesArray)
+						{
+							if (!editMode && capabilityDisabled[capability.id])
+							{
+								continue;
+							}
+
+							// create an HTML line for each capability with the title left aligned and the value right aligned
+							html += '<div>';
+
+							if (editMode)
+							{
+								// Add a toggle switch at the begging of the row to enable/disable the capability
+								html += `<p class="alignleft homey-font-size-default" style="padding-top:6px; padding-bottom:5px">
+														<input id="enable_${capability.id}" style="margin-right:5px" type="checkbox" ${capabilityDisabled[capability.id] ? '' : 'checked'} onclick="onEnableCapability('${capability.id}')">
+													</p>`;
+							}
+
+							if (capability.setable === true)
+							{
+								if ((capability.type === "boolean") && capability.getable)
+								{
+									height += 40;
+
+									// create a switch for boolean capabilities
+									html += `<p class="alignleft homey-font-size-default"> ${capability.title}</p>
+												<p class="alignright homey-font-size-default">
+													<b>
+														<span>
+															<label class="switch">
+																<input id="${capability.id}" type="checkbox" ${capability.value ? 'checked' : ''} onclick="onOffToggle('${settings.devices.id}', '${capability.id}')">
+																<span class="slider round">
+																</span>
+															</label>
+														</span>
+													</b>
+												</p>`;
+								}
+								else if (capability.type === "boolean")
+								{
+									height += 40;
+
+									// Create a push button
+									html += `<p class="alignleft homey-font-size-default"> ${capability.title}</p>
+												<p class="alignright homey-font-size-default">
+													<b>
+														<span>
+															<button class="button" id="${capability.id}" onclick="buttonPressed('${settings.devices.id}', '${capability.id}')">
+																1
+															</button>
+														</span>
+													</b>
+												</p>`;
+								}
+								else if (capability.type === "number")
+								{
+									// Allow extra space for sliders
+									height += 60;
+
+									// create a slider for number capabilities
+									html += `<p class="alignleft homey-font-size-default"> ${capability.title}</p><p class="alignright homey-font-size-default"><b> <span id="${capability.id}">${(capability.id === 'dim') || (capability.id == 'windowcoverings_set') ? capability.value * 100 : capability.value}</span> </b> ${capability.units ? capability.units : ''}</p>
 												<div style="clear: both;"></div>
 												<p class="homey-font-size-default" style="padding-top:0px; padding-bottom:5px">
 												<input
@@ -154,29 +189,57 @@
 													ontouchstart="handleTouchStart(event)"
 													ontouchmove="handleTouchStart(event)"
 													onfocus="handleCancelFocus(event)">
-												</p>
-												<div style="clear: both;"></div>`;
-									}
-									else
-									{
-										html += `<div><p class="alignleft homey-font-size-default" style="padding-top:6px; padding-bottom:5px"> ${capability.title}</p> <p class="alignright homey-font-size-default" style="padding-top:5px; padding-bottom:5px"><b> <span id="${capability.id}"> ${capability.value}</span> </b> ${capability.units ? capability.units : ''}</p> </div> <div style="clear: both;"></div>`;
-									}
+												</p>`;
 								}
 								else
 								{
-									html += `<div><p class="alignleft homey-font-size-default" style="padding-top:6px; padding-bottom:5px"> ${capability.title}</p> <p class="alignright homey-font-size-default" style="padding-top:5px; padding-bottom:5px"><b> <span id="${capability.id}"> ${capability.value}</span> </b> ${capability.units ? capability.units : ''}</p> </div> <div style="clear: both;"></div>`;
+									height += 40;
+
+									html += `<p class="alignleft homey-font-size-default"> ${capability.title}</p> <p class="alignright homey-font-size-default"><b> <span id="${capability.id}"> ${capability.value}</span> </b> ${capability.units ? capability.units : ''}</p>`;
 								}
 							}
+							else
+							{
+								height += 40;
+
+								html += `<p class="alignleft homey-font-size-default"> ${capability.title}</p> <p class="alignright homey-font-size-default"><b> <span id="${capability.id}"> ${capability.value}</span> </b> ${capability.units ? capability.units : ''}</p>`;
+							}
+
+							html += `</div >
+									<div style="clear: both;">
+									</div>`;
+
 						}
+					}
 
-						document.getElementById('capabilitiesSection').innerHTML = html;
-						Homey.setHeight(height);
+					document.getElementById('capabilitiesSection').innerHTML = html;
+					Homey.setHeight(height);
 
-						console.log(result);
-						return;
-					})
-					.catch(console.error);
-			}
+					console.log(result);
+					return;
+				})
+				.catch(console.error);
+		}
+
+		function onEnableCapability(capabilityId)
+		{
+			const element = document.getElementById(`enable_${capabilityId}`);
+			const value = element.checked;
+			capabilityDisabled[capabilityId] = !value;
+		}
+
+		function onChangeEditMode()
+		{
+			const element = document.getElementById('editMode');
+			editMode = element.checked;
+			Homey.api('PUT', '/', { capabilityDisabled })
+				.then((result) =>
+				{
+					console.log(result);
+					updateValues(false);
+					return;
+				})
+				.catch(console.error);
 		}
 
 		function onOffToggle(deviceId, capabilityId)
@@ -287,7 +350,6 @@
 		{
 			event.target.releasePointerCapture(event.pointerId); // Release the pointer after interaction ends
 		}
-
 	</script>
 </body>
 

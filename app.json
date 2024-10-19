@@ -91,7 +91,31 @@
           "id": "devices",
           "type": "autocomplete",
           "title": {
-            "en": "Device"
+            "en": "Device",
+            "nl": "Apparaat",
+            "de": "Gerät",
+            "fr": "Dispositif",
+            "es": "Dispositivo",
+            "it": "Dispositivo",
+            "pt": "Dispositivo",
+            "pl": "Urządzenie",
+            "ko": "장치"
+          }
+        },
+        {
+          "id": "enableConfiguration",
+          "type": "checkbox",
+          "value": false,
+          "title": {
+            "en": "Enabled run-time configuration",
+            "nl": "Ingeschakelde runtime-configuratie",
+            "de": "Aktivierte Laufzeitkonfiguration",
+            "fr": "Configuration d'exécution activée",
+            "es": "Configuración de tiempo de ejecución habilitada",
+            "it": "Configurazione runtime abilitata",
+            "pt": "Configuração em tempo de execução ativada",
+            "pl": "Włączona konfiguracja czasu wykonania",
+            "ko": "활성화 된 실행 시간 구성"
           }
         }
       ],

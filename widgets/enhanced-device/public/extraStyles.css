@@ -1,9 +1,17 @@
 .alignleft {
 	float: left;
+	margin-top: 15px;
+	margin-bottom: 0px;
+	height: 25px;
+	align-items: center;
 }
 
 .alignright {
 	float: right;
+	margin-top: 15px;
+	margin-bottom: 0px;
+	height: 25px;
+	align-items: center;
 }
 
 /* The switch - the box around the slider */
@@ -53,7 +61,7 @@
 }
 
 input:checked+.slider {
-	background-color: #2196F3;
+	background-color: var(--homey-color-green);
 }
 
 input:checked+.slider:before {
@@ -84,11 +92,29 @@ input:checked+.slider:before {
 
 .container {
 	display: flex;
+	justify-content: space-between;
 	align-items: center;
-	/* Aligns items to the left */
-	justify-content: flex-start;
-	/* Makes the container only as wide as the content */
-	width: fit-content;
+	width: 100%;
+	margin-bottom: 10px;
+}
+
+.left-section {
+	display: flex;
+	align-items: center;
+}
+
+.left-section img {
+	margin-right: 10px;
+}
+
+.right-section {
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+}
+
+.switch {
+	margin-top: 0px;
 }
 
 /* Ensures the div doesn't stretch */
@@ -96,41 +122,36 @@ input:checked+.slider:before {
 	flex-grow: 0;
 }
 
-input[type=range] {
-	-webkit-appearance: none;
-	margin: 0px 0;
-	width: 100%;
-	background: var(--homey-background-color);
-}
-
-input[type=range]::-webkit-slider-runnable-track {
-	width: 100%;
-	height: 24px;
-	cursor: pointer;
-	box-shadow: 1px 1px 1px #000000, 0px 0px 1px #0d0d0d;
-	background: #2196F3;
-	border-radius: 5px;
-	border: 0.2px solid #010101;
-}
-
 input[type=range]::-webkit-slider-thumb {
 	pointer-events: auto;
 	box-shadow: 1px 1px 1px #000000, 0px 0px 1px #0d0d0d;
 	border: 1px solid #000000;
-	height: 24px;
+	height: 25px;
 	width: 16px;
 	border-radius: 5px;
-	background: white;
+	background: var(--homey-color-blue);
 	cursor: pointer;
 	-webkit-appearance: none;
 	margin-top: 0px;
 }
 
+
+input[type=range] {
+	-webkit-appearance: none;
+	width: 100%;
+	height: 10px;
+	background: #d3d3d3;
+	outline: none;
+	opacity: 0.7;
+	-webkit-transition: .2s;
+	transition: opacity .2s;
+}
+
 .button {
 	-webkit-appearance: none;
 	appearance: none;
-	background-color: #737b81;
-	color: white;
+	background-color:  var(--homey-background-color);
+	color: var(--homey-color-blue);
 	text-align: center;
 	text-decoration: none;
 	display: inline-block;
@@ -139,7 +160,7 @@ input[type=range]::-webkit-slider-thumb {
 	cursor: pointer;
 	height: 24px;
 	width: 40px;
-	border: 0.2px solid #010101;
-	box-shadow: 1px 1px 1px #000000, 0px 0px 1px #0d0d0d;
-	border-radius: 12px;
+	border: 1px solid #010101;
+	box-shadow: 1px 1px 1px #000000, 0px 0px 2px #0d0d0d;
+	border-radius: 10px;
 }
