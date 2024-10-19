@@ -1,6 +1,6 @@
 {
 	"id": "ady.enhanced_device_widget",
-	"version": "1.0.5",
+	"version": "1.0.6",
 	"compatibility": ">=12.1.0",
 	"sdk": 3,
 	"brandColor": "#FF7D4B",

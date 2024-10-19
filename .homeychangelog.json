@@ -16,5 +16,8 @@
   },
   "1.0.5": {
 	"en": "Restyled the controls. Added edit mode to enable hiding of capabilities."
+  },
+  "1.0.6": {
+	"en": "Fix capability hiding."
   }
 }

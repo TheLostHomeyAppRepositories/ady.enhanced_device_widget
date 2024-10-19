@@ -211,7 +211,7 @@ class MyApp extends Homey.App
 			{
 				this.error('Error setting capability', e);
 				this.updateLog(`\nError ${e.message} when setting ${deviceId}: ${capabilityId} to ${value}`);
-}
+			}
 		}
 	}
 
