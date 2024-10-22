@@ -36,6 +36,13 @@
 		"name": "Adrian Rockall",
 		"email": "ady@rockalls.uk"
 	},
+	"contributors": {
+		"developers": [
+			{
+				"name": "Markus"
+			}
+		]
+	},
 	"support": "https://github.com/AdyRock/com.enhanced_device_widget/issues",
 	"homeyCommunityTopicId": 117835,
 	"contributing": {
