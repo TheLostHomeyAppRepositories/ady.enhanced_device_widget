@@ -33,11 +33,16 @@
 			// View the settings the user provided if your widget has settings.
 			const settings = Homey.getSettings();
 			document.getElementById('deviceName').innerHTML = settings.devices.name;
-			document.getElementById('deviceIcon').src = settings.devices.iconObj.url;
+
+			if (settings.devices.iconOverride) {
+				// haven't found another trick for the default icons yet
+				document.getElementById('deviceIcon').src = 'https://my.homey.app/img/devices/' + settings.devices.iconOverride + '.svg';
+			} else {
+				document.getElementById('deviceIcon').src = settings.devices.iconObj.url;
+			}
 
 			document.getElementById('enableEdit').style.display = settings.enableConfiguration ? 'flex' : 'none';
 			editEnabled = settings.enableConfiguration;
-			// editMode = editEnabled;
 			document.getElementById('editMode').checked = editMode;
 
 			Homey.api('GET', `/?disabledCapabilities=${widgetId}`, {})
@@ -95,6 +100,9 @@
 			// View the settings the user provided if your widget has settings.
 			const settings = Homey.getSettings();
 
+			const denseLayout = settings.dense;
+			let heightAdd = denseLayout ? 24 : 40;
+
 			// Fetch something from your app.
 			Homey.api('GET', `/?deviceId=${settings.devices.id}&disabledCapabilities=${disabledCapabilities ? JSON.stringify(disabledCapabilities) : null}`, {})
 				.then((result) =>
@@ -129,15 +137,15 @@
 													</p>`;
 							}
 
-							if (capability.setable === true)
+							if (capability.setable === true && !settings.readonly)
 							{
 								if ((capability.type === "boolean") && capability.getable)
 								{
-									height += 40;
+									height += heightAdd;
 
 									// create a switch for boolean capabilities
-									html += `<p class="alignleft homey-font-size-default"> ${capability.title}</p>
-												<p class="alignright homey-font-size-default">
+									html += `<p class="alignleft homey-font-size-default" dense="${denseLayout}"> ${capability.title}</p>
+												<p class="alignright homey-font-size-default" dense="${denseLayout}">
 													<b>
 														<span>
 															<label class="switch">
@@ -151,11 +159,11 @@
 								}
 								else if (capability.type === "boolean")
 								{
-									height += 40;
+									height += heightAdd;
 
 									// Create a push button
-									html += `<p class="alignleft homey-font-size-default"> ${capability.title}</p>
-												<p class="alignright homey-font-size-default">
+									html += `<p class="alignleft homey-font-size-default" dense="${denseLayout}"> ${capability.title}</p>
+												<p class="alignright homey-font-size-default" dense="${denseLayout}">
 													<b>
 														<span>
 															<button class="button" id="${capability.id}" onclick="buttonPressed('${settings.devices.id}', '${capability.id}')">
@@ -168,10 +176,10 @@
 								else if (capability.type === "number")
 								{
 									// Allow extra space for sliders
-									height += 60;
+									height += heightAdd + (denseLayout ? 10 : 20);
 
 									// create a slider for number capabilities
-									html += `<p class="alignleft homey-font-size-default"> ${capability.title}</p><p class="alignright homey-font-size-default"><b> <span id="${capability.id}">${(capability.id === 'dim') || (capability.id == 'windowcoverings_set') ? capability.value * 100 : capability.value}</span> </b> ${capability.units ? capability.units : ''}</p>
+									html += `<p class="alignleft homey-font-size-default" dense="${denseLayout}"> ${capability.title}</p><p class="alignright homey-font-size-default" dense="${denseLayout}"><b> <span id="${capability.id}">${(capability.id === 'dim') || (capability.id == 'windowcoverings_set') ? capability.value * 100 : capability.value}</span> </b> ${capability.units ? capability.units : ''}</p>
 												<div style="clear: both;"></div>
 												<p class="homey-font-size-default" style="padding-top:0px; padding-bottom:5px">
 												<input
@@ -193,16 +201,22 @@
 								}
 								else
 								{
-									height += 40;
+									height += heightAdd;
 
-									html += `<p class="alignleft homey-font-size-default"> ${capability.title}</p> <p class="alignright homey-font-size-default"><b> <span id="${capability.id}"> ${capability.value}</span> </b> ${capability.units ? capability.units : ''}</p>`;
+									html += `<p class="alignleft homey-font-size-default" dense="${denseLayout}"> ${capability.title}</p> <p class="alignright homey-font-size-default" dense="${denseLayout}"><b> <span id="${capability.id}"> ${capability.value}</span> </b> ${capability.units ? capability.units : ''}</p>`;
 								}
 							}
 							else
 							{
-								height += 40;
+								height += heightAdd;
 
-								html += `<p class="alignleft homey-font-size-default"> ${capability.title}</p> <p class="alignright homey-font-size-default"><b> <span id="${capability.id}"> ${capability.value}</span> </b> ${capability.units ? capability.units : ''}</p>`;
+								let value = capability.value;								
+								if (capability.type == "enum") {
+									let e = capability.values.find((v) => v.id == value);
+									value = e ? e.title : value;
+								}
+
+								html += `<p class="alignleft homey-font-size-default" dense="${denseLayout}"> ${capability.title}</p> <p class="alignright homey-font-size-default" dense="${denseLayout}"><b> <span id="${capability.id}"> ${value}</span> </b> ${capability.units ? capability.units : ''}</p>`;
 							}
 
 							html += `</div >
@@ -213,6 +227,8 @@
 					}
 
 					document.getElementById('capabilitiesSection').innerHTML = html;
+					document.getElementById('capabilitiesSection').setAttribute("dense", denseLayout);
+
 					Homey.setHeight(height);
 
 					console.log(result);
