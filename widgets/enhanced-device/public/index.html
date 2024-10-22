@@ -33,7 +33,13 @@
 			// View the settings the user provided if your widget has settings.
 			const settings = Homey.getSettings();
 			document.getElementById('deviceName').innerHTML = settings.devices.name;
-			document.getElementById('deviceIcon').src = settings.devices.iconObj.url;
+
+			Homey.api('GET', `/?deviceImage=${settings.devices.id}`, {})
+				.then((result) =>
+				{
+					document.getElementById('deviceIcon').src = result;
+				})
+				.catch(console.error);
 
 			document.getElementById('enableEdit').style.display = settings.enableConfiguration ? 'flex' : 'none';
 			editEnabled = settings.enableConfiguration;
@@ -79,6 +85,10 @@
 					{
 						document.getElementById(`${capabilityID}`).checked = value;
 					}
+					else if (typeof (value) === 'string')
+					{
+						document.getElementById(`${capabilityID}`).value = value;
+					}
 					else
 					{
 						document.getElementById(`${capabilityID}`).innerHTML = value;
@@ -111,6 +121,8 @@
 							height += 10;
 						}
 
+						// for (var page = 0; page < 10; page++)
+						// {
 						for (const capability of capabilitiesArray)
 						{
 							if (!editMode && disabledCapabilities[capability.id])
@@ -168,7 +180,7 @@
 								else if (capability.type === "number")
 								{
 									// Allow extra space for sliders
-									height += 60;
+									height += 55;
 
 									// create a slider for number capabilities
 									html += `<p class="alignleft homey-font-size-default"> ${capability.title}</p><p class="alignright homey-font-size-default"><b> <span id="${capability.id}">${(capability.id === 'dim') || (capability.id == 'windowcoverings_set') ? capability.value * 100 : capability.value}</span> </b> ${capability.units ? capability.units : ''}</p>
@@ -191,6 +203,25 @@
 													onfocus="handleCancelFocus(event)">
 												</p>`;
 								}
+								else if (capability.type === "enum")
+								{
+									height += 40;
+
+									// Create a drop list for enum capabilities
+									html += `<p class="alignleft homey-font-size-default"> ${capability.title}</p>
+												<p class="alignright homey-font-size-default">
+													<b>
+														<span>
+															<select class="select" id="${capability.id}" onchange="dropListChanged('${settings.devices.id}', '${capability.id}')">`
+																for (const option of capability.values)
+																{
+																	html+= `<option value="${option.id}" ${option.title === capability.value ? 'selected' : ''}>${option.title}</option>`;
+																}
+															html += `</select>
+														</span>
+													</b>
+												</p>`;
+								}
 								else
 								{
 									height += 40;
@@ -210,6 +241,7 @@
 									</div>`;
 
 						}
+//					}
 					}
 
 					document.getElementById('capabilitiesSection').innerHTML = html;
@@ -237,6 +269,21 @@
 				{
 					console.log(result);
 					updateValues(capabilityDisabled);
+					return;
+				})
+				.catch(console.error);
+		}
+
+		function dropListChanged(deviceId, capabilityId)
+		{
+			const element = document.getElementById(capabilityId);
+			let selectedOption = element.options[element.selectedIndex];  // Get the selected option element
+			let selectedValue = selectedOption.value;  // Get the id of the selected option
+
+			Homey.api('POST', '/', { deviceId: deviceId, capabilityId: capabilityId, value: selectedValue })
+				.then((result) =>
+				{
+					console.log(result);
 					return;
 				})
 				.catch(console.error);
