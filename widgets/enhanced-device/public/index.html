@@ -182,12 +182,12 @@
 								else if (capability.type === "number")
 								{
 									// Allow extra space for sliders
-									height += heightAdd + (denseLayout ? 45 : 55);
+									height += heightAdd + (denseLayout ? 30 : 15);
 
 									// create a slider for number capabilities
 									html += `<p class="alignleft homey-font-size-default" dense="${denseLayout}"> ${capability.title}</p><p class="alignright homey-font-size-default" dense="${denseLayout}"><b> <span id="${capability.id}">${(capability.id === 'dim') || (capability.id == 'windowcoverings_set') ? capability.value * 100 : capability.value}</span> </b> ${capability.units ? capability.units : ''}</p>
 												<div style="clear: both;"></div>
-												<p class="homey-font-size-default" style="padding-top:0px; padding-bottom:5px">
+												<p class="homey-font-size-default" style="${denseLayout ? "padding-top:5px; padding-bottom:15px" : "padding-top:0px; padding-bottom:5px"}">
 												<input
 													id="${capability.id}_slide"
 													type="range"
@@ -210,8 +210,8 @@
 									height += heightAdd;
 
 									// Create a drop list for enum capabilities
-									html += `<p class="alignleft homey-font-size-default"> ${capability.title}</p>
-												<p class="alignright homey-font-size-default dense="${denseLayout}"">
+									html += `<p class="alignleft homey-font-size-default" dense="${denseLayout}"> ${capability.title}</p>
+												<p class="alignright homey-font-size-default" dense="${denseLayout}">
 													<b>
 														<span>
 															<select class="select" id="${capability.id}" onchange="dropListChanged('${settings.devices.id}', '${capability.id}')">`
@@ -249,7 +249,7 @@
 									</div>`;
 
 						}
-//					}
+					// }
 					}
 
 					document.getElementById('capabilitiesSection').innerHTML = html;

@@ -67,13 +67,18 @@ class MyApp extends Homey.App
 					// Device not found
 					return null;
 				}
+				let iconURI = device?.iconObj?.url;
+				if (device.iconOverride)
+				{
+					iconURI = `https://my.homey.app/img/devices/${device.iconOverride}.svg`;
+				}
 
 				if (this.logLevel > 0)
 				{
 					this.updateLog(`Device image URL for ${deviceId}:\n${JSON.stringify(device.iconObj, null, 2)}`);
 				}
 
-				return device.iconObj?.url ? `${device.iconObj.url}` : null;
+				return iconURI;
 			}
 			catch (e)
 			{
