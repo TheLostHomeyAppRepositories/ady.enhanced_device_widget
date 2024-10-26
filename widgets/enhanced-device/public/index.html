@@ -105,23 +105,17 @@
 			const settings = Homey.getSettings();
 
 			const denseLayout = settings.dense;
-			let heightAdd = denseLayout ? 24 : 40;
+			let heightAdd = denseLayout ? 25 : 40;
 
 			// Fetch something from your app.
 			Homey.api('GET', `/?deviceId=${settings.devices.id}&disabledCapabilities=${disabledCapabilities ? JSON.stringify(disabledCapabilities) : null}`, {})
 				.then((result) =>
 				{
 					var html = '';
-					var height = 78;
 					if (result)
 					{
 						// Add each of the capabilities to the panel
 						const capabilitiesArray = Object.values(result);
-						// height = ((capabilitiesArray.length) * 29) + 78;
-						if (editEnabled)
-						{
-							height += 10;
-						}
 
 						// for (var page = 0; page < 10; page++)
 						// {
@@ -138,17 +132,15 @@
 							if (editMode)
 							{
 								// Add a toggle switch at the begging of the row to enable/disable the capability
-								html += `<p class="alignleft homey-font-size-default" style="padding-top:6px; padding-bottom:5px">
-														<input id="enable_${capability.id}" style="margin-right:5px" type="checkbox" ${disabledCapabilities[capability.id] ? '' : 'checked'} onclick="onEnableCapability('${capability.id}')">
-													</p>`;
+								html += `<p class="alignleft homey-font-size-default" dense="${denseLayout}">
+											<input id="enable_${capability.id}" style="margin-right:5px" type="checkbox" ${disabledCapabilities[capability.id] ? '' : 'checked'} onclick="onEnableCapability('${capability.id}')">
+										</p>`;
 							}
 
 							if (capability.setable === true && !settings.readonly)
 							{
 								if ((capability.type === "boolean") && capability.getable)
 								{
-									height += heightAdd;
-
 									// create a switch for boolean capabilities
 									html += `<p class="alignleft homey-font-size-default" dense="${denseLayout}"> ${capability.title}</p>
 												<p class="alignright homey-font-size-default" dense="${denseLayout}">
@@ -165,8 +157,6 @@
 								}
 								else if (capability.type === "boolean")
 								{
-									height += heightAdd;
-
 									// Create a push button
 									html += `<p class="alignleft homey-font-size-default" dense="${denseLayout}"> ${capability.title}</p>
 												<p class="alignright homey-font-size-default" dense="${denseLayout}">
@@ -181,9 +171,6 @@
 								}
 								else if (capability.type === "number")
 								{
-									// Allow extra space for sliders
-									height += heightAdd + (denseLayout ? 30 : 15);
-
 									// create a slider for number capabilities
 									html += `<p class="alignleft homey-font-size-default" dense="${denseLayout}"> ${capability.title}</p><p class="alignright homey-font-size-default" dense="${denseLayout}"><b> <span id="${capability.id}">${(capability.id === 'dim') || (capability.id == 'windowcoverings_set') ? capability.value * 100 : capability.value}</span> </b> ${capability.units ? capability.units : ''}</p>
 												<div style="clear: both;"></div>
@@ -207,8 +194,6 @@
 								}
 								else if (capability.type === "enum")
 								{
-									height += heightAdd;
-
 									// Create a drop list for enum capabilities
 									html += `<p class="alignleft homey-font-size-default" dense="${denseLayout}"> ${capability.title}</p>
 												<p class="alignright homey-font-size-default" dense="${denseLayout}">
@@ -226,15 +211,11 @@
 								}
 								else
 								{
-									height += heightAdd;
-
 									html += `<p class="alignleft homey-font-size-default" dense="${denseLayout}"> ${capability.title}</p> <p class="alignright homey-font-size-default" dense="${denseLayout}"><b> <span id="${capability.id}"> ${capability.value}</span> </b> ${capability.units ? capability.units : ''}</p>`;
 								}
 							}
 							else
 							{
-								height += heightAdd;
-
 								let value = capability.value;
 								if (capability.type == "enum") {
 									let e = capability.values.find((v) => v.id == value);
@@ -255,6 +236,9 @@
 					document.getElementById('capabilitiesSection').innerHTML = html;
 					document.getElementById('capabilitiesSection').setAttribute("dense", denseLayout);
 
+					// Get the height of the capabilitiesSection and set the height of the widget so it includes the bottom of the capabilitiesSection
+					const capabilitiesSection = document.getElementById('capabilitiesSection');
+					height = capabilitiesSection.offsetHeight + 25 + capabilitiesSection.offsetTop;
 					Homey.setHeight(height);
 
 					console.log(result);

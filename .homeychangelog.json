@@ -1,29 +1,32 @@
 {
-  "1.0.0": {
-    "en": "First test version"
-  },
-  "1.0.1": {
-	"en": "Update app images and readme to pass Homey review"
-  },
-  "1.0.2": {
-	"en": "Fix search when selecting a device. Invert icon colour in darkmode.. Improve slider usability and add the value to the widget"
-  },
-  "1.0.3": {
-	"en": "Made the range bars thicker. Added buttons for non setable boolean capabilities."
-  },
-  "1.0.4": {
-	"en": "Enabled slider tap to set position. Workaround for slider issue to reset position if finger moved off the slider. Added log to app settings page for debugging."
-  },
-  "1.0.5": {
-	"en": "Restyled the controls. Added edit mode to enable hiding of capabilities."
-  },
-  "1.0.6": {
-	"en": "Fix capability hiding."
-  },
-  "1.1.0": {
-	"en": "Added ENUM capability type. Merged changes supplied by Markus for adding readonly and dense modes and for fetching custom icons."
-  },
-  "1.1.1": {
-	"en": "Fix to select active ENUM capability value. Rename the 'Enable runtime configuration' setting to 'Enable Edit Mode' and add hints to the settings."
-  }
+	"1.0.0": {
+		"en": "First test version"
+	},
+	"1.0.1": {
+		"en": "Update app images and readme to pass Homey review"
+	},
+	"1.0.2": {
+		"en": "Fix search when selecting a device. Invert icon colour in darkmode.. Improve slider usability and add the value to the widget"
+	},
+	"1.0.3": {
+		"en": "Made the range bars thicker. Added buttons for non setable boolean capabilities."
+	},
+	"1.0.4": {
+		"en": "Enabled slider tap to set position. Workaround for slider issue to reset position if finger moved off the slider. Added log to app settings page for debugging."
+	},
+	"1.0.5": {
+		"en": "Restyled the controls. Added edit mode to enable hiding of capabilities."
+	},
+	"1.0.6": {
+		"en": "Fix capability hiding."
+	},
+	"1.1.0": {
+		"en": "Added ENUM capability type. Merged changes supplied by Markus for adding readonly and dense modes and for fetching custom icons."
+	},
+	"1.1.1": {
+		"en": "Fix to select active ENUM capability value. Rename the 'Enable runtime configuration' setting to 'Enable Edit Mode' and add hints to the settings."
+	},
+	"1.1.2": {
+		"en": "Fix height of widget when lines wrap and edit mode is enabled in dense mode"
+	}
 }
