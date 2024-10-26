@@ -52,6 +52,15 @@ class MyApp extends Homey.App
 		};
 
 		this.homey.settings.set('simSettings', simSettings);
+
+		this.homey.on('settings:set', async (settings) =>
+		{
+			if (settings.key === 'logLevel')
+			{
+				this.logLevel = settings.value;
+			}
+		});
+
 		this.log('MyApp has been initialized');
 	}
 

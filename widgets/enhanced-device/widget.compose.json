@@ -16,22 +16,44 @@
 				"pt": "Dispositivo",
 				"pl": "Urządzenie",
 				"ko": "장치"
+			},
+			"hint": {
+				"en": "Select the device you want to control",
+				"nl": "Selecteer het apparaat dat u wilt bedienen",
+				"de": "Wählen Sie das Gerät aus, das Sie steuern möchten",
+				"fr": "Sélectionnez le dispositif que vous souhaitez contrôler",
+				"es": "Seleccione el dispositivo que desea controlar",
+				"it": "Seleziona il dispositivo che desideri controllare",
+				"pt": "Selecione o dispositivo que deseja controlar",
+				"pl": "Wybierz urządzenie, które chcesz kontrolować",
+				"ko": "제어하려는 장치를 선택하십시오"
 			}
 		},
 		{
 			"id": "enableConfiguration",
 			"type": "checkbox",
-			"value": false,
+			"value": true,
 			"title": {
-				"en": "Enabled run-time configuration",
-				"nl": "Ingeschakelde runtime-configuratie",
-				"de": "Aktivierte Laufzeitkonfiguration",
-				"fr": "Configuration d'exécution activée",
-				"es": "Configuración de tiempo de ejecución habilitada",
-				"it": "Configurazione runtime abilitata",
-				"pt": "Configuração em tempo de execução ativada",
-				"pl": "Włączona konfiguracja czasu wykonania",
-				"ko": "활성화 된 실행 시간 구성"
+				"en": "Enabled Edit Mode",
+				"nl": "Bewerkingsmodus inschakelen",
+				"de": "Bearbeitungsmodus aktivieren",
+				"fr": "Activer le mode édition",
+				"es": "Habilitar el modo de edición",
+				"it": "Abilita la modalità di modifica",
+				"pt": "Ativar o modo de edição",
+				"pl": "Włącz tryb edycji",
+				"ko": "편집 모드 활성화"
+			},
+			"hint": {
+				"en": "Show the edit mode check box to be able to show / hide capabilities",
+				"nl": "Toon het selectievakje voor de bewerkingsmodus om mogelijkheden te kunnen tonen / verbergen",
+				"de": "Zeigen Sie das Kontrollkästchen für den Bearbeitungsmodus an, um Fähigkeiten anzeigen / ausblenden zu können",
+				"fr": "Affichez la case à cocher du mode édition pour pouvoir afficher / masquer les capacités",
+				"es": "Muestre la casilla de verificación del modo de edición para poder mostrar / ocultar capacidades",
+				"it": "Mostra la casella di controllo della modalità di modifica per poter mostrare / nascondere le capacità",
+				"pt": "Mostrar a caixa de seleção do modo de edição para poder mostrar / ocultar capacidades",
+				"pl": "Pokaż pole wyboru trybu edycji, aby móc pokazywać / ukrywać zdolności",
+				"ko": "기능을 표시 / 숨기려면 편집 모드 확인란을 표시하십시오"
 			}
 		},
 		{
@@ -40,6 +62,17 @@
 			"value": false,
 			"title": {
 				"en": "Read only?"
+			},
+			"hint": {
+				"en": "Show the capabilities in read only mode",
+				"nl": "Toon de mogelijkheden in de alleen-lezen modus",
+				"de": "Zeigen Sie die Fähigkeiten im Nur-Lese-Modus an",
+				"fr": "Afficher les capacités en mode lecture seule",
+				"es": "Mostrar las capacidades en modo de solo lectura",
+				"it": "Mostra le capacità in modalità di sola lettura",
+				"pt": "Mostrar as capacidades no modo somente leitura",
+				"pl": "Pokaż zdolności w trybie tylko do odczytu",
+				"ko": "기능을 읽기 전용 모드로 표시"
 			}
 		},
 		{
@@ -48,6 +81,17 @@
 			"value": false,
 			"title": {
 				"en": "Dense Layout?"
+			},
+			"hint": {
+				"en": "Reduce the vertical space betwwen the capabilities",
+				"nl": "Verminder de verticale ruimte tussen de mogelijkheden",
+				"de": "Verringern Sie den vertikalen Platz zwischen den Fähigkeiten",
+				"fr": "Réduire l'espace vertical entre les capacités",
+				"es": "Reducir el espacio vertical entre las capacidades",
+				"it": "Riduci lo spazio verticale tra le capacità",
+				"pt": "Reduzir o espaço vertical entre as capacidades",
+				"pl": "Zmniejsz odstęp pionowy między zdolnościami",
+				"ko": "기능 사이의 수직 공간을 줄입니다."
 			}
 		}
 	],

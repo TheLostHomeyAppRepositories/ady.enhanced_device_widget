@@ -217,7 +217,7 @@
 															<select class="select" id="${capability.id}" onchange="dropListChanged('${settings.devices.id}', '${capability.id}')">`
 																for (const option of capability.values)
 																{
-																	html+= `<option value="${option.id}" ${option.title === capability.value ? 'selected' : ''}>${option.title}</option>`;
+																	html+= `<option value="${option.id}" ${option.id === capability.value ? 'selected' : ''}>${option.title}</option>`;
 																}
 															html += `</select>
 														</span>
