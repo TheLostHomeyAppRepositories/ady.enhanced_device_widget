@@ -68,6 +68,12 @@
 
 					if (typeof (value) === 'number')
 					{
+						if (capabilityID === 'light_hue')
+						{
+							value = value * 360;
+							value = value.toFixed();
+						}
+
 						const slider = document.getElementById(`${capabilityID}_slide`);
 						if (slider)
 						{
@@ -127,7 +133,7 @@
 							}
 
 							// create an HTML line for each capability with the title left aligned and the value right aligned
-							html += '<div>';
+							html += '<div class="capability-item">';
 
 							if (editMode)
 							{
@@ -142,6 +148,7 @@
 								if ((capability.type === "boolean") && capability.getable)
 								{
 									// create a switch for boolean capabilities
+									html += `<div class="capability-row">`;
 									html += `<p class="alignleft homey-font-size-default" dense="${denseLayout}"> ${capability.title}</p>
 												<p class="alignright homey-font-size-default" dense="${denseLayout}">
 													<b>
@@ -154,10 +161,12 @@
 														</span>
 													</b>
 												</p>`;
+									html += `</div>`; // close capability-row
 								}
 								else if (capability.type === "boolean")
 								{
 									// Create a push button
+									html += `<div class="capability-row">`;
 									html += `<p class="alignleft homey-font-size-default" dense="${denseLayout}"> ${capability.title}</p>
 												<p class="alignright homey-font-size-default" dense="${denseLayout}">
 													<b>
@@ -168,20 +177,41 @@
 														</span>
 													</b>
 												</p>`;
+									html += `</div>`; // close capability-row
 								}
 								else if (capability.type === "number")
 								{
-									// create a slider for number capabilities
-									html += `<p class="alignleft homey-font-size-default" dense="${denseLayout}"> ${capability.title}</p><p class="alignright homey-font-size-default" dense="${denseLayout}"><b> <span id="${capability.id}">${(capability.id === 'dim') || (capability.id == 'windowcoverings_set') ? capability.value * 100 : capability.value}</span> </b> ${capability.units ? capability.units : ''}</p>
-												<div style="clear: both;"></div>
-												<p class="homey-font-size-default" style="${denseLayout ? "padding-top:5px; padding-bottom:15px" : "padding-top:0px; padding-bottom:5px"}">
-												<input
+									// the value for dim and windowcoverings_set needs to be multiplied by 100 to get the correct value
+									let value = capability.value;
+									if ((capability.id === 'dim') || (capability.id === 'windowcoverings_set'))
+									{
+										value = value * 100;
+										value = value.toFixed();
+									}
+									else if (capability.id === 'light_hue')
+									{
+										value = value * 360;
+										value = value.toFixed();
+									}
+									// Flex container for title and value text
+									html += `<div class="capability-row">`;
+									html += `<p class="alignleft homey-font-size-default" dense="${denseLayout}">${capability.title}</p>`;
+									html += `<p class="alignright homey-font-size-default" dense="${denseLayout}"><b><span id="${capability.id}">${value}</span></b> ${capability.units || ''}</p>`;
+									html += `</div>`; // close capability-row
+
+									// Separate block for the slider below the text
+									// If it's hue capability thenadd a hue slider
+									if (capability.id === 'light_hue')
+									{
+										html += `<div class="hue-slider-container">`;
+										html += `<input
+													class="hue-slider"
 													id="${capability.id}_slide"
 													type="range"
-													min="${capability.min}"
-													max="${capability.max}"
-													step="${(capability.max - capability.min) / 100}"
-													value="${capability.value}"
+													min="0"
+													max="360"
+													step="1"
+													value="${value}"
 													onchange="numberChange('${settings.devices.id}', '${capability.id}')"
 													oninput="numberSlide('${capability.id}')"
 													onpointerdown="handlePointerDown(event)"
@@ -190,24 +220,68 @@
 													ontouchstart="handleTouchStart(event)"
 													ontouchmove="handleTouchStart(event)"
 													onfocus="handleCancelFocus(event)">
-												</p>`;
+												</div>`;
+									}
+									else if (capability.id === 'light_temperature')
+									{
+										html += `<div class="color-temp-slider-container">`;
+										html += `<input
+													class="color-temp-slider"
+													id="${capability.id}_slide"
+													type="range"
+													min="${capability.min}"
+													max="${capability.max}"
+													step="${(capability.max - capability.min) / 100}"
+													value="${value}"
+													onchange="numberChange('${settings.devices.id}', '${capability.id}')"
+													oninput="numberSlide('${capability.id}')"
+													onpointerdown="handlePointerDown(event)"
+													onpointerup="handlePointerUp(event)"
+													onpointermove="handlePointerMove(event)"
+													ontouchstart="handleTouchStart(event)"
+													ontouchmove="handleTouchStart(event)"
+													onfocus="handleCancelFocus(event)">
+												</div>`;
+									}
+									else
+									{
+										html += `<div class="slider-container">`;
+										html += `<input
+													id="${capability.id}_slide"
+													type="range"
+													min="${capability.min}"
+													max="${capability.max}"
+													step="${(capability.max - capability.min) / 100}"
+													value="${value}"
+													onchange="numberChange('${settings.devices.id}', '${capability.id}')"
+													oninput="numberSlide('${capability.id}')"
+													onpointerdown="handlePointerDown(event)"
+													onpointerup="handlePointerUp(event)"
+													onpointermove="handlePointerMove(event)"
+													ontouchstart="handleTouchStart(event)"
+													ontouchmove="handleTouchStart(event)"
+													onfocus="handleCancelFocus(event)">
+												</div>`;
+									}
 								}
 								else if (capability.type === "enum")
 								{
 									// Create a drop list for enum capabilities
+									html += `<div class="capability-row">`;
 									html += `<p class="alignleft homey-font-size-default" dense="${denseLayout}"> ${capability.title}</p>
 												<p class="alignright homey-font-size-default" dense="${denseLayout}">
 													<b>
 														<span>
 															<select class="select" id="${capability.id}" onchange="dropListChanged('${settings.devices.id}', '${capability.id}')">`
-																for (const option of capability.values)
-																{
-																	html+= `<option value="${option.id}" ${option.id === capability.value ? 'selected' : ''}>${option.title}</option>`;
-																}
-															html += `</select>
+									for (const option of capability.values)
+									{
+										html += `<option value="${option.id}" ${option.id === capability.value ? 'selected' : ''}>${option.title}</option>`;
+									}
+									html += `</select>
 														</span>
 													</b>
 												</p>`;
+									html += `</div>`; // close capability-row
 								}
 								else
 								{
@@ -217,12 +291,15 @@
 							else
 							{
 								let value = capability.value;
-								if (capability.type == "enum") {
+								if (capability.type == "enum")
+								{
 									let e = capability.values.find((v) => v.id == value);
 									value = e ? e.title : value;
 								}
 
+								html += `<div class="capability-row">`;
 								html += `<p class="alignleft homey-font-size-default" dense="${denseLayout}"> ${capability.title}</p> <p class="alignright homey-font-size-default" dense="${denseLayout}"><b> <span id="${capability.id}"> ${value}</span> </b> ${capability.units ? capability.units : ''}</p>`;
+								html += `</div>`; // close capability-row
 							}
 
 							html += `</div >
@@ -230,7 +307,7 @@
 									</div>`;
 
 						}
-					// }
+						// }
 					}
 
 					document.getElementById('capabilitiesSection').innerHTML = html;
@@ -313,9 +390,14 @@
 		function numberChange(deviceId, capabilityId)
 		{
 			const element = document.getElementById(`${capabilityId}_slide`);
-			const value = parseFloat(element.value);
+			let value = parseFloat(element.value);
 			clearTimeout(SliderCancelTimer);
 			oldValue = null;
+
+			if (capabilityId === 'light_hue')
+			{
+				value = (value / 360);
+			}
 
 			Homey.api('POST', '/', { deviceId: deviceId, capabilityId: capabilityId, value: value })
 				.then((result) =>

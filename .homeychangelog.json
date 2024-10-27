@@ -28,5 +28,8 @@
 	},
 	"1.1.2": {
 		"en": "Fix height of widget when lines wrap and edit mode is enabled in dense mode"
+	},
+	"1.1.3": {
+		"en": "Fix for long value text overlapping the next row. Added colour to the Hue capability slider. Add temperature colour to the colour temperature slider."
 	}
 }
