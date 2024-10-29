@@ -93,6 +93,7 @@
 					else if (typeof (value) === 'string')
 					{
 						document.getElementById(`${capabilityID}`).value = value;
+						refreshHeight();
 					}
 					else
 					{
@@ -200,7 +201,7 @@
 									html += `</div>`; // close capability-row
 
 									// Separate block for the slider below the text
-									// If it's hue capability thenadd a hue slider
+									// If it's hue capability then add a hue slider
 									if (capability.id === 'light_hue')
 									{
 										html += `<div class="hue-slider-container">`;
@@ -314,14 +315,19 @@
 					document.getElementById('capabilitiesSection').setAttribute("dense", denseLayout);
 
 					// Get the height of the capabilitiesSection and set the height of the widget so it includes the bottom of the capabilitiesSection
-					const capabilitiesSection = document.getElementById('capabilitiesSection');
-					height = capabilitiesSection.offsetHeight + 25 + capabilitiesSection.offsetTop;
-					Homey.setHeight(height);
+					refreshHeight();
 
 					console.log(result);
 					return;
 				})
 				.catch(console.error);
+		}
+
+		function refreshHeight()
+		{
+			const capabilitiesSection = document.getElementById('capabilitiesSection');
+			height = capabilitiesSection.offsetHeight + 25 + capabilitiesSection.offsetTop;
+			Homey.setHeight(height);
 		}
 
 		function onEnableCapability(capabilityId)

@@ -96,12 +96,12 @@
 
 .alignleft[dense="false"] {
 	margin-top: 15px;
-	height: 25px;
+	min-height: 25px;
 }
 
 .alignright[dense="false"] {
 	margin-top: 15px;
-	height: 25px;
+	min-height: 25px;
 }
 
 /* Dense Layout for Capabilities Section */
