@@ -34,5 +34,8 @@
 	},
 	"1.1.4": {
 		"en": "Fix for long value text overlapping the next row when not in dense mode."
+	},
+	"1.1.5": {
+		"en": "Fix for read-only values not updating in the widget."
 	}
 }
