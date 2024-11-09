@@ -65,41 +65,46 @@
 					{
 						return;
 					}
+					if (settings.devices.capabilitiesObj[capabilityID].settable)
+					{
+						if (typeof (value) === 'number')
+						{
+							if (capabilityID === 'light_hue')
+							{
+								value = value * 360;
+								value = value.toFixed();
+							}
 
-					if (typeof (value) === 'number')
-					{
-						if (capabilityID === 'light_hue')
-						{
-							value = value * 360;
-							value = value.toFixed();
+							const slider = document.getElementById(`${capabilityID}_slide`);
+							if (slider)
+							{
+								slider.value = value;
+							}
+							if ((capabilityID === 'dim') || (capabilityID === 'windowcoverings_set'))
+							{
+								value = value * 100;
+								value = value.toFixed();
+							}
+							document.getElementById(`${capabilityID}`).innerHTML = `${value}`;
 						}
-
-						const slider = document.getElementById(`${capabilityID}_slide`);
-						if (slider)
+						else if (typeof (value) === 'boolean')
 						{
-							slider.value = value;
+							document.getElementById(`${capabilityID}`).checked = value;
 						}
-						if ((capabilityID === 'dim') || (capabilityID === 'windowcoverings_set'))
+						else if (typeof (value) === 'string')
 						{
-							value = value * 100;
-							value = value.toFixed();
+							document.getElementById(`${capabilityID}`).value = value;
+							refreshHeight();
 						}
-						document.getElementById(`${capabilityID}`).innerHTML = `${value}`;
-					}
-					else if (typeof (value) === 'boolean')
-					{
-						document.getElementById(`${capabilityID}`).checked = value;
-					}
-					else if (typeof (value) === 'string')
-					{
-						document.getElementById(`${capabilityID}`).value = value;
-						refreshHeight();
+						else
+						{
+							document.getElementById(`${capabilityID}`).innerHTML = value;
+						}
 					}
 					else
 					{
 						document.getElementById(`${capabilityID}`).innerHTML = value;
 					}
-
 				}
 			});
 		}
