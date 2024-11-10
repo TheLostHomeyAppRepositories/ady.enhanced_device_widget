@@ -1,0 +1,33 @@
+{
+	"name": {
+		"en": "Status Display"
+	},
+	"settings": [
+		{
+			"id": "widgetID",
+			"type": "text",
+			"name": "Widget ID",
+			"placeholder": {
+				"en": "widget ID"
+			}
+		}
+	],
+	"api": {
+		"getSomething": {
+			"method": "GET",
+			"path": "/"
+		},
+		"addSomething": {
+			"method": "POST",
+			"path": "/"
+		},
+		"updateSomething": {
+			"method": "PUT",
+			"path": "/"
+		},
+		"deleteSomething": {
+			"method": "DELETE",
+			"path": "/"
+		}
+	}
+}

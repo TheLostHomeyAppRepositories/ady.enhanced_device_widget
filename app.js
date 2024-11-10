@@ -5,7 +5,7 @@
 if (process.env.DEBUG === '1')
 {
 	// eslint-disable-next-line node/no-unsupported-features/node-builtins, global-require
-	require('inspector').open(9229, '0.0.0.0', true);
+//	require('inspector').open(9229, '0.0.0.0', true);
 }
 
 const Homey = require('homey');
@@ -60,6 +60,15 @@ class MyApp extends Homey.App
 				this.logLevel = settings.value;
 			}
 		});
+
+		// Create the Flow action set-status card
+		this.homey.flow.getActionCard('set-status')
+			.registerRunListener(async (args, state) =>
+			{
+				const { widgetID, title, status, backColour, textColour } = args;
+				this.homey.api.realtime('updateStatus', { widgetID, title, status, backColour, textColour });
+				return true;
+			});
 
 		this.log('MyApp has been initialized');
 	}

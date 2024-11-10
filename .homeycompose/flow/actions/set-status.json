@@ -1,0 +1,48 @@
+{
+  "title": {
+    "en": "Set Status"
+  },
+  "titleFormatted": {
+	"en": "Set Status of [[widgetID]] to [[title]], [[status]], [[backColour]], [[textColour]]"
+  },
+  "hint": {
+    "en": "Update a Status Widget content"
+  },
+  "args": [
+    {
+      "type": "text",
+      "name": "widgetID",
+      "placeholder": {
+        "en": "widget ID"
+      }
+    },
+    {
+      "type": "text",
+      "name": "title",
+      "placeholder": {
+        "en": "Title"
+      }
+    },
+    {
+      "type": "text",
+      "name": "status",
+      "placeholder": {
+        "en": "Status text"
+      }
+    },
+    {
+      "type": "text",
+      "name": "backColour",
+      "placeholder": {
+        "en": "Hexadecimal Background colour (#FFFFFF)"
+      }
+    },
+    {
+      "type": "text",
+      "name": "textColour",
+      "placeholder": {
+        "en": "Hexadecimal Text colour (#000000)"
+      }
+    }
+  ]
+}
