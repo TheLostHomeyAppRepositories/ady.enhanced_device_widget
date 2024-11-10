@@ -40,5 +40,8 @@
 	},
 	"1.1.6": {
 		"en": "Add a status widget that is update via a Flow action card."
+	},
+	"1.1.7": {
+		"en": "Added Dense mode to status widget. Changed the action Flow card to use colour pickers for the background and text colours."
 	}
 }
