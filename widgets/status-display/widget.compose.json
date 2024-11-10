@@ -6,10 +6,8 @@
 		{
 			"id": "widgetID",
 			"type": "text",
-			"name": "Widget ID",
-			"placeholder": {
-				"en": "widget ID"
-			}
+			"title": "Widget ID",
+			"hint": "The ID of the widget to use in the Flow action card"
 		}
 	],
 	"api": {

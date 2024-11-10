@@ -37,5 +37,8 @@
 	},
 	"1.1.5": {
 		"en": "Fix for read-only values not updating in the widget."
+	},
+	"1.1.6": {
+		"en": "Add a status widget that is update via a Flow action card."
 	}
 }
