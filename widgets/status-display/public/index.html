@@ -6,15 +6,14 @@
 
 <body class="homey-widget">
 	<div id="widgetContent">
-		<div class="container">
+		<div class="container1">
 			<div class="left-section">
 				<img id="deviceIcon" src="cancel.png" alt="Device Icon" class="device-image-class" />
 				<div id="title" class="homey-text-bold">Title</div>
 			</div>
 		</div>
-		<hr>
-		<div class="container" style="margin-top: 10px;">
-			<div id="status" class="homey-text-bold">Status</div>
+		<div class="container2">
+			<div id="status" class="homey-text-normal">Status</div>
 		</div>
 	</div>
 
@@ -23,6 +22,8 @@
 		function onHomeyReady(Homey)
 		{
 			// widgetId = Homey.getWidgetInstanceId();
+			const settings = Homey.getSettings();
+			toggleDenseMode(settings.dense);
 
 			Homey.on('updateStatus', function ({ widgetID, title, status, backColour, textColour })
 			{
@@ -41,7 +42,7 @@
 			});
 
 			// Add a listener for the icon being touched
-			document.getElementById('deviceIcon').addEventListener('click', function()
+			document.getElementById('deviceIcon').addEventListener('click', function ()
 			{
 				// Hide the "widgetContent" div
 				document.getElementById('widgetContent').style.display = 'none';
@@ -58,8 +59,20 @@
 		{
 			const widgetContent = document.getElementById('widgetContent');
 			const rect = widgetContent.getBoundingClientRect();
-			const height = rect.top + rect.bottom ;
+			const height = rect.top + rect.bottom;
 			Homey.setHeight(height);
+		}
+
+		function toggleDenseMode(isDense)
+		{
+			const widgetContent = document.getElementById('widgetContent');
+			if (isDense)
+			{
+				widgetContent.style.setProperty("--dense", 2);
+			} else
+			{
+				widgetContent.style.setProperty('--dense', 10);
+			}
 		}
 
 	</script>

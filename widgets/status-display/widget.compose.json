@@ -6,8 +6,55 @@
 		{
 			"id": "widgetID",
 			"type": "text",
-			"title": "Widget ID",
-			"hint": "The ID of the widget to use in the Flow action card"
+			"title": {
+				"en": "Widget ID",
+				"nl": "Widget-ID",
+				"de": "Widget-ID",
+				"fr": "ID du widget",
+				"es": "ID del widget",
+				"it": "ID del widget",
+				"pt": "ID do widget",
+				"pl": "ID widżetu",
+				"ko": "위젯 ID"
+			},
+			"hint": {
+				"en": "The ID of the widget to use in the Flow action card",
+				"nl": "De ID van het widget om te gebruiken in de Flow-actiekaart",
+				"de": "Die ID des Widgets, das in der Flow-Aktionskarte verwendet werden soll",
+				"fr": "L'ID du widget à utiliser dans la carte d'action Flow",
+				"es": "La ID del widget a utilizar en la tarjeta de acción de flujo",
+				"it": "L'ID del widget da utilizzare nella scheda di azione di flusso",
+				"pt": "O ID do widget a ser usado no cartão de ação de fluxo",
+				"pl": "ID widżetu do użycia w karcie akcji Flow",
+				"ko": "Flow 작업 카드에서 사용할 위젯 ID"
+			}
+		},
+		{
+			"id": "dense",
+			"type": "checkbox",
+			"value": false,
+			"title": {
+				"en": "Dense Layout?",
+				"nl": "Dichte lay-out?",
+				"de": "Dichtes Layout?",
+				"fr": "Mise en page dense?",
+				"es": "¿Diseño denso?",
+				"it": "Layout denso?",
+				"pt": "Layout denso?",
+				"pl": "Gęste układ?",
+				"ko": "밀집 레이아웃?"
+			},
+			"hint": {
+				"en": "Reduce the vertical space betwwen the capabilities",
+				"nl": "Verminder de verticale ruimte tussen de mogelijkheden",
+				"de": "Verringern Sie den vertikalen Platz zwischen den Fähigkeiten",
+				"fr": "Réduire l'espace vertical entre les capacités",
+				"es": "Reducir el espacio vertical entre las capacidades",
+				"it": "Riduci lo spazio verticale tra le capacità",
+				"pt": "Reduzir o espaço vertical entre as capacidades",
+				"pl": "Zmniejsz odstęp pionowy między zdolnościami",
+				"ko": "기능 사이의 수직 공간을 줄입니다."
+			}
 		}
 	],
 	"api": {

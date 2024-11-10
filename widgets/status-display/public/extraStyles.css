@@ -1,3 +1,9 @@
+@property --dense {
+	syntax: "<integer>";
+	inherits: true;
+	initial-value: 5;
+}
+
 /* Custom CSS for Device Image */
 .device-image-class {
 	margin-right: 10px;
@@ -10,12 +16,22 @@
 }
 
 /* Layout for Container */
-.container {
+.container1 {
 	display: flex;
 	justify-content: space-between;
 	align-items: center;
 	width: 100%;
-	margin-bottom: 10px;
+	margin-bottom: 0px;
+	margin-top: 0px;
+}
+
+.container2 {
+	display: flex;
+	justify-content: space-between;
+	align-items: center;
+	width: 100%;
+	margin-bottom: 0px;
+	margin-top: var(--dense);
 }
 
 .left-section {
