@@ -5,7 +5,7 @@
 </head>
 
 <body class="homey-widget">
-	<div id="widgetContent">
+	<div id="widgetContent" style="display:none">
 		<div class="container1">
 			<div class="left-section">
 				<img id="deviceIcon" src="cancel.png" alt="Device Icon" class="device-image-class" />
@@ -21,8 +21,9 @@
 
 		function onHomeyReady(Homey)
 		{
-			// widgetId = Homey.getWidgetInstanceId();
+			const widgetId = Homey.getWidgetInstanceId();
 			const settings = Homey.getSettings();
+
 			toggleDenseMode(settings.dense);
 
 			Homey.on('updateStatus', function ({ widgetID, title, status, backColour, textColour })
@@ -38,6 +39,15 @@
 					// Show the "widgetContent" div
 					document.getElementById('widgetContent').style.display = 'block';
 					refreshHeight();
+
+					Homey.api('PUT', '/', { widgetId, lastStatus: { title, status, backColour, textColour } })
+						.then((result) =>
+						{
+							console.log(result);
+							return;
+						})
+						.catch(console.error);
+
 				}
 			});
 
@@ -48,18 +58,50 @@
 				document.getElementById('widgetContent').style.display = 'none';
 				document.body.style.backgroundColor = '#FFFFFF';
 				document.body.style.color = '#000000';
+
+				Homey.api('PUT', '/', { widgetId, lastStatus: { title: '', status: '', backColour: '#FFFFFF', textColour: '#000000' } })
+					.then((result) =>
+					{
+						console.log(result);
+						return;
+					})
+					.catch(console.error);
 				Homey.setHeight(40);
 			});
 
-			Homey.ready();
-			refreshHeight();
+			Homey.api('GET', `/?lastStatus=${widgetId}`, {})
+				.then((lastStatus) =>
+				{
+
+					document.getElementById('title').innerHTML = lastStatus.title;
+					document.getElementById('status').innerHTML = lastStatus.status;
+					document.body.style.backgroundColor = lastStatus.backColour;
+					document.body.style.color = lastStatus.textColour;
+
+					if (lastStatus.title === '' && lastStatus.status === '')
+					{
+						document.getElementById('widgetContent').style.display = 'none';
+					}
+					else
+					{
+						document.getElementById('widgetContent').style.display = 'block';
+					}
+
+					Homey.ready();
+					refreshHeight();
+				})
+				.catch(console.error);
 		}
 
 		function refreshHeight()
 		{
 			const widgetContent = document.getElementById('widgetContent');
 			const rect = widgetContent.getBoundingClientRect();
-			const height = rect.top + rect.bottom;
+			let height = rect.top + rect.bottom;
+			if (height < 40)
+			{
+				height = 40;
+			}
 			Homey.setHeight(height);
 		}
 

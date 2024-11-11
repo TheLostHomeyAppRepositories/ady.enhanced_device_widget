@@ -3,13 +3,15 @@
 module.exports = {
 	async getSomething({ homey, query })
 	{
-		// you can access query parameters like "/?foo=bar" through `query.foo`
-
-		// you can access the App instance through homey.app
-		// const result = await homey.app.getSomething();
-		// return result;
-
-		// perform other logic like mapping result data
+		if (query.lastStatus)
+		{
+			let lastStatus = homey.settings.get(query.lastStatus);
+			if (!lastStatus)
+			{
+				lastStatus = { title: 'Title', status: 'This is the text', backColour: '#FFFFFF', textColour: '#000000' };
+			}
+			return lastStatus;
+		}
 
 		return 'Hello from App';
 	},
@@ -17,10 +19,15 @@ module.exports = {
 	async addSomething({ homey, body })
 	{
 		// access the post body and perform some action on it.
+
 	},
 
 	async updateSomething({ homey, params, body })
 	{
+		if (body.lastStatus)
+		{
+			homey.settings.set(body.widgetId, body.lastStatus);
+		}
 		return null;
 	},
 
