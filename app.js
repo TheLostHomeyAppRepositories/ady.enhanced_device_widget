@@ -36,13 +36,20 @@ class MyApp extends Homey.App
 
 		this.deviceDispather = new DeviceDispatcher(this);
 
-		const widget = this.homey.dashboards.getWidget('enhanced-device');
-
-		widget.registerSettingAutocompleteListener('devices', async (query, settings) =>
+		try
 		{
-			const devices = await this.getHomeyDevices({});
-			return devices.filter((item) => item.name.toLowerCase().includes(query.toLowerCase()));
-		});
+			const widget = this.homey.dashboards.getWidget('enhanced-device');
+
+			widget.registerSettingAutocompleteListener('devices', async (query, settings) =>
+			{
+				const devices = await this.getHomeyDevices({});
+				return devices.filter((item) => item.name.toLowerCase().includes(query.toLowerCase()));
+			});
+		}
+		catch (e)
+		{
+			this.updateLog(`\nError ${e.message} when registering widget setting autocomplete listener`);
+		}
 
 		const simSettings = {
 			devices: {
