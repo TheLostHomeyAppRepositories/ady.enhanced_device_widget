@@ -46,5 +46,8 @@
 	},
 	"1.1.8": {
 		"en": "Save abd restore the status widget values for persistence through restarts."
+	},
+	"1.1.9": {
+		"en": "Fix Send Log. Fix false error message in the log each time the page is opened."
 	}
 }

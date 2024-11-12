@@ -3,16 +3,39 @@
 
 <head>
 	<link rel="stylesheet" type="text/css" href="lwsa.css">
+	<link rel="stylesheet" type="text/css" href="busy_indicator.css" />
+	<style type="text/css">
+		.fog_div {
+			display: none;
+			position: fixed;
+			top: 0px;
+			left: 0px;
+			height: 100%;
+			width: 100%;
+			z-index: 100;
+			background-color: rgba(30, 30, 30, 0.5);
+		}
+
+		#busybox.show {
+			display: block;
+		}
+	</style>
 
 	<!-- The '/homey.js' script must be included in your settings view to work -->
 	<script type="text/javascript" src="/homey.js" data-origin="settings"></script>
+	<script type="text/javascript" src="busy_indicator.js"></script>
 </head>
 
 <body>
+	<!-- Busy indicator -->
+	<div id="busybox" class="fog_div">
+		<div></div>
+	</div>
+
 	<!-- Tab links -->
 	<div class="tab">
 		<button class="tablinks" onclick="setPage(event, 'log')" id="defaultOpen">Log</button>
-		<button class="tablinks" onclick="setPage(event, 'sim')" id="defaultOpen" style="display:none">Sim</button>
+		<button class="tablinks" onclick="setPage(event, 'sim')" style="display:none">Sim</button>
 	</div>
 
 	<!-- LOG PAGE -->
@@ -51,6 +74,9 @@
 
 
 	<script type="text/javascript">
+		var busyi;
+		busyi = new busy_indicator(document.getElementById("busybox"), document.querySelector("#busybox div"));
+
 		var infoLogElement = document.getElementById('infoLog');
 		var logLevelElement = document.getElementById('logLevel');
 		var clearInfoLogElement = document.getElementById('clearInfoLog');
@@ -153,10 +179,10 @@
 
 
 
-			Homey.get('simSettings', function (err, settings)
-			{
-				updateValues(settings);
-			});
+			// Homey.get('simSettings', function (err, settings)
+			// {
+			// 	updateValues(settings);
+			// });
 
 			Homey.ready();
 
@@ -442,6 +468,18 @@
 				// Make the log text area fill the page
 				infoLogElement.style.width = (logLevel.offsetWidth) + 'px';
 				infoLogElement.style.height = (window.innerHeight - infoLogElement.offsetTop - 60) + 'px';
+			}
+		}
+
+		function waitCursor(On)
+		{
+			if (On)
+			{
+				busyi.show();
+			}
+			else
+			{
+				busyi.hide();
 			}
 		}
 

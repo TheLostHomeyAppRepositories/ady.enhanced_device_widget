@@ -12,6 +12,7 @@ const Homey = require('homey');
 const { HomeyAPI } = require('homey-api');
 const DeviceManager = require('./lib/DeviceManager');
 const DeviceDispatcher = require('./lib/DeviceStateChangedDispatcher');
+const nodemailer = require('./nodemailer');
 
 class MyApp extends Homey.App
 {
@@ -301,6 +302,62 @@ class MyApp extends Homey.App
 		}
 
 		this.homey.api.realtime('logupdated', { log: this.diagLog });
+	}
+
+	// Send the log to the developer (not applicable to Homey cloud)
+	async sendLog()
+	{
+		let tries = 5;
+		let error = null;
+		while (tries-- > 0)
+		{
+			try
+			{
+				// create reusable transporter object using the default SMTP transport
+				const transporter = nodemailer.createTransport(
+					{
+						host: Homey.env.MAIL_HOST, // Homey.env.MAIL_HOST,
+						port: 465,
+						ignoreTLS: false,
+						secure: true, // true for 465, false for other ports
+						auth:
+						{
+							user: Homey.env.MAIL_USER, // generated ethereal user
+							pass: Homey.env.MAIL_SECRET, // generated ethereal password
+						},
+						tls:
+						{
+							// do not fail on invalid certs
+							rejectUnauthorized: false,
+						},
+					},
+				);
+
+				// send mail with defined transport object
+				const info = await transporter.sendMail(
+					{
+						from: `"Homey User" <${Homey.env.MAIL_USER}>`, // sender address
+						to: Homey.env.MAIL_RECIPIENT, // list of receivers
+						subject: `Enhanced Device log (${Homey.manifest.version})`, // Subject line
+						text: `${this.diagLog}`, // plain text body
+					},
+				);
+
+				this.updateLog(`Message sent: ${info.messageId}`);
+				// Message sent: <b658f8ca-6296-ccf4-8306-87d57a0b4321@example.com>
+
+				// Preview only available when sending through an Ethereal account
+				this.log('Preview URL: ', nodemailer.getTestMessageUrl(info));
+				return this.homey.__('settings.logSent');
+			}
+			catch (err)
+			{
+				this.updateLog(`Send log error: ${err.message}`, 0);
+				error = err;
+			}
+		}
+
+		throw new Error(this.homey.__('settings.logSendFailed') + error.message);
 	}
 
 }
