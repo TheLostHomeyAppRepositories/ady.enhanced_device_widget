@@ -1,0 +1,10 @@
+{
+    "settings": {
+        "clear": "Protokoll Löschen",
+        "send": "Protokoll Senden",
+        "logLevel": "Protokollstufe"
+    },
+    "widget": {
+        "noNotifications": "Keine Benachrichtigungen"
+    }
+}

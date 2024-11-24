@@ -1,0 +1,10 @@
+{
+    "settings": {
+        "clear": "로그 지우기",
+        "send": "로그 보내기",
+        "logLevel": "로그 레벨"
+    },
+    "widget": {
+        "noNotifications": "알림 없음"
+    }
+}

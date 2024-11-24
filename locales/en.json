@@ -3,5 +3,8 @@
 		"clear": "Clear Log",
 		"send": "Send Log",
 		"logLevel": "Log Level"
+	},
+	"widget": {
+		"noNotifications": "No Notifications"
 	}
 }

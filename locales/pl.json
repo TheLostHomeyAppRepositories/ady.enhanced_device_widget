@@ -1,0 +1,10 @@
+{
+    "settings": {
+        "clear": "Wyczyść dziennik",
+        "send": "Wyślij dziennik",
+        "logLevel": "Poziom dziennika"
+    },
+    "widget": {
+        "noNotifications": "Brak powiadomień"
+    }
+}

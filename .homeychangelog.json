@@ -49,5 +49,8 @@
 	},
 	"1.1.9": {
 		"en": "Fix Send Log. Fix false error message in the log each time the page is opened."
+	},
+	"1.1.10": {
+		"en": "Added option to switch off the X. Moved the X to the top right of the widget. Taping on the X sets the background to the default colour and displays 'No Notifications'."
 	}
 }

@@ -1,0 +1,10 @@
+{
+    "settings": {
+		"clear": "Borrar Registro",
+        "send": "Enviar Registro",
+        "logLevel": "Nivel de Registro"
+    },
+    "widget": {
+        "noNotifications": "Sin Notificaciones"
+    }
+}

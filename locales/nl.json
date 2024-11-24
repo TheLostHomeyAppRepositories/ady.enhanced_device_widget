@@ -1,0 +1,10 @@
+{
+    "settings": {
+        "clear": "Log wissen",
+        "send": "Log verzenden",
+        "logLevel": "Logniveau"
+    },
+    "widget": {
+        "noNotifications": "Geen meldingen"
+    }
+}

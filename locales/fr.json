@@ -1,0 +1,10 @@
+{
+    "settings": {
+        "clear": "Effacer le Journal",
+        "send": "Envoyer le Journal",
+        "logLevel": "Niveau de Journal"
+    },
+    "widget": {
+        "noNotifications": "Pas de Notifications"
+    }
+}

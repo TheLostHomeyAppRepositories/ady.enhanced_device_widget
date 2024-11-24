@@ -8,13 +8,18 @@
 	<div id="widgetContent" style="display:none">
 		<div class="container1">
 			<div class="left-section">
-				<img id="deviceIcon" src="cancel.png" alt="Device Icon" class="device-image-class" />
 				<div id="title" class="homey-text-bold">Title</div>
+			</div>
+			<div class="right-section">
+				<div id="deviceIcon" class="cross">&#x2715;</div>
 			</div>
 		</div>
 		<div class="container2">
 			<div id="status" class="homey-text-normal">Status</div>
 		</div>
+	</div>
+	<div id="widgetNoContent" style="display:block">
+		<div id="noStatus" class="homey-text-normal" data-i18n="widget.noNotifications"></div>
 	</div>
 
 	<script type="text/javascript">
@@ -23,6 +28,14 @@
 		{
 			const widgetId = Homey.getWidgetInstanceId();
 			const settings = Homey.getSettings();
+			if (settings.hideCross)
+			{
+				document.getElementById('deviceIcon').style.display = 'none';
+			}
+			else
+			{
+				document.getElementById('deviceIcon').style.display = 'block';
+			}
 
 			toggleDenseMode(settings.dense);
 
@@ -31,15 +44,6 @@
 				const settings = Homey.getSettings();
 				if (settings.widgetID === widgetID)
 				{
-					document.getElementById('title').innerHTML = title;
-					document.getElementById('status').innerHTML = status;
-					document.body.style.backgroundColor = backColour;
-					document.body.style.color = textColour;
-
-					// Show the "widgetContent" div
-					document.getElementById('widgetContent').style.display = 'block';
-					refreshHeight();
-
 					Homey.api('PUT', '/', { widgetId, lastStatus: { title, status, backColour, textColour } })
 						.then((result) =>
 						{
@@ -48,6 +52,26 @@
 						})
 						.catch(console.error);
 
+						if (title === '' && status === '')
+					{
+						document.getElementById('widgetContent').style.display = 'none';
+						document.getElementById('widgetNoContent').style.display = 'block';
+						document.body.style.backgroundColor = 'var(--homey-background-color)';
+						document.body.style.color = 'var(--homey-text-color)';
+					}
+					else
+					{
+						document.getElementById('title').innerHTML = title;
+						document.getElementById('status').innerHTML = status;
+						document.getElementById('title').style.color = textColour;
+						document.getElementById('status').style.color = textColour;
+						document.body.style.backgroundColor = backColour;
+						document.body.style.color = textColour;
+						document.getElementById('widgetContent').style.display = 'block';
+						document.getElementById('widgetNoContent').style.display = 'none';
+					}
+
+					refreshHeight();
 				}
 			});
 
@@ -56,8 +80,9 @@
 			{
 				// Hide the "widgetContent" div
 				document.getElementById('widgetContent').style.display = 'none';
-				document.body.style.backgroundColor = '#FFFFFF';
-				document.body.style.color = '#000000';
+				document.getElementById('widgetNoContent').style.display = 'block';
+				document.body.style.backgroundColor = 'var(--homey-background-color)';
+				document.body.style.color = 'var(--homey-text-color)';
 
 				Homey.api('PUT', '/', { widgetId, lastStatus: { title: '', status: '', backColour: '#FFFFFF', textColour: '#000000' } })
 					.then((result) =>
@@ -72,19 +97,23 @@
 			Homey.api('GET', `/?lastStatus=${widgetId}`, {})
 				.then((lastStatus) =>
 				{
-
-					document.getElementById('title').innerHTML = lastStatus.title;
-					document.getElementById('status').innerHTML = lastStatus.status;
-					document.body.style.backgroundColor = lastStatus.backColour;
-					document.body.style.color = lastStatus.textColour;
-
 					if (lastStatus.title === '' && lastStatus.status === '')
 					{
 						document.getElementById('widgetContent').style.display = 'none';
+						document.getElementById('widgetNoContent').style.display = 'block';
+						document.body.style.backgroundColor = 'var(--homey-background-color)';
+						document.body.style.color = 'var(--homey-text-color)';
 					}
 					else
 					{
+						document.getElementById('title').innerHTML = lastStatus.title;
+						document.getElementById('status').innerHTML = lastStatus.status;
+						document.getElementById('title').style.color = lastStatus.textColour;
+						document.getElementById('status').style.color = lastStatus.textColour;
+						document.body.style.backgroundColor = lastStatus.backColour;
+						document.body.style.color = lastStatus.textColour;
 						document.getElementById('widgetContent').style.display = 'block';
+						document.getElementById('widgetNoContent').style.display = 'none';
 					}
 
 					Homey.ready();
@@ -95,14 +124,21 @@
 
 		function refreshHeight()
 		{
-			const widgetContent = document.getElementById('widgetContent');
-			const rect = widgetContent.getBoundingClientRect();
-			let height = rect.top + rect.bottom;
-			if (height < 40)
+			try
 			{
-				height = 40;
+				const widgetContent = document.getElementById('widgetContent');
+				const rect = widgetContent.getBoundingClientRect();
+				let height = rect.top + rect.bottom;
+				if (height < 40)
+				{
+					height = 40;
+				}
+				Homey.setHeight(height);
 			}
-			Homey.setHeight(height);
+			catch (e)
+			{
+				console.error(e);
+			}
 		}
 
 		function toggleDenseMode(isDense)

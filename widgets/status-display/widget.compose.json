@@ -55,6 +55,33 @@
 				"pl": "Zmniejsz odstęp pionowy między zdolnościami",
 				"ko": "기능 사이의 수직 공간을 줄입니다."
 			}
+		},
+		{
+			"id": "hideCross",
+			"type": "checkbox",
+			"value": false,
+			"title": {
+				"en": "Hide the dismiss cross?",
+				"nl": "Kruis verbergen?",
+				"de": "Kreuz zum Schließen verbergen?",
+				"fr": "Masquer la croix de rejet?",
+				"es": "¿Ocultar la cruz de descarte?",
+				"it": "Nascondi la croce di respingimento?",
+				"pt": "Ocultar a cruz de rejeição?",
+				"pl": "Ukryć krzyż odrzucania?",
+				"ko": "닫기 크로스 숨기기?"
+			},
+			"hint": {
+				"en": "Hide the cross that dismisses the widget",
+				"nl": "Verberg het kruis dat het widget sluit",
+				"de": "Verbergen Sie das Kreuz, das das Widget schließt",
+				"fr": "Masquer la croix qui rejette le widget",
+				"es": "Ocultar la cruz que descarta el widget",
+				"it": "Nascondi la croce che respinge il widget",
+				"pt": "Ocultar a cruz que rejeita o widget",
+				"pl": "Ukryj krzyż, który odrzuca widżet",
+				"ko": "위젯을 닫는 크로스 숨기기"
+			}
 		}
 	],
 	"api": {

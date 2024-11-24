@@ -8,7 +8,7 @@ module.exports = {
 			let lastStatus = homey.settings.get(query.lastStatus);
 			if (!lastStatus)
 			{
-				lastStatus = { title: 'Title', status: 'This is the text', backColour: '#FFFFFF', textColour: '#000000' };
+				lastStatus = { title: '', status: '', backColour: '#FFFFFF', textColour: '#000000' };
 			}
 			return lastStatus;
 		}
