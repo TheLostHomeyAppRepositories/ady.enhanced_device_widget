@@ -35,19 +35,11 @@
 	margin-top: var(--dense);
 }
 
-.left-section {
-	display: flex;
-	align-items: center;
-}
-
-.right-section {
-	display: flex;
-	flex-direction: column;
-	align-items: center;
-}
-
 .cross {
-	transform: translate(10px, -10px);
+	position: absolute;
+	top: 0;
+	right: 0;
+	transform: translate(-7px, 5px);
 	margin-top: 0px;
 	margin-right: 0px;
 	margin-left: 10px;

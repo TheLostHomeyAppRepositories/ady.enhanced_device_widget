@@ -6,17 +6,13 @@
 
 <body class="homey-widget">
 	<div id="widgetContent" style="display:none">
-		<div class="container1">
-			<div class="left-section">
+		<div id="titleContainer" class="container1">
 				<div id="title" class="homey-text-bold">Title</div>
-			</div>
-			<div class="right-section">
-				<div id="deviceIcon" class="cross">&#x2715;</div>
-			</div>
 		</div>
-		<div class="container2">
+		<div id="statusConatiner" class="container2">
 			<div id="status" class="homey-text-normal">Status</div>
 		</div>
+		<div id="closeX" class="cross">&#x2715;</div>
 	</div>
 	<div id="widgetNoContent" style="display:block">
 		<div id="noStatus" class="homey-text-normal" data-i18n="widget.noNotifications"></div>
@@ -30,11 +26,11 @@
 			const settings = Homey.getSettings();
 			if (settings.hideCross)
 			{
-				document.getElementById('deviceIcon').style.display = 'none';
+				document.getElementById('closeX').style.display = 'none';
 			}
 			else
 			{
-				document.getElementById('deviceIcon').style.display = 'block';
+				document.getElementById('closeX').style.display = 'block';
 			}
 
 			toggleDenseMode(settings.dense);
@@ -52,31 +48,13 @@
 						})
 						.catch(console.error);
 
-						if (title === '' && status === '')
-					{
-						document.getElementById('widgetContent').style.display = 'none';
-						document.getElementById('widgetNoContent').style.display = 'block';
-						document.body.style.backgroundColor = 'var(--homey-background-color)';
-						document.body.style.color = 'var(--homey-text-color)';
-					}
-					else
-					{
-						document.getElementById('title').innerHTML = title;
-						document.getElementById('status').innerHTML = status;
-						document.getElementById('title').style.color = textColour;
-						document.getElementById('status').style.color = textColour;
-						document.body.style.backgroundColor = backColour;
-						document.body.style.color = textColour;
-						document.getElementById('widgetContent').style.display = 'block';
-						document.getElementById('widgetNoContent').style.display = 'none';
-					}
-
+					setElements(title, status, backColour, textColour);
 					refreshHeight();
 				}
 			});
 
 			// Add a listener for the icon being touched
-			document.getElementById('deviceIcon').addEventListener('click', function ()
+			document.getElementById('closeX').addEventListener('click', function ()
 			{
 				// Hide the "widgetContent" div
 				document.getElementById('widgetContent').style.display = 'none';
@@ -97,29 +75,51 @@
 			Homey.api('GET', `/?lastStatus=${widgetId}`, {})
 				.then((lastStatus) =>
 				{
-					if (lastStatus.title === '' && lastStatus.status === '')
-					{
-						document.getElementById('widgetContent').style.display = 'none';
-						document.getElementById('widgetNoContent').style.display = 'block';
-						document.body.style.backgroundColor = 'var(--homey-background-color)';
-						document.body.style.color = 'var(--homey-text-color)';
-					}
-					else
-					{
-						document.getElementById('title').innerHTML = lastStatus.title;
-						document.getElementById('status').innerHTML = lastStatus.status;
-						document.getElementById('title').style.color = lastStatus.textColour;
-						document.getElementById('status').style.color = lastStatus.textColour;
-						document.body.style.backgroundColor = lastStatus.backColour;
-						document.body.style.color = lastStatus.textColour;
-						document.getElementById('widgetContent').style.display = 'block';
-						document.getElementById('widgetNoContent').style.display = 'none';
-					}
+					setElements(lastStatus.title, lastStatus.status, lastStatus.backColour, lastStatus.textColour);
 
 					Homey.ready();
 					refreshHeight();
 				})
 				.catch(console.error);
+		}
+
+		function setElements(title, status, backColour, textColour)
+		{
+			if (title === '' && status === '')
+			{
+				document.getElementById('widgetContent').style.display = 'none';
+				document.getElementById('widgetNoContent').style.display = 'block';
+				document.body.style.backgroundColor = 'var(--homey-background-color)';
+				document.body.style.color = 'var(--homey-text-color)';
+			}
+			else
+			{
+				if (title === '')
+				{
+					document.getElementById('titleContainer').style.display = 'none';
+				}
+				else
+				{
+					document.getElementById('titleContainer').style.display = 'flex';
+					document.getElementById('title').innerHTML = title;
+					document.getElementById('title').style.color = textColour;
+				}
+
+				if (status === '')
+				{
+					document.getElementById('statusConatiner').style.display = 'none';
+				}
+				else
+				{
+					document.getElementById('statusConatiner').style.display = 'flex';
+					document.getElementById('status').innerHTML = status;
+					document.getElementById('status').style.color = textColour;
+				}
+				document.body.style.backgroundColor = backColour;
+				document.body.style.color = textColour;
+				document.getElementById('widgetContent').style.display = 'block';
+				document.getElementById('widgetNoContent').style.display = 'none';
+			}
 		}
 
 		function refreshHeight()
@@ -129,9 +129,9 @@
 				const widgetContent = document.getElementById('widgetContent');
 				const rect = widgetContent.getBoundingClientRect();
 				let height = rect.top + rect.bottom;
-				if (height < 40)
+				if (height < 45)
 				{
-					height = 40;
+					height = 45;
 				}
 				Homey.setHeight(height);
 			}
