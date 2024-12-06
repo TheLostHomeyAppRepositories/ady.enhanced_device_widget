@@ -22,7 +22,6 @@
 
 		function onHomeyReady(Homey)
 		{
-			const widgetId = Homey.getWidgetInstanceId();
 			const settings = Homey.getSettings();
 			if (settings.hideCross)
 			{
@@ -72,7 +71,7 @@
 				Homey.setHeight(40);
 			});
 
-			Homey.api('GET', `/?lastStatus=${widgetId}`, {})
+			Homey.api('GET', `/?lastStatus=${settings.widgetID}`, {})
 				.then((lastStatus) =>
 				{
 					setElements(lastStatus.title, lastStatus.status, lastStatus.backColour, lastStatus.textColour);

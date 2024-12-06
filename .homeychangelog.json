@@ -55,5 +55,8 @@
 	},
 	"1.1.11": {
 		"en": "Made the title and Status optional parameteres in the Flow action card. Set both to empty to clear the widget."
+	},
+	"1.1.12": {
+		"en": "Fixed issue with settings capabilities in the Enhanced Device Widget when they change externally. Cache status widget values to ensure values are refreshed when the widget is not visible."
 	}
 }

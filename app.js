@@ -5,7 +5,7 @@
 if (process.env.DEBUG === '1')
 {
 	// eslint-disable-next-line node/no-unsupported-features/node-builtins, global-require
-	// require('inspector').open(9229, '0.0.0.0', true);
+	require('inspector').open(9229, '0.0.0.0', true);
 }
 
 const Homey = require('homey');
@@ -74,6 +74,7 @@ class MyApp extends Homey.App
 			.registerRunListener(async (args, state) =>
 			{
 				const { widgetID, title, status, backColour, textColour } = args;
+				this.homey.settings.set(widgetID, { title, status, backColour, textColour });
 				this.homey.api.realtime('updateStatus', { widgetID, title, status, backColour, textColour });
 				return true;
 			});
