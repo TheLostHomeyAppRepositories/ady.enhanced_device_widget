@@ -111,6 +111,8 @@
 				else
 				{
 					document.getElementById('statusConatiner').style.display = 'flex';
+					// make the cr/lf compatible with HTML
+					status = status.replace(/(?:\r\n|\r|\n)/g, '<br>');
 					document.getElementById('status').innerHTML = status;
 					document.getElementById('status').style.color = textColour;
 				}
