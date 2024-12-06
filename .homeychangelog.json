@@ -58,5 +58,8 @@
 	},
 	"1.1.12": {
 		"en": "Fixed issue with settings capabilities in the Enhanced Device Widget when they change externally. Cache status widget values to ensure values are refreshed when the widget is not visible."
+	},
+	"1.1.13": {
+		"en": "Make cr/lf HTML compatible for multi-line status."
 	}
 }
