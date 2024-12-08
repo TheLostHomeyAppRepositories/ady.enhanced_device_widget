@@ -39,14 +39,6 @@
 				const settings = Homey.getSettings();
 				if (settings.widgetID === widgetID)
 				{
-					Homey.api('PUT', '/', { widgetId, lastStatus: { title, status, backColour, textColour } })
-						.then((result) =>
-						{
-							console.log(result);
-							return;
-						})
-						.catch(console.error);
-
 					setElements(title, status, backColour, textColour);
 					refreshHeight();
 				}
@@ -61,7 +53,9 @@
 				document.body.style.backgroundColor = 'var(--homey-background-color)';
 				document.body.style.color = 'var(--homey-text-color)';
 
-				Homey.api('PUT', '/', { widgetId, lastStatus: { title: '', status: '', backColour: '#FFFFFF', textColour: '#000000' } })
+				const settings = Homey.getSettings();
+
+				Homey.api('PUT', '/', { widgetId: settings.widgetID, lastStatus: { title: '', status: '', backColour: '#FFFFFF', textColour: '#000000' } })
 					.then((result) =>
 					{
 						console.log(result);

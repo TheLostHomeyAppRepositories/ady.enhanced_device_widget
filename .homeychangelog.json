@@ -61,5 +61,8 @@
 	},
 	"1.1.13": {
 		"en": "Make cr/lf HTML compatible for multi-line status."
+	},
+	"1.1.14": {
+		"en": "Fix for the status widget not clearing permanently when the X is tap."
 	}
 }
