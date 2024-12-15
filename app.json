@@ -401,6 +401,62 @@
             "pl": "Ukryj krzyż, który odrzuca widżet",
             "ko": "위젯을 닫는 크로스 숨기기"
           }
+        },
+        {
+          "id": "fixedHeight",
+          "type": "checkbox",
+          "value": false,
+          "title": {
+            "en": "Fixed Height",
+            "nl": "Vaste hoogte",
+            "de": "Feste Höhe",
+            "fr": "Hauteur fixe",
+            "es": "Altura fija",
+            "it": "Altezza fissa",
+            "pt": "Altura fixa",
+            "pl": "Stała wysokość",
+            "ko": "고정 높이"
+          },
+          "hint": {
+            "en": "Fix the height of the widget",
+            "nl": "De hoogte van het widget vastzetten",
+            "de": "Die Höhe des Widgets festlegen",
+            "fr": "Fixer la hauteur du widget",
+            "es": "Fijar la altura del widget",
+            "it": "Fissare l'altezza del widget",
+            "pt": "Fixar a altura do widget",
+            "pl": "Ustal wysokość widżetu",
+            "ko": "위젯의 높이 고정"
+          }
+        },
+        {
+          "id": "height",
+          "type": "number",
+          "value": 200,
+          "min": 100,
+          "max": 1000,
+          "title": {
+            "en": "Height",
+            "nl": "Hoogte",
+            "de": "Höhe",
+            "fr": "Hauteur",
+            "es": "Altura",
+            "it": "Altezza",
+            "pt": "Altura",
+            "pl": "Wysokość",
+            "ko": "신장"
+          },
+          "hint": {
+            "en": "The height of the widget if Fixed Height is enabled",
+            "nl": "De hoogte van het widget als Vaste hoogte is ingeschakeld",
+            "de": "Die Höhe des Widgets, wenn die feste Höhe aktiviert ist",
+            "fr": "La hauteur du widget si la hauteur fixe est activée",
+            "es": "La altura del widget si se habilita la Altura fija",
+            "it": "L'altezza del widget se l'Altezza fissa è abilitata",
+            "pt": "A altura do widget se a Altura fixa estiver ativada",
+            "pl": "Wysokość widżetu, jeśli włączona jest stała wysokość",
+            "ko": "고정 높이가 활성화된 경우 위젯의 높이"
+          }
         }
       ],
       "api": {

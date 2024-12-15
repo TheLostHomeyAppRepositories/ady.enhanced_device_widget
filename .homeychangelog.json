@@ -64,5 +64,8 @@
 	},
 	"1.1.14": {
 		"en": "Fix for the status widget not clearing permanently when the X is tap."
+	},
+	"1.1.15": {
+		"en": "Add option to set a fixed height for the status widget. Add a refresh icon to the status widget that is displayed when the X is not shown."
 	}
 }

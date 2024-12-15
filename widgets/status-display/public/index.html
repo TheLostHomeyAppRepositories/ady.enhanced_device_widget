@@ -13,12 +13,16 @@
 			<div id="status" class="homey-text-normal">Status</div>
 		</div>
 		<div id="closeX" class="cross">&#x2715;</div>
+		<img id="refresh" src="refresh.svg" alt="Refresh" class="refresh" />
 	</div>
 	<div id="widgetNoContent" style="display:block">
 		<div id="noStatus" class="homey-text-normal" data-i18n="widget.noNotifications"></div>
+		<img id="refresh2" src="refresh.svg" alt="Refresh" class="refresh" />
 	</div>
 
 	<script type="text/javascript">
+
+		fixedHeight = -1;
 
 		function onHomeyReady(Homey)
 		{
@@ -26,10 +30,21 @@
 			if (settings.hideCross)
 			{
 				document.getElementById('closeX').style.display = 'none';
+				document.getElementById('refresh').style.display = 'block';
 			}
 			else
 			{
 				document.getElementById('closeX').style.display = 'block';
+				document.getElementById('refresh').style.display = 'none';
+			}
+
+			if (settings.fixedHeight)
+			{
+				fixedHeight = settings.height;
+			}
+			else
+			{
+				fixedHeight = -1;
 			}
 
 			toggleDenseMode(settings.dense);
@@ -44,7 +59,7 @@
 				}
 			});
 
-			// Add a listener for the icon being touched
+			// Add a listener for the X icon being touched
 			document.getElementById('closeX').addEventListener('click', function ()
 			{
 				// Hide the "widgetContent" div
@@ -62,8 +77,43 @@
 						return;
 					})
 					.catch(console.error);
-				Homey.setHeight(40);
+				Homey.setHeight(fixedHeight > 0 ? fixedHeight : 40);
 			});
+
+			// Add a listener for the refresh icon being touched
+			document.getElementById('refresh').addEventListener('click', function ()
+			{
+				refreshWidget();
+			});
+
+			// Add a listener for the refresh2 icon being touched
+			document.getElementById('refresh2').addEventListener('click', function ()
+			{
+				refreshWidget();
+			});
+
+			function refreshWidget()
+			{
+				// Add the rotate class to the refresh image
+				const refreshImg = document.getElementById('refresh');
+				refreshImg.classList.add('rotate');
+
+				// Remove the rotate class after the animation completes
+				setTimeout(() =>
+				{
+					refreshImg.classList.remove('rotate');
+				}, 1000); // Duration of the animation
+
+
+				// Refresh the "widgetContent" div
+				Homey.api('GET', `/?lastStatus=${settings.widgetID}`, {})
+					.then((lastStatus) =>
+					{
+						setElements(lastStatus.title, lastStatus.status, lastStatus.backColour, lastStatus.textColour);
+						refreshHeight();
+					})
+					.catch(console.error);
+			};
 
 			Homey.api('GET', `/?lastStatus=${settings.widgetID}`, {})
 				.then((lastStatus) =>
@@ -119,6 +169,12 @@
 
 		function refreshHeight()
 		{
+			if (fixedHeight > 0)
+			{
+				Homey.setHeight(fixedHeight);
+				return;
+			}
+
 			try
 			{
 				const widgetContent = document.getElementById('widgetContent');
