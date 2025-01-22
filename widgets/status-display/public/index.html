@@ -7,13 +7,15 @@
 <body class="homey-widget">
 	<div id="widgetContent" style="display:none">
 		<div id="titleContainer" class="container1">
-				<div id="title" class="homey-text-bold">Title</div>
+			<div id="title" class="homey-text-bold">Title</div>
 		</div>
 		<div id="statusConatiner" class="container2">
 			<div id="status" class="homey-text-normal">Status</div>
 		</div>
-		<div id="closeX" class="cross">&#x2715;</div>
-		<img id="refresh" src="refresh.svg" alt="Refresh" class="refresh" />
+		<div class="icon-container">
+			<img id="refresh" src="refresh.svg" alt="Refresh" class="refresh" />
+			<div id="closeX" class="cross">&#x2715;</div>
+		</div>
 	</div>
 	<div id="widgetNoContent" style="display:block">
 		<div id="noStatus" class="homey-text-normal" data-i18n="widget.noNotifications"></div>
@@ -36,6 +38,17 @@
 			{
 				document.getElementById('closeX').style.display = 'block';
 				document.getElementById('refresh').style.display = 'none';
+			}
+
+			if (settings.showRefreshIcon)
+			{
+				document.getElementById('refresh').style.display = 'block';
+				document.getElementById('refresh2').style.display = 'block';
+			}
+			else
+			{
+				document.getElementById('refresh').style.display = 'none';
+				document.getElementById('refresh2').style.display = 'none';
 			}
 
 			if (settings.fixedHeight)

@@ -25,13 +25,14 @@
 		var widgetId = null;
 		var capabilityDisabled = {};
 		var editEnabled = false;
+		var settings = null;
 
 		function onHomeyReady(Homey)
 		{
 			widgetId = Homey.getWidgetInstanceId();
 
 			// View the settings the user provided if your widget has settings.
-			const settings = Homey.getSettings();
+			settings = Homey.getSettings();
 			document.getElementById('deviceName').innerHTML = settings.devices.name;
 
 			Homey.api('GET', `/?deviceImage=${settings.devices.id}`, {})
@@ -58,7 +59,7 @@
 
 			Homey.on('updateWidget', function ({ deviceId, capabilityID, value })
 			{
-				const settings = Homey.getSettings();
+				settings = Homey.getSettings();
 				if (settings.devices.id === deviceId)
 				{
 					if (capabilityDisabled[capabilityID])
@@ -81,7 +82,9 @@
 							{
 								slider.value = value;
 							}
-							if ((capabilityID === 'dim') || (capabilityID === 'windowcoverings_set'))
+
+							// Now update the value in the text field
+							if ((settings.devices.capabilitiesObj[capabilityID].units === '%') || (capabilityID === 'light_saturation'))
 							{
 								value = value * 100;
 								value = value.toFixed();
@@ -115,7 +118,7 @@
 			const widgetId = Homey.getWidgetInstanceId();
 
 			// View the settings the user provided if your widget has settings.
-			const settings = Homey.getSettings();
+			settings = Homey.getSettings();
 
 			const denseLayout = settings.dense;
 			let heightAdd = denseLayout ? 25 : 40;
@@ -179,7 +182,7 @@
 													<b>
 														<span>
 															<button class="button" id="${capability.id}" onclick="buttonPressed('${settings.devices.id}', '${capability.id}')">
-																1
+																<p>&#9654;</p>
 															</button>
 														</span>
 													</b>
@@ -190,20 +193,29 @@
 								{
 									// the value for dim and windowcoverings_set needs to be multiplied by 100 to get the correct value
 									let value = capability.value;
-									if ((capability.id === 'dim') || (capability.id === 'windowcoverings_set'))
+									let units = capability.units;
+									if (value === null)
 									{
-										value = value * 100;
-										value = value.toFixed();
+										value = 0;
 									}
-									else if (capability.id === 'light_hue')
+									else
 									{
-										value = value * 360;
-										value = value.toFixed();
+										if ((capability.units === '%') || (capability.id == 'light_saturation'))
+										{
+											value = value * 100;
+											value = value.toFixed();
+											units = '%'
+										}
+										if (capability.id === 'light_hue')
+										{
+											value = value * 360;
+											value = value.toFixed();
+										}
 									}
 									// Flex container for title and value text
 									html += `<div class="capability-row">`;
 									html += `<p class="alignleft homey-font-size-default" dense="${denseLayout}">${capability.title}</p>`;
-									html += `<p class="alignright homey-font-size-default" dense="${denseLayout}"><b><span id="${capability.id}">${value}</span></b> ${capability.units || ''}</p>`;
+									html += `<p class="alignright homey-font-size-default" dense="${denseLayout}"><b><span id="${capability.id}">${value}</span></b> ${units || ''}</p>`;
 									html += `</div>`; // close capability-row
 
 									// Separate block for the slider below the text
@@ -259,7 +271,7 @@
 													min="${capability.min}"
 													max="${capability.max}"
 													step="${(capability.max - capability.min) / 100}"
-													value="${value}"
+													value="${capability.value}"
 													onchange="numberChange('${settings.devices.id}', '${capability.id}')"
 													oninput="numberSlide('${capability.id}')"
 													onpointerdown="handlePointerDown(event)"
@@ -298,10 +310,17 @@
 							else
 							{
 								let value = capability.value;
-								if (capability.type == "enum")
+								if (value === null)
 								{
-									let e = capability.values.find((v) => v.id == value);
-									value = e ? e.title : value;
+									value = '-';
+								}
+								else
+								{
+									if (capability.type == "enum")
+									{
+										let e = capability.values.find((v) => v.id == value);
+										value = e ? e.title : value;
+									}
 								}
 
 								html += `<div class="capability-row">`;
@@ -410,6 +429,10 @@
 			{
 				value = (value / 360);
 			}
+			else if (capabilityId === 'light_temperature')
+			{
+				value = (value / 100);
+			}
 
 			Homey.api('POST', '/', { deviceId: deviceId, capabilityId: capabilityId, value: value })
 				.then((result) =>
@@ -430,7 +453,7 @@
 				oldValue = document.getElementById(capabilityId).innerHTML;
 			}
 
-			if ((capabilityId === 'dim') || (capabilityId === 'windowcoverings_set'))
+			if ((settings.devices.capabilitiesObj[capabilityId].units === '%') || (capabilityId === 'light_saturation'))
 			{
 				value = (value * 100);
 				value = value.toFixed();
@@ -444,10 +467,6 @@
 				// reset slider position to current value if the slider was moved but then cancled due to finger sliding
 				document.getElementById(capabilityId).innerHTML = `${oldValue}`;
 
-				if ((capabilityId === 'dim') || (capabilityId === 'windowcoverings_set'))
-				{
-					oldValue = (oldValue / 100);
-				}
 				element.value = oldValue;
 
 				oldValue = null;

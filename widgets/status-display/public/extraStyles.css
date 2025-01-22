@@ -74,3 +74,19 @@
 .rotate {
 	animation: rotate 1s linear;
 }
+
+.icon-container {
+	display: flex;
+	justify-content: flex-end;
+	align-items: center;
+}
+
+.refresh {
+	margin-right: 30px;
+	/* Adjust the spacing as needed */
+}
+
+.cross {
+	margin-left: 10px;
+	/* Adjust the spacing as needed */
+}

@@ -67,5 +67,8 @@
 	},
 	"1.1.15": {
 		"en": "Add option to set a fixed height for the status widget. Add a refresh icon to the status widget that is displayed when the X is not shown."
+	},
+	"1.1.16": {
+		"en": "Detect % units instead of specific capabilities to determin if the value needs to be multiplied by 100 to display it. Multiply light_saturation by 100 to display it as a percentage. Changed the button style for non-latching buttons."
 	}
 }
