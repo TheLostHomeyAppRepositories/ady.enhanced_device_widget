@@ -1,7 +1,7 @@
 {
   "_comment": "This file is generated. Please edit .homeycompose/app.json instead.",
   "id": "ady.enhanced_device_widget",
-  "version": "1.1.16",
+  "version": "1.1.18",
   "compatibility": ">=12.1.0",
   "sdk": 3,
   "brandColor": "#FF7D4B",
@@ -92,7 +92,15 @@
     "actions": [
       {
         "title": {
-          "en": "Set Status"
+          "en": "Set Status",
+          "nl": "Status instellen",
+          "fr": "Définir le statut",
+          "de": "Status festlegen",
+          "es": "Establecer estado",
+          "it": "Imposta stato",
+          "pt": "Definir estado",
+          "pl": "Ustaw status",
+          "ko": "상태 설정"
         },
         "titleFormatted": {
           "en": "Set Status of [[widgetID]]: Title: [[title]], Text: [[status]], Background colour: [[backColour]], Text colour: [[textColour]]",
@@ -196,6 +204,121 @@
           }
         ],
         "id": "set-status"
+      },
+      {
+        "title": {
+          "en": "Enhanced Set Status",
+          "nl": "Verbeterde status instellen",
+          "fr": "Statut défini amélioré",
+          "de": "Verbesserten Status festlegen",
+          "es": "Estado establecido mejorado",
+          "it": "Stato impostato migliorato",
+          "pt": "Status definido aprimorado",
+          "pl": "Ustawiony status ulepszony",
+          "ko": "향상된 상태 설정"
+        },
+        "titleFormatted": {
+          "en": "Enhanced Set Status of [[widgetID]]: Title: [[title]], Text: [[status]], Background colour: [[backColour]], Text colour: [[textColour]]",
+          "nl": "Verbeterde status instellen van [[widgetID]]: Titel: [[title]], Tekst: [[status]], Achtergrondkleur: [[backColour]], Tekstkleur: [[textColour]]",
+          "fr": "Statut défini amélioré de [[widgetID]]: Titre: [[title]], Texte: [[status]], Couleur de fond: [[backColour]], Couleur du texte: [[textColour]]",
+          "de": "Verbesserten Status von [[widgetID]] festlegen: Titel: [[title]], Text: [[status]], Hintergrundfarbe: [[backColour]], Textfarbe: [[textColour]]",
+          "es": "Estado establecido mejorado de [[widgetID]]: Título: [[title]], Texto: [[status]], Color de fondo: [[backColour]], Color de texto: [[textColour]]",
+          "it": "Stato impostato migliorato di [[widgetID]]: Titolo: [[title]], Testo: [[status]], Colore di sfondo: [[backColour]], Colore del testo: [[textColour]]",
+          "pt": "Status definido aprimorado de [[widgetID]]: Título: [[title]], Texto: [[status]], Cor de fundo: [[backColour]], Cor do texto: [[textColour]]",
+          "pl": "Ustawiony status ulepszony z [[widgetID]]: Tytuł: [[title]], Tekst: [[status]], Kolor tła: [[backColour]], Kolor tekstu: [[textColour]]",
+          "ko": "[[widgetID]]의 향상된 상태 설정: 제목: [[title]], 텍스트: [[status]], 배경색: [[backColour]], 텍스트 색상: [[textColour]]"
+        },
+        "hint": {
+          "en": "Update a Status Widget content. The colours are in hexadecimal format but can also include conditions.",
+          "nl": "Werk de inhoud van een statuswidget bij. De kleuren zijn in hexadecimale indeling maar kunnen ook voorwaarden bevatten.",
+          "fr": "Mettre à jour le contenu d'un widget de statut. Les couleurs sont au format hexadécimal mais peuvent également inclure des conditions.",
+          "de": "Aktualisieren Sie den Inhalt eines Status-Widgets. Die Farben sind im hexadezimalen Format, können aber auch Bedingungen enthalten.",
+          "es": "Actualizar el contenido de un widget de estado. Los colores están en formato hexadecimal pero también pueden incluir condiciones.",
+          "it": "Aggiorna il contenuto di un widget di stato. I colori sono in formato esadecimale ma possono anche includere condizioni.",
+          "pt": "Atualizar o conteúdo de um widget de status. As cores estão em formato hexadecimal, mas também podem incluir condições.",
+          "pl": "Zaktualizuj zawartość widżetu statusu. Kolory są w formacie szesnastkowym, ale mogą również zawierać warunki.",
+          "ko": "상태 위젯 콘텐츠 업데이트. 색상은 16 진수 형식이지만 조건도 포함할 수 있습니다."
+        },
+        "args": [
+          {
+            "type": "text",
+            "name": "widgetID",
+            "placeholder": {
+              "en": "Widget ID",
+              "nl": "Widget-ID",
+              "de": "Widget-ID",
+              "fr": "ID du widget",
+              "es": "ID del widget",
+              "it": "ID del widget",
+              "pt": "ID do widget",
+              "pl": "ID widżetu",
+              "ko": "위젯 ID"
+            }
+          },
+          {
+            "type": "text",
+            "name": "title",
+            "placeholder": {
+              "en": "Title",
+              "nl": "Titel",
+              "de": "Titel",
+              "fr": "Titre",
+              "es": "Título",
+              "it": "Titolo",
+              "pt": "Título",
+              "pl": "Tytuł",
+              "ko": "제목"
+            },
+            "required": false
+          },
+          {
+            "type": "text",
+            "name": "status",
+            "placeholder": {
+              "en": "Status text",
+              "nl": "Status tekst",
+              "de": "Status Text",
+              "fr": "Texte de statut",
+              "es": "Texto de estado",
+              "it": "Testo di stato",
+              "pt": "Texto de status",
+              "pl": "Tekst statusu",
+              "ko": "상태 텍스트"
+            },
+            "required": false
+          },
+          {
+            "type": "text",
+            "name": "backColour",
+            "placeholder": {
+              "en": "Background colour",
+              "nl": "Achtergrondkleur",
+              "de": "Hintergrundfarbe",
+              "fr": "Couleur de fond",
+              "es": "Color de fondo",
+              "it": "Colore di sfondo",
+              "pt": "Cor de fundo",
+              "pl": "Kolor tła",
+              "ko": "배경색"
+            }
+          },
+          {
+            "type": "text",
+            "name": "textColour",
+            "placeholder": {
+              "en": "Text colour",
+              "nl": "Tekstkleur",
+              "de": "Textfarbe",
+              "fr": "Couleur du texte",
+              "es": "Color de texto",
+              "it": "Colore del testo",
+              "pt": "Cor do texto",
+              "pl": "Kolor tekstu",
+              "ko": "텍스트 색상"
+            }
+          }
+        ],
+        "id": "set-status2"
       }
     ]
   },

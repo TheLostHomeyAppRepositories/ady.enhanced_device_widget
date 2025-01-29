@@ -70,5 +70,11 @@
 	},
 	"1.1.16": {
 		"en": "Detect % units instead of specific capabilities to determin if the value needs to be multiplied by 100 to display it. Multiply light_saturation by 100 to display it as a percentage. Changed the button style for non-latching buttons."
+	},
+	"1.1.17": {
+		"en": "Enhance API connection handling and device capability registration. Add periodic API connection checks and improve error logging for device capabilities. Ensure light_hue and light_saturation are updated together as they are usually used bt multiple-capability handlers."
+	},
+	"1.1.18": {
+		"en": "Added extra Set Status 2 Flow action card to allow for more complex colour options"
 	}
 }

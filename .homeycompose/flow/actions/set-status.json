@@ -1,6 +1,14 @@
 {
 	"title": {
-		"en": "Set Status"
+		"en": "Set Status",
+		"nl": "Status instellen",
+		"fr": "Définir le statut",
+		"de": "Status festlegen",
+		"es": "Establecer estado",
+		"it": "Imposta stato",
+		"pt": "Definir estado",
+		"pl": "Ustaw status",
+		"ko": "상태 설정"
 	},
 	"titleFormatted": {
 		"en": "Set Status of [[widgetID]]: Title: [[title]], Text: [[status]], Background colour: [[backColour]], Text colour: [[textColour]]",

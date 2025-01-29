@@ -429,10 +429,10 @@
 			{
 				value = (value / 360);
 			}
-			else if (capabilityId === 'light_temperature')
-			{
-				value = (value / 100);
-			}
+			// else if (capabilityId === 'light_temperature')
+			// {
+			// 	value = (value / 100);
+			// }
 
 			Homey.api('POST', '/', { deviceId: deviceId, capabilityId: capabilityId, value: value })
 				.then((result) =>

@@ -5,7 +5,7 @@
 if (process.env.DEBUG === '1')
 {
 	// eslint-disable-next-line node/no-unsupported-features/node-builtins, global-require
-	// require('inspector').open(9229, '0.0.0.0', true);
+	require('inspector').open(9229, '0.0.0.0', true);
 }
 
 const Homey = require('homey');
@@ -13,6 +13,7 @@ const { HomeyAPI } = require('homey-api');
 const DeviceManager = require('./lib/DeviceManager');
 const DeviceDispatcher = require('./lib/DeviceStateChangedDispatcher');
 const nodemailer = require('./nodemailer');
+const math = require('mathjs');
 
 class MyApp extends Homey.App
 {
@@ -79,7 +80,54 @@ class MyApp extends Homey.App
 				return true;
 			});
 
+		// Create the Flow action set-status2 card
+		this.homey.flow.getActionCard('set-status2')
+			.registerRunListener(async (args, state) =>
+			{
+				const { status, widgetID, title } = args;
+				let { backColour, textColour } = args;
+
+				backColour = this.convertColourToHex(backColour, '#000000');
+				textColour = this.convertColourToHex(textColour, '#FFFFFF');
+
+				this.homey.settings.set(widgetID, { title, status, backColour, textColour });
+				this.homey.api.realtime('updateStatus', { widgetID, title, status, backColour, textColour });
+				return true;
+			});
+
+		// Check the API connection every minute
+		this.apiCheckTimer = this.homey.setTimeout(() =>
+		{
+			this.checkAPIConnection();
+		}, 30000);
+
 		this.log('MyApp has been initialized');
+	}
+
+	convertColourToHex(colour, defaultColour)
+	{
+		// If the backColour does not start with a # then check if it's a decimal number
+		if (colour)
+		{
+			if (colour.startsWith('#'))
+			{
+				return colour;
+			}
+
+			// Evaluate the colour to see if it's a math expression
+			colour = math.evaluate(colour);
+
+			// eslint-disable-next-line no-restricted-globals
+			if (!isNaN(colour))
+			{
+				// Convert the decimal number to a hex string with at least 6 disgits, pad with 0's
+				colour = `#${colour.toString(16).padStart(6, '0')}`.toUpperCase();
+			}
+
+			return colour;
+		}
+
+		return defaultColour;
 	}
 
 	async getDeviceImageURI(deviceId)
@@ -237,6 +285,25 @@ class MyApp extends Homey.App
 					return;
 				}
 
+				if (capabilityId === 'light_hue')
+				{
+					// Set both hue and saturation at the same time
+					const saturation = await this.getCapabilityById(device, 'light_saturation');
+					if (saturation)
+					{
+						device.setCapabilityValue('light_saturation', saturation.value).catch((this.error));
+					}
+				}
+				else if (capabilityId === 'light_saturation')
+				{
+					// Set both hue and saturation at the same time
+					const hue = await this.getCapabilityById(device, 'light_hue');
+					if (hue)
+					{
+						device.setCapabilityValue('light_hue', hue.value).catch((this.error));
+					}
+				}
+
 				await device.setCapabilityValue(capabilityId, value);
 				if (this.logLevel > 0)
 				{
@@ -359,6 +426,29 @@ class MyApp extends Homey.App
 		}
 
 		throw new Error(this.homey.__('settings.logSendFailed') + error.message);
+	}
+
+	async checkAPIConnection()
+	{
+		if (!this.deviceManager.checkAPIConnection())
+		{
+			// The API wasn't connected so reregister the notifications
+			this.updateLog('API reconnected so re-registering the capability listeners', 0);
+
+			await this.deviceDispather.reregisterDeviceCapabilities();
+		}
+
+		if (this.apiCheckTimer !== null)
+		{
+			this.homey.clearTimeout(this.apiCheckTimer);
+			this.apiCheckTimer = null;
+		}
+
+		// Set a timeout to update the time every minute
+		this.apiCheckTimer = this.homey.setTimeout(() =>
+		{
+			this.checkAPIConnection();
+		}, 60000);
 	}
 
 }
