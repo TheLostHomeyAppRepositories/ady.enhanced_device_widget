@@ -18,6 +18,7 @@
 
 /* Layout for Container */
 .container1 {
+	position: relative;
 	display: flex;
 	justify-content: space-between;
 	align-items: center;
@@ -32,6 +33,8 @@
 	align-items: center;
 	width: 100%;
 	margin-bottom: 0px;
+	margin-left: 5px;
+	margin-right: 5px;
 	margin-top: var(--dense);
 }
 
@@ -89,4 +92,35 @@
 .cross {
 	margin-left: 10px;
 	/* Adjust the spacing as needed */
+}
+
+/* Next & previous buttons */
+.prev,
+.next {
+	cursor: pointer;
+	position: absolute;
+	top: 50%;
+	width: auto;
+	padding: 6px;
+	margin-top: -2px;
+	color: var(--homey-text-color);
+	background-color: rgba(127, 127, 127, 0.5); /* Semi-transparent background */
+	font-weight: bold;
+	font-size: 18px;
+	transition: 0.6s ease;
+	border-radius: 0 3px 3px 0;
+	user-select: none;
+	text-shadow: 1px 1px 2px var(--homey-background-color); /* Text shadow for better readability */
+}
+
+/* Position the "previous button" to the left */
+.prev {
+	left: -5px;
+	border-radius: 3px 0 0 3px;
+}
+
+/* Position the "next button" to the right */
+.next {
+	right: 5px;
+	border-radius: 3px 0 0 3px;
 }

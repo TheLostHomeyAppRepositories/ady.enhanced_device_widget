@@ -12,6 +12,15 @@ module.exports = {
 			}
 			return lastStatus;
 		}
+		else if (query.pageButtons)
+		{
+			let button_state = homey.settings.get(`${query.lastStatus}PageButtons`);
+			if (!button_state)
+			{
+				button_state = "none";
+			}
+			return button_state;
+		}
 
 		return 'Hello from App';
 	},
@@ -19,7 +28,7 @@ module.exports = {
 	async addSomething({ homey, body })
 	{
 		// access the post body and perform some action on it.
-
+		homey.app.triggerStatusFlow(body.widgetId, body.event);
 	},
 
 	async updateSomething({ homey, params, body })

@@ -70,6 +70,22 @@ class MyApp extends Homey.App
 			}
 		});
 
+		this._triggerStatus_widget_event = this.homey.flow.getTriggerCard('status_widget_event')
+			.registerRunListener((args, state) =>
+			{
+				return args.widgetId === state.widgetId && args.event === state.event;
+			});
+
+		// Create the Flow action set_status_page_buttons card
+		this.homey.flow.getActionCard('set_status_page_buttons')
+			.registerRunListener(async (args, state) =>
+			{
+				const { widgetId, button_state } = args;
+				this.homey.settings.set(`${widgetId}PageButtons`, button_state);
+				this.homey.api.realtime('updatePageButtons', { widgetId, button_state });
+				return true;
+			});
+
 		// Create the Flow action set-status card
 		this.homey.flow.getActionCard('set-status')
 			.registerRunListener(async (args, state) =>
@@ -451,5 +467,11 @@ class MyApp extends Homey.App
 		}, 60000);
 	}
 
+	triggerStatusFlow(widgetId, event)
+	{
+		const state = { widgetId, event };
+
+		return this._triggerStatus_widget_event.trigger(null, state);
+	}
 }
 module.exports = MyApp;

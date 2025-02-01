@@ -76,5 +76,8 @@
 	},
 	"1.1.18": {
 		"en": "Added extra Set Status 2 Flow action card to allow for more complex colour options"
+	},
+	"1.1.19": {
+		"en": "Added status widget Flow trigger for touch events on X, Title, Refresh, Next and Previous. Add an action Flow card to set the next and previous buttons visible or hidden."
 	}
 }

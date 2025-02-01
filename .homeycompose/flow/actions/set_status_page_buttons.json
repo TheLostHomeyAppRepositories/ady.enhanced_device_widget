@@ -1,0 +1,125 @@
+{
+	"title": {
+		"en": "Show status widget page buttons",
+		"nl": "Statuswidgetpagina-knoppen weergeven",
+		"de": "Status-Widget-Seitenschaltflächen anzeigen",
+		"fr": "Afficher les boutons de la page du widget d'état",
+		"es": "Mostrar botones de la página del widget de estado",
+		"it": "Mostra i pulsanti della pagina del widget di stato",
+		"pt": "Mostrar botões da página do widget de status",
+		"pl": "Pokaż przyciski strony widżetu stanu",
+		"ko": "상태 위젯 페이지 버튼 표시"
+	},
+	"titleFormatted": {
+		"en": "Show [[button_state]] page buttons on status widget [[widgetId]]",
+		"nl": "Toon [[button_state]] pagina-knoppen op statuswidget [[widgetId]]",
+		"de": "Zeige [[button_state]] Seitenschaltflächen auf Status-Widget [[widgetId]]",
+		"fr": "Afficher les boutons de la page [[button_state]] sur le widget d'état [[widgetId]]",
+		"es": "Mostrar botones de la página [[button_state]] en el widget de estado [[widgetId]]",
+		"it": "Mostra i pulsanti della pagina [[button_state]] sul widget di stato [[widgetId]]",
+		"pt": "Mostrar botões da página [[button_state]] no widget de status [[widgetId]]",
+		"pl": "Pokaż przyciski strony [[button_state]] na widżecie stanu [[widgetId]]",
+		"ko": "상태 위젯 [[widgetId]]의 [[button_state]] 페이지 버튼 표시"
+	},
+	"hint": {
+		"en": "Show or hide the page buttons on a status widget",
+		"nl": "Paginaknoppen weergeven of verbergen op een statuswidget",
+		"de": "Seitenschaltflächen auf einem Status-Widget anzeigen oder ausblenden",
+		"fr": "Afficher ou masquer les boutons de la page sur un widget d'état",
+		"es": "Mostrar u ocultar los botones de la página en un widget de estado",
+		"it": "Mostra o nascondi i pulsanti della pagina su un widget di stato",
+		"pt": "Mostrar ou ocultar os botões da página em um widget de status",
+		"pl": "Pokaż lub ukryj przyciski strony na widżecie stanu",
+		"ko": "상태 위젯의 페이지 버튼을 표시하거나 숨깁니다"
+	},
+	"args": [
+		{
+			"type": "text",
+			"name": "widgetId",
+			"placeholder": {
+				"en": "Widget ID",
+				"nl": "Widget-ID",
+				"de": "Widget-ID",
+				"fr": "ID du widget",
+				"es": "ID del widget",
+				"it": "ID del widget",
+				"pt": "ID do widget",
+				"pl": "ID widżetu",
+				"ko": "위젯 ID"
+			}
+		},
+		{
+			"name": "button_state",
+			"type": "dropdown",
+			"placeholder": {
+				"en": "Button State",
+				"nl": "Knopstatus",
+				"de": "Schaltflächenstatus",
+				"fr": "État du bouton",
+				"es": "Estado del botón",
+				"it": "Stato del pulsante",
+				"pt": "Estado do botão",
+				"pl": "Stan przycisku",
+				"ko": "버튼 상태"
+			},
+			"values": [
+				{
+					"id": "none",
+					"title": {
+						"en": "Neither",
+						"nl": "Geen van beide",
+						"de": "Keiner",
+						"fr": "Aucun",
+						"es": "Ninguno",
+						"it": "Nessuno",
+						"pt": "Nenhum",
+						"pl": "Żaden",
+						"ko": "없음"
+					}
+				},
+				{
+					"id": "left",
+					"title": {
+						"en": "Left",
+						"nl": "Links",
+						"de": "Links",
+						"fr": "Gauche",
+						"es": "Izquierda",
+						"it": "Sinistra",
+						"pt": "Esquerda",
+						"pl": "Lewo",
+						"ko": "왼쪽"
+					}
+				},
+				{
+					"id": "right",
+					"title": {
+						"en": "Right",
+						"nl": "Rechts",
+						"de": "Rechts",
+						"fr": "Droite",
+						"es": "Derecha",
+						"it": "Destra",
+						"pt": "Direita",
+						"pl": "Prawo",
+						"ko": "오른쪽"
+					}
+				},
+				{
+					"id": "both",
+					"title": {
+						"en": "Both",
+						"nl": "Beide",
+						"de": "Beide",
+						"fr": "Les deux",
+						"es": "Ambos",
+						"it": "Entrambi",
+						"pt": "Ambos",
+						"pl": "Oba",
+						"ko": "양쪽"
+					}
+				}
+			]
+		}
+	]
+}

@@ -1,0 +1,130 @@
+{
+	"title": {
+		"en": "A status widget event occurred",
+		"nl": "Een statuswidget-gebeurtenis heeft plaatsgevonden",
+		"de": "Ein Status-Widget-Ereignis ist aufgetreten",
+		"fr": "Un événement de widget de statut s'est produit",
+		"es": "Se ha producido un evento de widget de estado",
+		"it": "Si è verificato un evento del widget di stato",
+		"pt": "Ocorreu um evento de widget de status",
+		"pl": "Wystąpiło zdarzenie widżetu statusu",
+		"ko": "상태 위젯 이벤트가 발생했습니다"
+	},
+	"titleFormatted": {
+		"en": "The widget '[[widgetId]]' has triggered the event '[[event]]'",
+		"nl": "Het widget '[[widgetId]]' heeft het gebeurtenistype '[[event]]' geactiveerd",
+		"de": "Das Widget '[[widgetId]]' hat das Ereignis '[[event]]' ausgelöst",
+		"fr": "Le widget '[[widgetId]]' a déclenché l'événement '[[event]]'",
+		"es": "El widget '[[widgetId]]' ha desencadenado el evento '[[event]]'",
+		"it": "Il widget '[[widgetId]]' ha attivato l'evento '[[event]]'",
+		"pt": "O widget '[[widgetId]]' acionou o evento '[[event]]'",
+		"pl": "Widżet '[[widgetId]]' wywołał zdarzenie '[[event]]'",
+		"ko": "위젯 '[[widgetId]]'이 이벤트 '[[event]]'를 트리거했습니다"
+	},
+	"highlight": true,
+	"args": [
+		{
+			"name": "widgetId",
+			"type": "text",
+			"placeholder": {
+				"en": "Widget ID",
+				"nl": "Widget-ID",
+				"de": "Widget-ID",
+				"fr": "ID du widget",
+				"es": "ID del widget",
+				"it": "ID del widget",
+				"pt": "ID do widget",
+				"pl": "ID widżetu",
+				"ko": "위젯 ID"
+			},
+			"example": "w1"
+		},
+		{
+			"type": "dropdown",
+			"name": "event",
+			"placeholder": {
+				"en": "Event Type",
+				"nl": "Gebeurtenistype",
+				"de": "Ereignistyp",
+				"fr": "Type d'événement",
+				"es": "Tipo de evento",
+				"it": "Tipo di evento",
+				"pt": "Tipo de evento",
+				"pl": "Typ zdarzenia",
+				"ko": "이벤트 유형"
+			},
+			"values": [
+				{
+					"id": "xClick",
+					"title": {
+						"en": "X clicked",
+						"nl": "X geklikt",
+						"de": "X geklickt",
+						"fr": "X cliqué",
+						"es": "X clicado",
+						"it": "X cliccato",
+						"pt": "X clicado",
+						"pl": "X kliknięty",
+						"ko": "X 클릭"
+					}
+				},
+				{
+					"id": "refreshClick",
+					"title": {
+						"en": "Refresh clicked",
+						"nl": "Vernieuwen geklikt",
+						"de": "Aktualisieren geklickt",
+						"fr": "Actualiser cliqué",
+						"es": "Actualizar clicado",
+						"it": "Aggiorna cliccato",
+						"pt": "Atualizar clicado",
+						"pl": "Odśwież kliknięty",
+						"ko": "새로 고침 클릭"
+					}
+				},
+				{
+					"id": "titleClick",
+					"title": {
+						"en": "Title clicked",
+						"nl": "Titel geklikt",
+						"de": "Titel geklickt",
+						"fr": "Titre cliqué",
+						"es": "Título clicado",
+						"it": "Titolo cliccato",
+						"pt": "Título clicado",
+						"pl": "Tytuł kliknięty",
+						"ko": "제목 클릭"
+					}
+				},
+				{
+					"id": "btnPrevClick",
+					"title": {
+						"en": "Previous button clicked",
+						"nl": "Vorige knop geklikt",
+						"de": "Vorherige Schaltfläche geklickt",
+						"fr": "Bouton précédent cliqué",
+						"es": "Botón anterior clicado",
+						"it": "Pulsante precedente cliccato",
+						"pt": "Botão anterior clicado",
+						"pl": "Kliknięto przycisk poprzedni",
+						"ko": "이전 버튼 클릭"
+					}
+				},
+				{
+					"id": "btnNextClick",
+					"title": {
+						"en": "Next button clicked",
+						"nl": "Volgende knop geklikt",
+						"de": "Nächste Schaltfläche geklickt",
+						"fr": "Bouton suivant cliqué",
+						"es": "Botón siguiente clicado",
+						"it": "Pulsante successivo cliccato",
+						"pt": "Botão seguinte clicado",
+						"pl": "Kliknięto przycisk następny",
+						"ko": "다음 버튼 클릭"
+					}
+				}
+			]
+		}
+	]
+}

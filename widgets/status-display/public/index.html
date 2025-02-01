@@ -10,6 +10,8 @@
 			<div id="title" class="homey-text-bold">Title</div>
 		</div>
 		<div id="statusConatiner" class="container2">
+			<a id="btnPrev" class="prev">❮</a>
+			<a id="btNext" class="next">❯</a>
 			<div id="status" class="homey-text-normal">Status</div>
 		</div>
 		<div class="icon-container">
@@ -72,6 +74,35 @@
 				}
 			});
 
+			Homey.on('updatePageButtons', function ({ widgetId, button_state })
+			{
+				const settings = Homey.getSettings();
+				if (settings.widgetID === widgetId)
+				{
+					// Show or hide the previous and next buttons
+					if (button_state === 'none')
+					{
+						document.getElementById('btnPrev').style.display = 'none';
+						document.getElementById('btNext').style.display = 'none';
+					}
+					else if (button_state === 'left')
+					{
+						document.getElementById('btnPrev').style.display = 'block';
+						document.getElementById('btNext').style.display = 'none';
+					}
+					else if (button_state === 'right')
+					{
+						document.getElementById('btnPrev').style.display = 'none';
+						document.getElementById('btNext').style.display = 'block';
+					}
+					else if (button_state === 'both')
+					{
+						document.getElementById('btnPrev').style.display = 'block';
+						document.getElementById('btNext').style.display = 'block';
+					}
+				}
+			});
+
 			// Add a listener for the X icon being touched
 			document.getElementById('closeX').addEventListener('click', function ()
 			{
@@ -91,18 +122,78 @@
 					})
 					.catch(console.error);
 				Homey.setHeight(fixedHeight > 0 ? fixedHeight : 40);
+
+				Homey.api('POST', '/', { widgetId: settings.widgetID, event: 'xClick' })
+					.then((result) =>
+					{
+						console.log(result);
+						return;
+					})
+					.catch(console.error);
 			});
 
 			// Add a listener for the refresh icon being touched
 			document.getElementById('refresh').addEventListener('click', function ()
 			{
+				Homey.api('POST', '/', { widgetId: settings.widgetID, event: 'refreshClick' })
+					.then((result) =>
+					{
+						console.log(result);
+						return;
+					})
+					.catch(console.error);
+
 				refreshWidget();
 			});
 
 			// Add a listener for the refresh2 icon being touched
 			document.getElementById('refresh2').addEventListener('click', function ()
 			{
+				Homey.api('POST', '/', { widgetId: settings.widgetID, event: 'refreshClick' })
+					.then((result) =>
+					{
+						console.log(result);
+						return;
+					})
+					.catch(console.error);
+
 				refreshWidget();
+			});
+
+			// Add a listener for the Title being touched
+			document.getElementById('title').addEventListener('click', function ()
+			{
+				Homey.api('POST', '/', { widgetId: settings.widgetID, event: 'titleClick' })
+					.then((result) =>
+					{
+						console.log(result);
+						return;
+					})
+					.catch(console.error);
+			});
+
+			// Add a listener for the Previous button being touched
+			document.getElementById('btnPrev').addEventListener('click', function ()
+			{
+				Homey.api('POST', '/', { widgetId: settings.widgetID, event: 'btnPrevClick' })
+					.then((result) =>
+					{
+						console.log(result);
+						return;
+					})
+					.catch(console.error);
+			});
+
+			// Add a listener for the Next button being touched
+			document.getElementById('btNext').addEventListener('click', function ()
+			{
+				Homey.api('POST', '/', { widgetId: settings.widgetID, event: 'btnNextClick' })
+					.then((result) =>
+					{
+						console.log(result);
+						return;
+					})
+					.catch(console.error);
 			});
 
 			function refreshWidget()
@@ -127,6 +218,33 @@
 					})
 					.catch(console.error);
 			};
+
+			Homey.api('GET', `/?pageButtons=${settings.widgetID}`, {})
+				.then((button_state) =>
+				{
+					// Show or hide the previous and next buttons
+					if (button_state === 'none')
+					{
+						document.getElementById('btnPrev').style.display = 'none';
+						document.getElementById('btNext').style.display = 'none';
+					}
+					else if (button_state === 'left')
+					{
+						document.getElementById('btnPrev').style.display = 'block';
+						document.getElementById('btNext').style.display = 'none';
+					}
+					else if (button_state === 'right')
+					{
+						document.getElementById('btnPrev').style.display = 'none';
+						document.getElementById('btNext').style.display = 'block';
+					}
+					else if (button_state === 'both')
+					{
+						document.getElementById('btnPrev').style.display = 'block';
+						document.getElementById('btNext').style.display = 'block';
+					}
+				})
+				.catch(console.error);
 
 			Homey.api('GET', `/?lastStatus=${settings.widgetID}`, {})
 				.then((lastStatus) =>
