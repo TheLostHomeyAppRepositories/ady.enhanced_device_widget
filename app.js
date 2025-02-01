@@ -13,7 +13,7 @@ const { HomeyAPI } = require('homey-api');
 const DeviceManager = require('./lib/DeviceManager');
 const DeviceDispatcher = require('./lib/DeviceStateChangedDispatcher');
 const nodemailer = require('./nodemailer');
-const math = require('mathjs');
+const math = require('./mathjs');
 
 class MyApp extends Homey.App
 {
