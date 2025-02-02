@@ -9,6 +9,7 @@
         "linebreak-style": ["error", "windows"],
         "no-tabs": ["error", { "allowIndentationTabs": true }],
         "object-curly-newline": ["error", { "consistent": true }],
-        "max-len": ["error", { "code": 300 }]
+        "max-len": ["error", { "code": 300 }],
+		"camelcase": "off"
     }
 }

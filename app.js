@@ -10,10 +10,11 @@ if (process.env.DEBUG === '1')
 
 const Homey = require('homey');
 const { HomeyAPI } = require('homey-api');
+const { Parser } = require('expr-eval');
 const DeviceManager = require('./lib/DeviceManager');
 const DeviceDispatcher = require('./lib/DeviceStateChangedDispatcher');
 const nodemailer = require('./nodemailer');
-const math = require('./mathjs');
+// const math = require('mathjs');
 
 class MyApp extends Homey.App
 {
@@ -131,7 +132,7 @@ class MyApp extends Homey.App
 			}
 
 			// Evaluate the colour to see if it's a math expression
-			colour = math.evaluate(colour);
+			colour = Parser.evaluate(colour);
 
 			// eslint-disable-next-line no-restricted-globals
 			if (!isNaN(colour))
@@ -473,5 +474,6 @@ class MyApp extends Homey.App
 
 		return this._triggerStatus_widget_event.trigger(null, state);
 	}
+
 }
 module.exports = MyApp;

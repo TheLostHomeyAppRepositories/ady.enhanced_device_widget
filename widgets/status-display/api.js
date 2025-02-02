@@ -12,12 +12,13 @@ module.exports = {
 			}
 			return lastStatus;
 		}
-		else if (query.pageButtons)
+
+		if (query.pageButtons)
 		{
 			let button_state = homey.settings.get(`${query.lastStatus}PageButtons`);
 			if (!button_state)
 			{
-				button_state = "none";
+				button_state = 'none';
 			}
 			return button_state;
 		}
