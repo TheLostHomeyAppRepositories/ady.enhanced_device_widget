@@ -104,12 +104,20 @@ class MyApp extends Homey.App
 				const { status, widgetID, title } = args;
 				let { backColour, textColour } = args;
 
-				backColour = this.convertColourToHex(backColour, '#000000');
-				textColour = this.convertColourToHex(textColour, '#FFFFFF');
+				try
+				{
+					backColour = this.convertColourToHex(backColour, '#000000');
+					textColour = this.convertColourToHex(textColour, '#FFFFFF');
 
-				this.homey.settings.set(widgetID, { title, status, backColour, textColour });
-				this.homey.api.realtime('updateStatus', { widgetID, title, status, backColour, textColour });
-				return true;
+					this.homey.settings.set(widgetID, { title, status, backColour, textColour });
+					this.homey.api.realtime('updateStatus', { widgetID, title, status, backColour, textColour });
+					return true;
+				}
+				catch (e)
+				{
+					this.updateLog(`\nError ${e.message} when setting status ${widgetID}: ${title}, backColour: ${backColour}, textColour: ${textColour}`);
+				}
+				return false;
 			});
 
 		// Check the API connection every minute
