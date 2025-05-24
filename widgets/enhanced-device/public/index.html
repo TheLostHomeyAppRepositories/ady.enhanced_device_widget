@@ -5,18 +5,20 @@
 </head>
 
 <body class="homey-widget">
-	<div class="container">
-		<div class="left-section">
-			<img id="deviceIcon" src="homey-logo.png" alt="Device Icon" class="device-image-class" />
-			<div id="deviceName" class="homey-text-bold">Device</div>
+		<div class="container">
+			<div class="left-section">
+				<img id="deviceIcon" src="homey-logo.png" alt="Device Icon" class="device-image-class" />
+				<div id="deviceName" class="homey-text-bold">Device</div>
+			</div>
+			<div id="enableEdit" class="right-section">
+				<label for="editMode" class="homey-font-size-default">Edit</label>
+				<input id="editMode" type="checkbox" onclick="onChangeEditMode()">
+			</div>
 		</div>
-		<div id="enableEdit" class="right-section">
-			<label for="editMode" class="homey-font-size-default">Edit</label>
-			<input id="editMode" type="checkbox" onclick="onChangeEditMode()">
+		<div id="headerSeperator">
+			<hr>
 		</div>
-	</div>
-	<hr>
-	<div id="capabilitiesSection"></div>
+		<div id="capabilitiesSection"></div>
 
 	<script type="text/javascript">
 		var SliderCancelTimer = null;
@@ -33,6 +35,17 @@
 
 			// View the settings the user provided if your widget has settings.
 			settings = Homey.getSettings();
+
+			// Set the background color or gradient based on the settings
+			if (settings.fillType === 'solid')
+			{
+				document.body.style.background = settings.color1;
+			}
+			else if (settings.fillType !== 'system')
+			{
+				document.body.style.background = `linear-gradient(${settings.fillType}, ${settings.color1}, ${settings.color2})`;
+			}
+
 			document.getElementById('deviceName').innerHTML = settings.devices.name;
 
 			Homey.api('GET', `/?deviceImage=${settings.devices.id}`, {})
@@ -45,6 +58,7 @@
 			document.getElementById('enableEdit').style.display = settings.enableConfiguration ? 'flex' : 'none';
 			editEnabled = settings.enableConfiguration;
 			document.getElementById('editMode').checked = editMode;
+			document.getElementById('headerSeperator').style.display = settings.dense ? 'none' : 'flex';
 
 			Homey.api('GET', `/?disabledCapabilities=${widgetId}`, {})
 				.then((result) =>
@@ -121,7 +135,7 @@
 			settings = Homey.getSettings();
 
 			const denseLayout = settings.dense;
-			let heightAdd = denseLayout ? 25 : 40;
+			let heightAdd = denseLayout ? 25 : 30;
 
 			// Fetch something from your app.
 			Homey.api('GET', `/?deviceId=${settings.devices.id}&disabledCapabilities=${disabledCapabilities ? JSON.stringify(disabledCapabilities) : null}`, {})
@@ -157,21 +171,42 @@
 							{
 								if ((capability.type === "boolean") && capability.getable)
 								{
-									// create a switch for boolean capabilities
-									html += `<div class="capability-row">`;
-									html += `<p class="alignleft homey-font-size-default" dense="${denseLayout}"> ${capability.title}</p>
-												<p class="alignright homey-font-size-default" dense="${denseLayout}">
-													<b>
-														<span>
-															<label class="switch">
-																<input id="${capability.id}" type="checkbox" ${capability.value ? 'checked' : ''} onclick="onOffToggle('${settings.devices.id}', '${capability.id}')">
-																<span class="slider round">
-																</span>
-															</label>
-														</span>
-													</b>
-												</p>`;
-									html += `</div>`; // close capability-row
+									if (editEnabled || (capability.id !== 'onoff'))
+									{
+										// create a switch for boolean capabilities
+										html += `<div class="capability-row">`;
+										html += `<p class="alignleft homey-font-size-default" dense="${denseLayout}"> ${capability.title}</p>
+													<p class="alignright homey-font-size-default" dense="${denseLayout}">
+														<b>
+															<span>
+																<label class="switch">
+																	<input id="${capability.id}" type="checkbox" ${capability.value ? 'checked' : ''} onclick="onOffToggle('${settings.devices.id}', '${capability.id}')">
+																	<span class="slider round">
+																	</span>
+																</label>
+															</span>
+														</b>
+													</p>`;
+										html += `</div>`; // close capability-row
+									}
+									else
+									{
+										// Display just a toggle switch in the right side of the header row
+										let html2 = `<p class="alignright homey-font-size-default" dense="${denseLayout}">
+														<b>
+															<span>
+																<label class="switch">
+																	<input id="${capability.id}" type="checkbox" ${capability.value ? 'checked' : ''} onclick="onOffToggle('${settings.devices.id}', '${capability.id}')">
+																	<span class="slider round">
+																	</span>
+																</label>
+															</span>
+														</b>
+													</p>`;
+
+										document.getElementById('enableEdit').innerHTML = html2;
+										document.getElementById('enableEdit').style.display = 'flex';
+									}
 								}
 								else if (capability.type === "boolean")
 								{
@@ -212,11 +247,15 @@
 											value = value.toFixed();
 										}
 									}
-									// Flex container for title and value text
-									html += `<div class="capability-row">`;
-									html += `<p class="alignleft homey-font-size-default" dense="${denseLayout}">${capability.title}</p>`;
-									html += `<p class="alignright homey-font-size-default" dense="${denseLayout}"><b><span id="${capability.id}">${value}</span></b> ${units || ''}</p>`;
-									html += `</div>`; // close capability-row
+
+									if (!denseLayout || ((capability.id !== 'dim') && (capability.id !== 'windowcoverings_set')))
+									{
+										// Flex container for title and value text
+										html += `<div class="capability-row">`;
+										html += `<p class="alignleft homey-font-size-default" dense="${denseLayout}">${capability.title}</p>`;
+										html += `<p class="alignright homey-font-size-default" dense="${denseLayout}"><b><span id="${capability.id}">${value}</span></b> ${units || ''}</p>`;
+										html += `</div>`; // close capability-row
+									}
 
 									// Separate block for the slider below the text
 									// If it's hue capability then add a hue slider

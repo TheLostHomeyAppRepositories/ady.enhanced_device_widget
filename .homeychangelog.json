@@ -79,5 +79,11 @@
 	},
 	"1.1.19": {
 		"en": "Added status widget Flow trigger for touch events on X, Title, Refresh, Next and Previous. Add an action Flow card to set the next and previous buttons visible or hidden."
+	},
+	"1.1.20": {
+		"en": "Improved error handling for widget interactions, ensuring users receive appropriate feedback during events via the log."
+	},
+	"1.1.21": {
+		"en": "Removed caption and value for dim and windowcover position when dense mode is selected. Moved onoff toggle to header in dense mode when Edit checkbox is not there. Added option to set background colour and gradient. Reduce size of non-dense mode."
 	}
 }

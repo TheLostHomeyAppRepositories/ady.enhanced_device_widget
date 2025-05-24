@@ -95,19 +95,15 @@
 }
 
 .alignleft[dense="false"] {
-	margin-top: 15px;
-	min-height: 25px;
+	margin-top: 10px;
+	min-height: 20px;
 }
 
 .alignright[dense="false"] {
-	margin-top: 15px;
-	min-height: 25px;
+	margin-top: 10px;
+	min-height: 20px;
 }
 
-/* Dense Layout for Capabilities Section */
-#capabilitiesSection[dense="true"] {
-	padding-top: 6px;
-}
 
 /* Switch Styling */
 .switch {
@@ -134,24 +130,18 @@
 	background-color: #ccc;
 	-webkit-transition: .4s;
 	transition: .4s;
-	box-shadow: 1px 1px 1px #000000, 0px 0px 1px #0d0d0d;
-	border-radius: 5px;
-	border: 0.2px solid #010101;
 }
 
 .slider:before {
 	position: absolute;
 	content: "";
-	width: 16px;
-	height: 16px;
-	left: 4px;
-	bottom: 4px;
+	width: 22px;
+	height: 22px;
+	left: 1px;
+	bottom: 1px;
 	background-color: white;
 	-webkit-transition: .4s;
 	transition: .4s;
-	box-shadow: 1px 1px 1px #000000, 0px 0px 1px #0d0d0d;
-	border-radius: 5px;
-	border: 0.2px solid #010101;
 }
 
 input:checked+.slider {
@@ -163,7 +153,7 @@ input:checked+.slider:before {
 }
 
 .slider.round {
-	border-radius: 24px;
+	border-radius: 12px;
 }
 
 .slider.round:before {
