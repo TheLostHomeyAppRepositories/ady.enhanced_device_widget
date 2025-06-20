@@ -123,8 +123,38 @@
 						"pl": "Kliknięto przycisk następny",
 						"ko": "다음 버튼 클릭"
 					}
+				},
+				{
+					"id": "objectClick",
+					"title": {
+						"en": "Object clicked",
+						"nl": "Object geklikt",
+						"de": "Objekt geklickt",
+						"fr": "Objet cliqué",
+						"es": "Objeto clicado",
+						"it": "Oggetto cliccato",
+						"pt": "Objeto clicado",
+						"pl": "Obiekt kliknięty",
+						"ko": "객체 클릭"
+					}
 				}
 			]
+		}
+	],
+	"tokens": [
+		{
+			"name": "eventID",
+			"type": "string",
+			"title": {
+				"en": "Event ID",
+				"nl": "Gebeurtenis-ID",
+				"de": "Ereignis-ID"
+			},
+			"example": {
+				"en": "Object1",
+				"nl": "Object1",
+				"de": "Objekt1"
+			}
 		}
 	]
 }

@@ -5,7 +5,7 @@
 if (process.env.DEBUG === '1')
 {
 	// eslint-disable-next-line node/no-unsupported-features/node-builtins, global-require
-//	require('inspector').open(9229, '0.0.0.0', true);
+	require('inspector').open(9229, '0.0.0.0', true);
 }
 
 const Homey = require('homey');
@@ -476,11 +476,12 @@ class MyApp extends Homey.App
 		}, 60000);
 	}
 
-	triggerStatusFlow(widgetId, event)
+	triggerStatusFlow(widgetId, event, eventID)
 	{
 		const state = { widgetId, event };
+		const tokens = eventID ? { eventID } : { eventID: '' };
 
-		return this._triggerStatus_widget_event.trigger(null, state);
+		return this._triggerStatus_widget_event.trigger(tokens, state);
 	}
 
 }

@@ -29,7 +29,7 @@ module.exports = {
 	async addSomething({ homey, body })
 	{
 		// access the post body and perform some action on it.
-		homey.app.triggerStatusFlow(body.widgetId, body.event);
+		homey.app.triggerStatusFlow(body.widgetId, body.event, body.eventID);
 	},
 
 	async updateSomething({ homey, params, body })

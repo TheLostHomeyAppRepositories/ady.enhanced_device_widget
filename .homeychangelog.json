@@ -85,5 +85,8 @@
 	},
 	"1.1.21": {
 		"en": "Removed caption and value for dim and windowcover position when dense mode is selected. Moved onoff toggle to header in dense mode when Edit checkbox is not there. Added option to set background colour and gradient. Reduce size of non-dense mode."
+	},
+	"1.1.22": {
+		"en": "Added new event, 'Object clicked' to the status widget. The Flow trigger passes the eventID token to identify the object. This allows the Flow to use the eventID in And Flow cards. Example HTML for the status widget: <img src=\"your-image\" alt=\"Description\" onclick=\"onObjectClick('myobj');\" />. The 'myobj' can be any string to pass as the eventID."
 	}
 }

@@ -1,7 +1,7 @@
 {
   "_comment": "This file is generated. Please edit .homeycompose/app.json instead.",
   "id": "ady.enhanced_device_widget",
-  "version": "1.1.21",
+  "version": "1.1.22",
   "compatibility": ">=12.1.0",
   "sdk": 3,
   "brandColor": "#FF7D4B",
@@ -215,8 +215,38 @@
                   "pl": "Kliknięto przycisk następny",
                   "ko": "다음 버튼 클릭"
                 }
+              },
+              {
+                "id": "objectClick",
+                "title": {
+                  "en": "Object clicked",
+                  "nl": "Object geklikt",
+                  "de": "Objekt geklickt",
+                  "fr": "Objet cliqué",
+                  "es": "Objeto clicado",
+                  "it": "Oggetto cliccato",
+                  "pt": "Objeto clicado",
+                  "pl": "Obiekt kliknięty",
+                  "ko": "객체 클릭"
+                }
               }
             ]
+          }
+        ],
+        "tokens": [
+          {
+            "name": "eventID",
+            "type": "string",
+            "title": {
+              "en": "Event ID",
+              "nl": "Gebeurtenis-ID",
+              "de": "Ereignis-ID"
+            },
+            "example": {
+              "en": "Object1",
+              "nl": "Object1",
+              "de": "Objekt1"
+            }
           }
         ],
         "id": "status_widget_event"

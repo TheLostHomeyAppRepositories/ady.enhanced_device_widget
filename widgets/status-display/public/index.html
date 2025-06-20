@@ -335,6 +335,18 @@
 			}
 		}
 
+		function onObjectClick(eventID)
+		{
+			const settings = Homey.getSettings();
+			Homey.api('POST', '/', { widgetId: settings.widgetID, event: 'objectClick', eventID: eventID })
+				.then((result) =>
+				{
+					console.log(result);
+					return;
+				})
+				.catch(console.error);
+		}
+
 	</script>
 </body>
 
