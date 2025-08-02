@@ -9,7 +9,7 @@
 		<div id="titleContainer" class="container1">
 			<div id="title" class="homey-text-bold">Title</div>
 		</div>
-		<div id="statusConatiner" class="container2">
+		<div id="statusContainer" class="container2">
 			<a id="btnPrev" class="prev">❮</a>
 			<a id="btNext" class="next">❯</a>
 			<div id="status" class="homey-text-normal">Status</div>
@@ -60,6 +60,40 @@
 			else
 			{
 				fixedHeight = -1;
+			}
+
+			// Set the margins for the title
+			if (settings.titleMargin)
+			{
+				document.getElementById('titleContainer').style.marginLeft = settings.titleMargin + 'px';
+			}
+			else
+			{
+				document.getElementById('titleContainer').style.marginLeft = '0px';
+			}
+
+			// Set alignment options for the title
+			if (settings.titleAlignment === 'left')
+			{
+				document.getElementById('titleContainer').style.justifyContent = 'flex-start';
+			}
+			else if (settings.titleAlignment === 'center')
+			{
+				document.getElementById('titleContainer').style.justifyContent = 'center';
+			}
+			else if (settings.titleAlignment === 'right')
+			{
+				document.getElementById('titleContainer').style.justifyContent = 'flex-end';
+			}
+
+			// Set the margins for the status
+			if (settings.statusMargin)
+			{
+				document.getElementById('statusContainer').style.marginLeft = settings.statusMargin + 'px';
+			}
+			else
+			{
+				document.getElementById('statusContainer').style.marginLeft = '0px';
 			}
 
 			toggleDenseMode(settings.dense);
@@ -281,11 +315,11 @@
 
 				if (status === '')
 				{
-					document.getElementById('statusConatiner').style.display = 'none';
+					document.getElementById('statusContainer').style.display = 'none';
 				}
 				else
 				{
-					document.getElementById('statusConatiner').style.display = 'flex';
+					document.getElementById('statusContainer').style.display = 'flex';
 					// make the cr/lf compatible with HTML
 					status = status.replace(/(?:\r\n|\r|\n)/g, '<br>');
 					document.getElementById('status').innerHTML = status;

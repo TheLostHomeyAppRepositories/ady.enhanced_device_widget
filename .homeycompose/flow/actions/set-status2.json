@@ -22,7 +22,7 @@
 		"ko": "[[widgetID]]의 향상된 상태 설정: 제목: [[title]], 텍스트: [[status]], 배경색: [[backColour]], 텍스트 색상: [[textColour]]"
 	},
 	"hint": {
-		"en": "Update a Status Widget content. The colours are in hexadecimal format but can also include conditions.",
+		"en": "Update a Status Widget content. The colours in this card are in hexadecimal format but can also include conditions.",
 		"nl": "Werk de inhoud van een statuswidget bij. De kleuren zijn in hexadecimale indeling maar kunnen ook voorwaarden bevatten.",
 		"fr": "Mettre à jour le contenu d'un widget de statut. Les couleurs sont au format hexadécimal mais peuvent également inclure des conditions.",
 		"de": "Aktualisieren Sie den Inhalt eines Status-Widgets. Die Farben sind im hexadezimalen Format, können aber auch Bedingungen enthalten.",

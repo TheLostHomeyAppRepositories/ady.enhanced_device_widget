@@ -88,5 +88,8 @@
 	},
 	"1.1.22": {
 		"en": "Added new event, 'Object clicked' to the status widget. The Flow trigger passes the eventID token to identify the object. This allows the Flow to use the eventID in And Flow cards. Example HTML for the status widget: <img src=\"your-image\" alt=\"Description\" onclick=\"onObjectClick('myobj');\" />. The 'myobj' can be any string to pass as the eventID."
+	},
+	"1.1.23": {
+		"en": "Added margin options for title and status text in the status widget, plus alignment options for the title."
 	}
 }

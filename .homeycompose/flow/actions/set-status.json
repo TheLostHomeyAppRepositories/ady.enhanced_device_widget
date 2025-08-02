@@ -22,15 +22,15 @@
 		"ko": "[[widgetID]] 상태 설정: 제목: [[title]], 텍스트: [[status]], 배경색: [[backColour]], 텍스트 색상: [[textColour]]"
 	},
 	"hint": {
-		"en": "Update a Status Widget content",
-		"nl": "Werk de inhoud van een statuswidget bij",
-		"fr": "Mettre à jour le contenu d'un widget de statut",
-		"de": "Aktualisieren Sie den Inhalt eines Status-Widgets",
-		"es": "Actualizar el contenido de un widget de estado",
-		"it": "Aggiorna il contenuto di un widget di stato",
-		"pt": "Atualizar o conteúdo de um widget de status",
-		"pl": "Zaktualizuj zawartość widżetu statusu",
-		"ko": "상태 위젯 콘텐츠 업데이트"
+		"en": "Update a Status Widget content. This card uses a colour picker for the background and text colour.",
+		"nl": "Werk de inhoud van een statuswidget bij. Deze kaart maakt gebruik van een kleurenkiezer voor de achtergrond- en tekstkleur.",
+		"fr": "Mettre à jour le contenu d'un widget de statut. Cette carte utilise un sélecteur de couleur pour la couleur de fond et la couleur du texte.",
+		"de": "Aktualisieren Sie den Inhalt eines Status-Widgets. Diese Karte verwendet einen Farbwähler für die Hintergrund- und Textfarbe.",
+		"es": "Actualizar el contenido de un widget de estado. Esta tarjeta utiliza un selector de color para el color de fondo y el color del texto.",
+		"it": "Aggiorna il contenuto di un widget di stato. Questa scheda utilizza un selettore di colori per il colore di sfondo e il colore del testo.",
+		"pt": "Atualizar o conteúdo de um widget de status. Este cartão usa um seletor de cores para a cor de fundo e a cor do texto.",
+		"pl": "Zaktualizuj zawartość widżetu statusu. Ta karta używa selektora kolorów do koloru tła i koloru tekstu.",
+		"ko": "상태 위젯 콘텐츠 업데이트. 이 카드는 배경색과 텍스트 색상을 위한 색상 선택기를 사용합니다."
 	},
 	"args": [
 		{

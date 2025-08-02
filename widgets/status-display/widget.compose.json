@@ -34,9 +34,9 @@
 			"type": "checkbox",
 			"value": false,
 			"title": {
-				"en": "Dense Layout?",
+				"en": "Dense layout?",
 				"nl": "Dichte lay-out?",
-				"de": "Dichtes Layout?",
+				"de": "Dichtes layout?",
 				"fr": "Mise en page dense?",
 				"es": "¿Diseño denso?",
 				"it": "Layout denso?",
@@ -45,7 +45,7 @@
 				"ko": "밀집 레이아웃?"
 			},
 			"hint": {
-				"en": "Reduce the vertical space betwwen the capabilities",
+				"en": "Reduce the vertical space between the capabilities",
 				"nl": "Verminder de verticale ruimte tussen de mogelijkheden",
 				"de": "Verringern Sie den vertikalen Platz zwischen den Fähigkeiten",
 				"fr": "Réduire l'espace vertical entre les capacités",
@@ -115,9 +115,9 @@
 			"type": "checkbox",
 			"value": false,
 			"title": {
-				"en": "Fixed Height",
+				"en": "Fixed height",
 				"nl": "Vaste hoogte",
-				"de": "Feste Höhe",
+				"de": "Feste höhe",
 				"fr": "Hauteur fixe",
 				"es": "Altura fija",
 				"it": "Altezza fissa",
@@ -164,6 +164,135 @@
 				"pt": "A altura do widget se a Altura fixa estiver ativada",
 				"pl": "Wysokość widżetu, jeśli włączona jest stała wysokość",
 				"ko": "고정 높이가 활성화된 경우 위젯의 높이"
+			}
+		},
+		{
+			"id": "titleMargin",
+			"type": "number",
+			"value": 0,
+			"min": 0,
+			"max": 50,
+			"title": {
+				"en": "Title left margin",
+				"nl": "Linkermarge van de titel",
+				"de": "Linker abstand des titels",
+				"fr": "Marge gauche du titre",
+				"es": "Margen izquierdo del título",
+				"it": "Margine sinistro del titolo",
+				"pt": "Margem esquerda do título",
+				"pl": "Lewy margines tytułu",
+				"ko": "제목 왼쪽 여백"
+			},
+			"hint": {
+				"en": "The left margin of the title in pixels",
+				"nl": "De linkermarge van de titel in pixels",
+				"de": "Der linke Abstand des Titels in Pixeln",
+				"fr": "La marge gauche du titre en pixels",
+				"es": "El margen izquierdo del título en píxeles",
+				"it": "Il margine sinistro del titolo in pixel",
+				"pt": "A margem esquerda do título em pixels",
+				"pl": "Lewy margines tytułu w pikselach",
+				"ko": "픽셀 단위의 제목 왼쪽 여백"
+			}
+		},
+		{
+			"id": "titleAlignment",
+			"type": "dropdown",
+			"title": {
+				"en": "Justify title",
+				"nl": "Titel uitlijnen",
+				"de": "Titel ausrichten",
+				"fr": "Justifier le titre",
+				"es": "Justificar título",
+				"it": "Giustificare il titolo",
+				"pt": "Justificar título",
+				"pl": "Wyrównaj tytuł",
+				"ko": "제목 정렬"
+			},
+			"value": "left",
+			"values": [
+				{
+					"id": "left",
+					"title": {
+						"en": "Left",
+						"nl": "Links",
+						"de": "Links",
+						"fr": "Gauche",
+						"es": "Izquierda",
+						"it": "Sinistra",
+						"pt": "Esquerda",
+						"pl": "Lewo",
+						"ko": "왼쪽"
+					}
+				},
+				{
+					"id": "center",
+					"title": {
+						"en": "Center",
+						"nl": "Midden",
+						"de": "Mitte",
+						"fr": "Centre",
+						"es": "Centro",
+						"it": "Centro",
+						"pt": "Centro",
+						"pl": "Środek",
+						"ko": "가운데"
+					}
+				},
+				{
+					"id": "right",
+					"title": {
+						"en": "Right",
+						"nl": "Rechts",
+						"de": "Rechts",
+						"fr": "Droite",
+						"es": "Derecha",
+						"it": "Destra",
+						"pt": "Direita",
+						"pl": "Prawo",
+						"ko": "오른쪽"
+					}
+				}
+			],
+			"hint": {
+				"en": "The alignment of the content within the widget",
+				"nl": "De uitlijning van de inhoud binnen het widget",
+				"de": "Die Ausrichtung des Inhalts innerhalb des Widgets",
+				"fr": "L'alignement du contenu dans le widget",
+				"es": "La alineación del contenido dentro del widget",
+				"it": "L'allineamento del contenuto all'interno del widget",
+				"pt": "O alinhamento do conteúdo dentro do widget",
+				"pl": "Wyrównanie zawartości wewnątrz widżetu",
+				"ko": "위젯 내 콘텐츠 정렬"
+			}
+		},
+		{
+			"id": "statusMargin",
+			"type": "number",
+			"value": 5,
+			"min": 0,
+			"max": 50,
+			"title": {
+				"en": "Status left margin",
+				"nl": "Linkermarge van de status",
+				"de": "Linker abstand des Status",
+				"fr": "Marge gauche du statut",
+				"es": "Margen izquierdo del estado",
+				"it": "Margine sinistro dello stato",
+				"pt": "Margem esquerda do status",
+				"pl": "Lewy margines statusu",
+				"ko": "상태 왼쪽 여백"
+			},
+			"hint": {
+				"en": "The left margin of the status in pixels",
+				"nl": "De linkermarge van de status in pixels",
+				"de": "Der linke abstand des Status in Pixeln",
+				"fr": "La marge gauche du statut en pixels",
+				"es": "El margen izquierdo del estado en píxeles",
+				"it": "Il margine sinistro dello stato in pixel",
+				"pt": "A margem esquerda do status em pixels",
+				"pl": "Lewy margines statusu w pikselach",
+				"ko": "픽셀 단위의 상태 왼쪽 여백"
 			}
 		}
 	],
