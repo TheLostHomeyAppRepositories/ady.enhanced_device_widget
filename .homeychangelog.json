@@ -91,5 +91,8 @@
 	},
 	"1.1.23": {
 		"en": "Added margin options for title and status text in the status widget, plus alignment options for the title."
+	},
+	"1.1.24": {
+		"en": "Updated homey-api dependency to latest version."
 	}
 }
