@@ -56,8 +56,8 @@ class MyApp extends Homey.App
 
 		const simSettings = {
 			devices: {
-				name: '84:f7:03:3a:1f:26',
-				id: '50a0144e-33fe-46b2-aa3e-62c0b103c5e1',
+				name: 'AVD1',
+				id: '6b1d6dd7-d0d0-4637-95fa-047bf4846dcc',
 			},
 		};
 
